@@ -27,7 +27,7 @@ A 3D tennis serve you can tinker with in the browser. Move the toss, add spin an
 - **aim**: T, body or wide, or drag on the court map.
 - **returner level**: NTRP 2.0 to 5.0. Better returners react sooner, move faster, reach further and handle more pace, kick and slice. Against a 2.0 most serves win the point. Against a 5.0 you need pace and placement, or a kick or slice that pulls them off the court.
 - **compare**: "keep this serve to compare" pins the current serve's path on the court and the court map. Pick a color for the next serve's line (from the swatches or any custom color), change something, and serve again to see both paths side by side. Each kept serve is listed with its speed, spin, stance, result and net clearance.
-- **racket angle**: by default the server angles the racket so a perfect toss lands in the box. That shows what toss mistakes do, while allowing for the height, stance, jump, swing and contact point you picked. Turn auto off to set the angle yourself.
+- **racket angle**: how open or closed the racket face is at contact. In the animation the racket tilts to this angle (after the toss's effect) and turns toward your aim as it meets the ball. By default the server angles the racket so a perfect toss lands in the box. That shows what toss mistakes do, while allowing for the height, stance, jump, swing and contact point you picked. Turn auto off to set the angle yourself.
 
 ## what you see
 

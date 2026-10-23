@@ -1,7 +1,7 @@
 // How the toss, footwork and swing shape the serve: where the ball is met, when, with what spin and launch angle.
 // World axes match physics.js: x toward the receiver, y up, z to the server's right.
 
-import { ballAt, solveAngle } from './physics.js'
+import { ballAt, COURT, solveAngle } from './physics.js'
 import { BODY, CONTACT_T, poseAt, racketRoll, RELEASE_T, skeleton, torsoYaw } from './pose.js'
 
 export const BASE_X = -0.3
@@ -160,7 +160,11 @@ export function planServe(s) {
   const intended = { x: f.contact.x + stance.forward, y: reachAt(f.contact.x, cz, f) + jumpLift, z: cz }
   const autoSwing = solveAngle({ ...base, angleDeg: 0 }, intended) - pitchFromHit
   const swingDeg = s.autoSwing ? autoSwing : s.swingDeg
-  const launchDeg = swingDeg + pitchFromHit - DEG_PER_M_FORWARD * tossOffset
+  // The racket face: the racket angle, tipped down by a toss in front (or up by one behind). Where on
+  // the ball you hit then deflects the ball off that face (pitchFromHit), so the two can differ a little.
+  const faceDeg = swingDeg - DEG_PER_M_FORWARD * tossOffset
+  const launchDeg = faceDeg + pitchFromHit
+  const faceYawDeg = (Math.atan2(s.aimZ - contact.z, COURT.serviceLine - contact.x) * 180) / Math.PI
 
   return {
     contact,
@@ -176,6 +180,8 @@ export function planServe(s) {
     swingDeg,
     launchDeg,
     flight: { ...base, angleDeg: launchDeg },
+    faceDeg,
+    faceYawDeg,
     // The arm reaches from wherever the jump and the stance already carried the body.
     delta: {
       x: contact.x - f.contact.x - stance.forward,
@@ -313,14 +319,30 @@ export function serverJoints(p, body) {
     f.y = Math.max(f.y, 0)
     return f
   }
+  const racketHead = at(j.racketHead, side.hit, 1, { x: hitTurn.x, z: hitTurn.z + across * 1.3 })
+  let hHand = at(j.hHand, side.hit, 0.8, handTurn)
+  let roll = racketRoll(p)
+  // Around contact the racket turns to the serve's racket angle and aim: the face tilts to faceDeg
+  // (by leaning the handle) and turns toward the target (by rolling about the handle). The head stays
+  // on the ball.
+  if (body.faceDeg != null && w > 0.001) {
+    const lean = (-body.faceDeg * Math.PI) / 180
+    const L = BODY.racketToHead
+    hHand = {
+      x: hHand.x + (racketHead.x - L * Math.sin(lean) - hHand.x) * w,
+      y: hHand.y + (racketHead.y - L * Math.cos(lean) - hHand.y) * w,
+      z: hHand.z,
+    }
+    roll -= body.faceYawDeg * w
+  }
   return {
     hip: at(j.hip, 0),
     neck: at(j.shoulder, 0),
     head: at(j.head, 0),
     hShoulder: at(j.shoulder, side.hit, 0, hitTurn),
     hElbow: at(j.hElbow, side.hit + 0.05 * k * hs, 0.35, elbowTurn),
-    hHand: at(j.hHand, side.hit, 0.8, handTurn),
-    racketHead: at(j.racketHead, side.hit, 1, { x: hitTurn.x, z: hitTurn.z + across * 1.3 }),
+    hHand,
+    racketHead,
     tShoulder: at(j.shoulder, side.toss, 0, tossTurn),
     tElbow: at(j.tElbow, side.toss - 0.04 * k * hs, 0, tossTurn),
     tHand: at(j.tHand, side.toss, 0, tossTurn),
@@ -332,7 +354,7 @@ export function serverJoints(p, body) {
     bFoot: foot(bFoot, backZ),
     lean: poseAt(p).torso,
     yaw,
-    roll: (racketRoll(p) * Math.PI) / 180,
+    roll: (roll * Math.PI) / 180,
     scale: k,
   }
 }

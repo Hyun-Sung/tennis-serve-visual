@@ -206,7 +206,7 @@ export default function Controls({ s, plan, onChange, onToss, onHand }) {
           step={0.1}
           disabled={s.autoSwing}
           onChange={(swingDeg) => onChange({ swingDeg })}
-          hint="negative is downward. a toss in front tilts it down, behind tilts it up."
+          hint="negative closes the face and drives the ball down. a toss in front tilts it down, behind tilts it up. the racket in the animation tilts to match at contact."
         />
       </div>
     </div>
