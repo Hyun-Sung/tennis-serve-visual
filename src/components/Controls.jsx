@@ -156,12 +156,13 @@ export default function Controls({ s, plan, onChange, onToss, onHand }) {
         <Slider
           label="Brush across (side spin)"
           value={s.swing.side}
-          display={Math.abs(s.swing.side) < 0.01 ? 'none' : `${pct(s.swing.side)} to the ${s.swing.side > 0 ? 'right' : 'left'}`}
+          display={Math.abs(s.swing.side) < 0.01 ? 'none' : `${pct(s.swing.side)} ${s.swing.side > 0 ? 'right' : 'left'}`}
           min={-1}
           max={1}
           step={0.01}
           onChange={(side) => onChange({ swing: { ...s.swing, side } })}
-          ends={['to the left', 'to the right']}
+          ends={lefty ? ['← left (slice)', 'none', 'right →'] : ['← left', 'none', 'right (slice) →']}
+          centered
           hint={`brushing across to the ${sliceSide} adds slice, which curves the ball ${lefty ? 'right' : 'left'}.`}
         />
         <span className="sub">Contact on the ball</span>

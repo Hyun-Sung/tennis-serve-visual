@@ -840,3 +840,65 @@ header {
   padding: 0.2rem 0.8rem;
   font-size: 0.85rem;
 }
+
+/* centred sliders: the fill grows out from the middle mark toward the side you drag to */
+.centered-track {
+  position: relative;
+  display: block;
+}
+.centered-track::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: 0.85rem;
+  margin: -0.425rem 0 0 -1px;
+  border-radius: 1px;
+  background: var(--soft);
+  opacity: 0.55;
+  pointer-events: none;
+}
+.slider input.centered {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 1.2rem;
+  margin: 0.15rem 0;
+  background: transparent;
+  cursor: pointer;
+}
+.slider input.centered::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(to right, #ddd8ca var(--from), #8f7cf0 var(--from), #8f7cf0 var(--to), #ddd8ca var(--to));
+}
+.slider input.centered::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(to right, #ddd8ca var(--from), #8f7cf0 var(--from), #8f7cf0 var(--to), #ddd8ca var(--to));
+}
+.slider input.centered::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -5px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: var(--ink);
+  box-shadow: 0 0 0 1px var(--line);
+  position: relative;
+  z-index: 1;
+}
+.slider input.centered::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: var(--ink);
+}
+.slider input.centered:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
