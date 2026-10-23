@@ -15,6 +15,12 @@ const SITE_URL = (process.env.SITE_URL ?? '').replace(/\/+$/, '')
 const root = path.resolve(import.meta.dirname, '..')
 const dist = path.join(root, 'dist')
 const APP_NAME = 'Serve Visualization Tool'
+// Each page's title and description keys.
+const SEO_KEYS = {
+  tool: ['seo.title', 'seo.description'],
+  simple: ['seo.simpleTitle', 'seo.simpleDescription'],
+  about: ['seo.aboutTitle', 'seo.aboutDescription'],
+}
 const ABOUT_SECTIONS = ['flight', 'spin', 'bounce', 'toss', 'swing', 'tolerance', 'returner', 'direction', 'recommend', 'limits']
 
 const template = readFileSync(path.join(dist, 'index.html'), 'utf8')
@@ -33,8 +39,8 @@ const rich = (s) => escape(s).replace(/&lt;(\/?)b&gt;/g, '<$1b>').replace(/\{\{\
 const url = (code, page) => `${SITE_URL}${pathFor(code, page)}`
 
 function head(code, page) {
-  const title = escape(get(code, page === 'about' ? 'seo.aboutTitle' : 'seo.title'))
-  const description = escape(get(code, page === 'about' ? 'seo.aboutDescription' : 'seo.description'))
+  const title = escape(get(code, SEO_KEYS[page][0]))
+  const description = escape(get(code, SEO_KEYS[page][1]))
   const lines = [
     `<title>${title}</title>`,
     `<meta name="description" content="${description}" />`,
@@ -74,7 +80,7 @@ function head(code, page) {
           '@context': 'https://schema.org',
           '@type': 'WebApplication',
           name: APP_NAME,
-          description: get(code, 'seo.description'),
+          description: get(code, SEO_KEYS[page][1]),
           inLanguage: htmlLang(code),
           applicationCategory: 'SportsApplication',
           operatingSystem: 'Any (web browser)',
@@ -88,7 +94,7 @@ function head(code, page) {
 
 // The page's words as plain HTML: what a crawler or a visitor without JavaScript sees.
 function body(code, page) {
-  const nav = `<nav><a href="${pathFor(code, 'tool')}">${escape(get(code, 'nav.tool'))}</a> · <a href="${pathFor(code, 'about')}">${escape(get(code, 'nav.about'))}</a></nav>`
+  const nav = `<nav>${PAGES.map((p) => `<a href="${pathFor(code, p)}">${escape(get(code, `nav.${p}`))}</a>`).join(' · ')}</nav>`
   const langs = `<p>${LANGUAGES.map((l) => `<a href="${pathFor(l.code, page)}" hreflang="${l.html}" lang="${l.html}">${escape(l.name)}</a>`).join(' · ')}</p>`
   if (page === 'about') {
     const sections = ABOUT_SECTIONS.map((id) => {
@@ -99,6 +105,9 @@ function body(code, page) {
       return `<section><h2>${escape(get(code, `about.${id}.title`))}</h2><p>${rich(get(code, `about.${id}.body`))}</p>${extra}</section>`
     }).join('')
     return `<article class="prerender">${nav}<h1>${escape(get(code, 'about.title'))}</h1><p>${escape(get(code, 'about.intro'))}</p><p><a href="https://paypal.me/hyuns89">${escape(get(code, 'about.donate'))}</a></p>${sections}${langs}</article>`
+  }
+  if (page === 'simple') {
+    return `<main class="prerender">${nav}<h1>${escape(get(code, 'simple.title'))}</h1><p>${escape(get(code, 'simple.lede'))}</p><p>${escape(get(code, 'seo.simpleDescription'))}</p><noscript><p>${escape(get(code, 'seo.noscript'))}</p></noscript>${langs}</main>`
   }
   return `<main class="prerender">${nav}<h1>${APP_NAME}</h1><p>${escape(get(code, 'app.tagline'))}</p><p>${escape(get(code, 'seo.description'))}</p><noscript><p>${escape(get(code, 'seo.noscript'))}</p></noscript>${langs}</main>`
 }

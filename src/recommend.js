@@ -29,8 +29,13 @@ export const SECOND_IN_FLOOR = 0.9
 const TOP_COST = 0.3
 const SIDE_COST = 0.15
 const STRAIN_COST = 0.15
-export const MAX_SPEED_LIMITS = [110, 230]
+// From a beginner's serve up to the fastest in the pro game. Around 60 km/h (37 mph) is about the
+// slowest a serve can be and still reach the back of the box without being lobbed.
+export const MAX_SPEED_LIMITS = [60, 230]
 export const DEFAULT_MAX_SPEED = 170
+// The slowest serve worth trying, and the least the full tool's speed slider goes to: below about
+// 45 km/h (28 mph) the ball can't reach the service box at any angle.
+export const SLOWEST_SERVE = 45
 
 /** The fastest this style can be hit, for someone whose fastest flat serve is maxKmh. */
 export function speedCap(maxKmh, spin, strain) {

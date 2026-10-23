@@ -314,8 +314,93 @@
     "method": "encontrado testando {{n}} saques (quatro efeitos, seis direções, cinco velocidades) com a sua altura, mão, base e salto, usando a mesma física e tolerância a erro de cima. depois de uma devolução difícil, supõe-se que o sacador ganha {{tough}}% dos pontos, e depois de uma fácil, {{easy}}%. um guia aproximado, não uma regra.",
     "working": "calculando seus saques…"
   },
+  "simple": {
+    "title": "Modo simples",
+    "lede": "Toque onde você quer que o seu saque quique. Você verá qual saque chega melhor lá, quanta margem de erro ele tem, a dificuldade da devolução e a pontuação.",
+    "court": "Onde ele deve quicar?",
+    "courtLabel": "a área de saque vista de trás de você: toque ou arraste para colocar a bola; as setas a movem",
+    "spotFacts": "{{deep}} antes da linha de saque, {{across}} para dentro da {{line}}",
+    "centreLine": "linha central",
+    "sideline": "linha lateral",
+    "courtHint": "o oval sombreado mostra onde quicam 9 de cada 10 saques do tipo escolhido: quanto mais ele passa de uma linha, menos margem. toque na outra área para sacar do outro lado.",
+    "otherBox": "lado de {{side}}",
+    "returner": "devolvedor",
+    "serve": "Saque",
+    "speedHint": "seu saque chapado mais rápido. o efeito tira parte dessa velocidade.",
+    "levels": {
+      "beginner": "iniciante",
+      "club": "jogador de clube",
+      "strong": "jogador de clube forte",
+      "advanced": "jogador avançado"
+    },
+    "recommended": "Recomendado",
+    "yourChoice": "Sua escolha",
+    "backToPick": "voltar ao saque recomendado",
+    "rpm": "{{rpm}} rpm",
+    "why": {
+      "safest": "o jeito mais seguro de levar a bola até lá.",
+      "hardest": "dos saques que chegam lá, o mais difícil de devolver.",
+      "both": "o jeito mais seguro de levar a bola até lá, e o mais difícil de devolver.",
+      "balance": "a melhor mistura de segurança e pressão sobre o devolvedor."
+    },
+    "margin": "Margem",
+    "marginSub": "entram",
+    "return": "Devolução",
+    "difficulty": {
+      "easy": "fácil",
+      "medium": "média",
+      "hard": "difícil",
+      "veryHard": "muito difícil"
+    },
+    "score": "Pontuação",
+    "scoreSub": "pontos ganhos de 100",
+    "clears": "passa a rede por {{d}}",
+    "aimRight": "mire cerca de {{d}} à direita do ponto: o efeito traz a bola de volta",
+    "aimLeft": "mire cerca de {{d}} à esquerda do ponto: o efeito traz a bola de volta",
+    "allSpins": "Todos os saques para este ponto",
+    "cant": "não chega lá",
+    "nothing": "nenhum saque consegue quicar lá. tente outro ponto.",
+    "warnFirst": "este ponto é difícil: até o melhor saque entra só {{p}}% das vezes. tente um ponto mais fundo na área ou mais longe das linhas.",
+    "warnSecond": "nada entra aqui 9 em cada 10 vezes, então é arriscado para um segundo saque. tente um ponto mais longe das linhas.",
+    "watch": "Ver em 3D",
+    "working": "calculando os saques…",
+    "method": "para cada efeito, a ferramenta encontra o ângulo da raquete e a direção que levam a bola até o seu ponto, em várias velocidades até o seu saque mais rápido, lança cada um com os mesmos pequenos erros da ferramenta completa e fica com a velocidade que pontua melhor. a pontuação são os pontos que você ganharia em 100 saques assim: aces e erros na devolução ganham, e depois de uma devolução você ganha {{tough}}% dos ralis se ela foi difícil e {{easy}}% se foi fácil. no primeiro saque, um erro leva ao seu segundo saque (um {{second}} seguro no meio da área, que ganha cerca de {{secondWins}}%), então ele pode arriscar mais. para ser escolhido, um primeiro saque precisa entrar pelo menos metade das vezes, e um segundo saque 9 em cada 10.",
+    "game": {
+      "title": "Jogue um game",
+      "note": "você saca todos os pontos no seu ponto, contra o devolvedor escolhido acima. uma falta dá a você um segundo saque, e a recomendação muda para combinar.",
+      "you": "Você",
+      "them": "Rival",
+      "games": "Games",
+      "points": "Pontos",
+      "serving": "sacando",
+      "deuce": "iguais",
+      "advYou": "vantagem sua",
+      "advThem": "vantagem do rival",
+      "serve": "Sacar: {{serve}}",
+      "newGame": "novo game",
+      "stats": "pontos ganhos {{won}} de {{points}} · aces {{aces}} · duplas faltas {{doubles}} · primeiros saques dentro {{first}}%"
+    },
+    "result": {
+      "fault": "Falta: {{why}}. Segundo saque.",
+      "double": "Dupla falta: {{why}}. Ponto do rival.",
+      "ace": "Ace! Ponto seu.",
+      "winner": "Erro na devolução: ele tocou na bola mas não conseguiu colocá-la em quadra. Ponto seu.",
+      "toughWon": "Devolução difícil, e você ganhou o rali.",
+      "toughLost": "Devolução difícil, mas o rival ganhou o rali.",
+      "easyWon": "Devolução fácil, mas você ainda ganhou o rali.",
+      "easyLost": "Devolução fácil, e o rival ganhou o rali.",
+      "gameYou": "Game seu!",
+      "gameThem": "Game do rival."
+    },
+    "miss": {
+      "net": "na rede",
+      "long": "longa",
+      "wide": "fora"
+    }
+  },
   "nav": {
     "tool": "Ferramenta de saque",
+    "simple": "Modo simples",
     "about": "Sobre e a matemática"
   },
   "footer": {
@@ -326,6 +411,8 @@
   "seo": {
     "title": "Serve Visualization Tool: simulador gratuito de saque de tênis em 3D",
     "description": "Um simulador gratuito de saque de tênis em 3D. Ajuste o lançamento, a posição, o salto, o golpe, o efeito e a velocidade, veja se a bola passa a rede e descubra sua tolerância a erro e suas chances de ace contra recebedores de nível NTRP 2.0 a 5.0.",
+    "simpleTitle": "Modo simples: toque num ponto e veja o melhor saque | Serve Visualization Tool",
+    "simpleDescription": "Toque onde você quer que o seu saque quique e veja qual saque chega melhor lá: chapado, slice, topspin-slice ou kick, com a margem de erro de cada um, a dificuldade da devolução e uma pontuação. Depois jogue um game de treino contra um devolvedor de nível NTRP 2.0 a 5.0.",
     "aboutTitle": "Como funciona o Serve Visualization Tool: a matemática do saque de tênis, explicada de forma simples",
     "aboutDescription": "Como a ferramenta gratuita Serve Visualization Tool modela um saque de tênis: o voo da bola, o efeito, o quique, o lançamento, a tolerância a erro e o recebedor, explicados em palavras simples com as fórmulas por trás.",
     "noscript": "Esta ferramenta interativa em 3D precisa do JavaScript ativado."

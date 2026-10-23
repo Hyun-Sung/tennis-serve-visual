@@ -176,6 +176,14 @@ function nudge(flight, tilt, which, g, noise) {
   return f
 }
 
+/** The serve hit with all five kinds of mistake at once; g is each one's size in standard deviations. */
+export function misHit(flight, noise, g) {
+  const tilt = Math.atan2(flight.axis[1], -flight.axis[2])
+  let f = flight
+  for (let which = 0; which < 5; which++) f = nudge(f, tilt, which, g[which], noise)
+  return f
+}
+
 // What matters about a flight: net clearance, where it bounces, and where the returner meets it.
 const CLEAR = 0
 const BX = 1
@@ -233,6 +241,13 @@ export function assessServe(plan, level, { window = true } = {}) {
   }
   const share = {}
   for (const k of Object.keys(tally)) share[k] = tally[k] / TRIES
+  // How the bounce scatters around the aimed-for spot: its covariance in x (depth) and z (sideways), in m².
+  const spread = { xx: 0, xz: 0, zz: 0 }
+  for (const s of slope) {
+    spread.xx += s[BX] * s[BX]
+    spread.xz += s[BX] * s[BZ]
+    spread.zz += s[BZ] * s[BZ]
+  }
   // window is optional so a search over many serves can skip it.
-  return { inRate: 1 - share.fault, share, window: window ? angleWindow(flight, contact) : null, noise, base: NOISE }
+  return { inRate: 1 - share.fault, share, spread, window: window ? angleWindow(flight, contact) : null, noise, base: NOISE }
 }

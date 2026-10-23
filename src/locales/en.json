@@ -314,8 +314,93 @@
     "method": "found by trying {{n}} serves (four spins, six directions, five speeds) with your height, hand, stance and jump, using the same physics and error tolerance as above. after a tough return the server is assumed to win {{tough}}% of rallies, after an easy one {{easy}}%. a rough guide, not a rule.",
     "working": "working out your serves…"
   },
+  "simple": {
+    "title": "Simple mode",
+    "lede": "Tap where you want your serve to land. You'll see which serve gets it there best, how much room for error it has, how hard it is to return, and how it scores.",
+    "court": "Where should it land?",
+    "courtLabel": "the service box seen from behind you: tap or drag to place the ball, arrow keys move it",
+    "spotFacts": "{{deep}} inside the service line, {{across}} inside the {{line}}",
+    "centreLine": "centre line",
+    "sideline": "sideline",
+    "courtHint": "the shaded oval is where 9 in 10 of the chosen serve land: the more of it past a line, the less margin. tap the other box to serve from the other side.",
+    "otherBox": "{{side}} side",
+    "returner": "returner",
+    "serve": "Serve",
+    "speedHint": "your fastest flat serve. spin takes some of that pace.",
+    "levels": {
+      "beginner": "a beginner",
+      "club": "a club player",
+      "strong": "a strong club player",
+      "advanced": "an advanced player"
+    },
+    "recommended": "Recommended",
+    "yourChoice": "Your choice",
+    "backToPick": "back to the recommended serve",
+    "rpm": "{{rpm}} rpm",
+    "why": {
+      "safest": "the safest way to get the ball there.",
+      "hardest": "of the serves that get there, the hardest to return.",
+      "both": "the safest way to get the ball there, and the hardest to return.",
+      "balance": "the best mix of safety and pressure on the returner."
+    },
+    "margin": "Margin",
+    "marginSub": "land in",
+    "return": "Return",
+    "difficulty": {
+      "easy": "easy",
+      "medium": "medium",
+      "hard": "hard",
+      "veryHard": "very hard"
+    },
+    "score": "Score",
+    "scoreSub": "points won of 100",
+    "clears": "clears the net by {{d}}",
+    "aimRight": "aim about {{d}} right of the spot: the spin bends it back",
+    "aimLeft": "aim about {{d}} left of the spot: the spin bends it back",
+    "allSpins": "Every serve to this spot",
+    "cant": "can't land there",
+    "nothing": "none of the serves can land there. try another spot.",
+    "warnFirst": "this spot is hard to hit: even the best serve lands in only {{p}}% of the time. try a spot deeper in the box or further from the lines.",
+    "warnSecond": "nothing lands here 9 times in 10, so it's risky for a second serve. try a spot further from the lines.",
+    "watch": "Watch it in 3D",
+    "working": "working out the serves…",
+    "method": "for each spin, the tool finds the racket angle and aim that land the ball on your spot at several speeds up to your fastest serve, flies each one with the same small mistakes as the full tool, and keeps the speed that scores best. the score is the points you'd win out of 100 serves like it: aces and return errors win, and after a return you win {{tough}}% of rallies after a tough one and {{easy}}% after an easy one. on a first serve a miss goes to your second serve (a safe {{second}} into the middle of the box, which wins about {{secondWins}}%), so it can take more risk. a first serve has to land in at least half the time to be picked, a second serve 9 times in 10.",
+    "game": {
+      "title": "Play a game",
+      "note": "you serve every point to your spot, against the returner set above. a fault gives you a second serve, and the recommendation switches to suit it.",
+      "you": "You",
+      "them": "Them",
+      "games": "Games",
+      "points": "Points",
+      "serving": "serving",
+      "deuce": "deuce",
+      "advYou": "advantage you",
+      "advThem": "advantage them",
+      "serve": "Serve it: {{serve}}",
+      "newGame": "new game",
+      "stats": "points won {{won}} of {{points}} · aces {{aces}} · double faults {{doubles}} · first serves in {{first}}%"
+    },
+    "result": {
+      "fault": "Fault: {{why}}. Second serve.",
+      "double": "Double fault: {{why}}. Point to them.",
+      "ace": "Ace! Point to you.",
+      "winner": "Return error: they got a racket on it but couldn't keep it in. Point to you.",
+      "toughWon": "Tough return, and you won the rally.",
+      "toughLost": "Tough return, but they won the rally.",
+      "easyWon": "Easy return, but you still won the rally.",
+      "easyLost": "Easy return, and they won the rally.",
+      "gameYou": "Game to you!",
+      "gameThem": "Game to them."
+    },
+    "miss": {
+      "net": "into the net",
+      "long": "long",
+      "wide": "wide"
+    }
+  },
   "nav": {
     "tool": "Serve tool",
+    "simple": "Simple mode",
     "about": "About & the math"
   },
   "footer": {
@@ -326,6 +411,8 @@
   "seo": {
     "title": "Serve Visualization Tool: free 3D tennis serve simulator",
     "description": "A free 3D tennis serve simulator. Adjust your toss, stance, jump, swing, spin and speed, watch whether the ball clears the net, and see your error tolerance and your chances of an ace against returners from NTRP 2.0 to 5.0.",
+    "simpleTitle": "Simple mode: tap a spot, get the best serve | Serve Visualization Tool",
+    "simpleDescription": "Tap where you want your tennis serve to land and see which serve gets it there best: flat, slice, topspin-slice or kick, with each one's margin for error, how hard it is to return and a score. Then play a practice game against a returner from NTRP 2.0 to 5.0.",
     "aboutTitle": "How the Serve Visualization Tool works: the tennis serve math, explained simply",
     "aboutDescription": "How the free Serve Visualization Tool models a tennis serve: ball flight, spin, the bounce, the toss, error tolerance and the returner, explained in plain words with the formulas behind them.",
     "noscript": "This interactive 3D tool needs JavaScript turned on."

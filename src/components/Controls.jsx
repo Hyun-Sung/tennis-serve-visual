@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { SLOWEST_SERVE } from '../recommend.js'
 import { DEFAULT_HIT, DEFAULT_SWING, DEFAULT_TOSS, HEIGHT_LIMITS, JUMP_LIMITS, STANCES, TOSS_LIMITS } from '../serve.js'
 import BallPicker from './BallPicker.jsx'
 import { Seg, Slider } from './Fields.jsx'
@@ -123,7 +124,7 @@ export default function Controls({ s, plan, onChange, onToss, onHand }) {
           label={t('swing.speed')}
           value={s.speedKmh}
           display={units.speed(s.speedKmh)}
-          min={100}
+          min={SLOWEST_SERVE}
           max={230}
           step={1}
           onChange={(speedKmh) => onChange({ speedKmh })}
@@ -196,7 +197,7 @@ export default function Controls({ s, plan, onChange, onToss, onHand }) {
           value={Math.round(plan.swingDeg * 10) / 10}
           display={`${plan.swingDeg.toFixed(1)}°`}
           min={-12}
-          max={8}
+          max={40}
           step={0.1}
           disabled={s.autoSwing}
           onChange={(swingDeg) => onChange({ swingDeg })}

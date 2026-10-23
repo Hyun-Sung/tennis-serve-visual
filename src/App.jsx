@@ -7,14 +7,17 @@ import Controls from './components/Controls.jsx'
 import Readout from './components/Readout.jsx'
 import Recommend from './components/Recommend.jsx'
 import Risk from './components/Risk.jsx'
+import Simple from './components/Simple.jsx'
 import Target from './components/Target.jsx'
 import { Seg } from './components/Fields.jsx'
 import Timeline from './components/Timeline.jsx'
 import TopView from './components/TopView.jsx'
+import { NEW_GAME } from './game.js'
 import { assessServe, DEFAULT_LEVEL, evaluateReturn, RETURN_X } from './outcome.js'
 import { simulateServe } from './physics.js'
 import { PHASES } from './pose.js'
 import { DEFAULT_MAX_SPEED } from './recommend.js'
+import { DEFAULT_SPOT } from './spot.js'
 import {
   ballPosition,
   DEFAULT_FOOTWORK,
@@ -28,11 +31,18 @@ import {
   realTime,
 } from './serve.js'
 import { LANGUAGES, rememberChoice, switchLanguage } from './i18n.js'
-import { parsePath, pathFor } from './languages.js'
+import { PAGES, parsePath, pathFor } from './languages.js'
 import { savedSystem, saveSystem, UNIT_SYSTEMS, UnitsContext, unitsFor } from './units.js'
 
 // three.js is most of the download, so the 3D view loads in its own file after the rest of the page.
 const Scene3D = lazy(() => import('./components/Scene3D.jsx'))
+
+// Each page's tab title and search description.
+const SEO_KEYS = {
+  tool: { title: 'seo.title', description: 'seo.description' },
+  simple: { title: 'seo.simpleTitle', description: 'seo.simpleDescription' },
+  about: { title: 'seo.aboutTitle', description: 'seo.aboutDescription' },
+}
 
 // Metric unless this browser chose otherwise, or it's set up for the US.
 const firstSystem = () => savedSystem() ?? (navigator.language === 'en-US' ? 'us' : 'metric')
@@ -63,6 +73,9 @@ export default function App() {
   const [kept, setKept] = useState([])
   const [level, setLevel] = useState(DEFAULT_LEVEL)
   const [maxKmh, setMaxKmh] = useState(DEFAULT_MAX_SPEED)
+  // The simple mode's landing spot and practice game, kept here so they survive a trip to the full tool.
+  const [spot, setSpot] = useState(DEFAULT_SPOT)
+  const [game, setGame] = useState(NEW_GAME)
   const [system, setSystem] = useState(firstSystem)
   const units = useMemo(() => unitsFor(system), [system])
   const chooseSystem = (v) => {
@@ -95,8 +108,9 @@ export default function App() {
   }, [i18n])
   // Keep the tab title and description in step with the page and language.
   useEffect(() => {
-    document.title = tr(page === 'about' ? 'seo.aboutTitle' : 'seo.title')
-    document.querySelector('meta[name="description"]')?.setAttribute('content', tr(page === 'about' ? 'seo.aboutDescription' : 'seo.description'))
+    const seo = SEO_KEYS[page]
+    document.title = tr(seo.title)
+    document.querySelector('meta[name="description"]')?.setAttribute('content', tr(seo.description))
   }, [page, tr])
   const link = (nextPage) => ({
     href: pathFor(i18n.language, nextPage),
@@ -117,7 +131,8 @@ export default function App() {
   const ball = ballPosition(plan, sim, t)
   const flown = t - plan.contactT
   const atEnd = t >= total - 0.001
-  const running = playing && !atEnd
+  // The 3D serve only plays on the tool page; elsewhere it waits.
+  const running = playing && !atEnd && page === 'tool'
 
   const totalRef = useRef(total)
   useEffect(() => {
@@ -195,6 +210,15 @@ export default function App() {
     setT(0)
     setPlaying(true)
   }
+  // From the simple mode: the serve that lands on the chosen spot (its racket angle is set by hand,
+  // since it was solved for that spot), played in the full tool.
+  const watchServe = (one) => {
+    const { speedKmh, swing, hit, toss, aimZ, autoSwing, swingDeg } = one
+    setS((p) => ({ ...p, speedKmh, swing, hit, toss, aimZ, autoSwing, swingDeg }))
+    setT(0)
+    setPlaying(true)
+    go('tool')
+  }
 
   const update = (patch) => setS((p) => ({ ...p, ...patch }))
   // Switching hands mirrors the toss, the brush and the contact point, so it's the same serve played the other way.
@@ -236,12 +260,11 @@ export default function App() {
             )}
             <p>{tr('app.tagline')}</p>
             <nav className="site-nav">
-              <a className={page === 'tool' ? 'on' : ''} aria-current={page === 'tool' ? 'page' : undefined} {...link('tool')}>
-                {tr('nav.tool')}
-              </a>
-              <a className={page === 'about' ? 'on' : ''} aria-current={page === 'about' ? 'page' : undefined} {...link('about')}>
-                {tr('nav.about')}
-              </a>
+              {PAGES.map((p) => (
+                <a key={p} className={page === p ? 'on' : ''} aria-current={page === p ? 'page' : undefined} {...link(p)}>
+                  {tr(`nav.${p}`)}
+                </a>
+              ))}
             </nav>
           </div>
           <div className="settings">
@@ -269,6 +292,21 @@ export default function App() {
 
         {page === 'about' ? (
           <About onTool={() => go('tool')} toolHref={pathFor(i18n.language, 'tool')} />
+        ) : page === 'simple' ? (
+          <Simple
+            who={who}
+            level={level}
+            onLevel={setLevel}
+            maxKmh={maxKmh}
+            onMaxKmh={setMaxKmh}
+            onHand={setHand}
+            onSide={setSide}
+            spot={spot}
+            onSpot={setSpot}
+            game={game}
+            onGame={setGame}
+            onWatch={watchServe}
+          />
         ) : (
           <div className="layout">
             <section className="stage">

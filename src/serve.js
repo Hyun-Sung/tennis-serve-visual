@@ -188,9 +188,10 @@ export function planServe(s) {
   const base = { speedKmh: s.speedKmh, rpm: spin.rpm, aimZ: s.aimZ, axis: spin.axis, yawOffsetDeg: -CONTACT_YAW_DEG * s.hit.u, side }
   // The server picks their height, stance, jump, sideways toss, swing and contact point on purpose,
   // so the auto racket angle allows for them. A toss too far forward or back, or below their reach,
-  // is a mistake it doesn't know about.
+  // is a mistake it doesn't know about. Finding it takes a couple of dozen flights, so a racket angle
+  // set by hand skips it (autoSwing is then null).
   const intended = { x: f.contact.x + stance.forward, y: reachAt(f.contact.x, cz, f) + jumpLift, z: cz }
-  const autoSwing = solveAngle({ ...base, angleDeg: 0 }, intended) - pitchFromHit
+  const autoSwing = s.autoSwing ? solveAngle({ ...base, angleDeg: 0 }, intended) - pitchFromHit : null
   const swingDeg = s.autoSwing ? autoSwing : s.swingDeg
   // The racket face: the racket angle, tipped down by a toss in front (or up by one behind). Where on
   // the ball you hit then deflects the ball off that face (pitchFromHit), so the two can differ a little.

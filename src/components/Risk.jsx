@@ -1,18 +1,10 @@
 import { Trans, useTranslation } from 'react-i18next'
 import { TRIES } from '../outcome.js'
+import { OUTCOME_PARTS as PARTS } from '../palette.js'
 
 const pct = (x) => Math.round(x * 100)
 // Mistake sizes grow on an awkward direction, so they're no longer round numbers.
 const one = (x) => Number(x.toFixed(1))
-
-// Best outcome for the server first.
-const PARTS = [
-  { key: 'ace', color: '#7c5cff' },
-  { key: 'winner', color: '#5aa9e6' },
-  { key: 'tough', color: '#4fd1a5' },
-  { key: 'easy', color: '#ffb35c' },
-  { key: 'fault', color: '#e2574c' },
-]
 
 export default function Risk({ risk, level, stale, direction }) {
   const { t, i18n } = useTranslation()

@@ -13,7 +13,8 @@ export const LANGUAGES = [
   { code: 'zh', name: '中文（简体）', html: 'zh-Hans' },
 ]
 export const DEFAULT_LANGUAGE = 'en'
-export const PAGES = ['tool', 'about']
+// In the order the site's menu lists them.
+export const PAGES = ['tool', 'simple', 'about']
 
 export const isLanguage = (code) => LANGUAGES.some((l) => l.code === code)
 export const htmlLang = (code) => LANGUAGES.find((l) => l.code === code)?.html ?? code
@@ -21,12 +22,12 @@ export const htmlLang = (code) => LANGUAGES.find((l) => l.code === code)?.html ?
 /** English lives at the root; every other language under its own prefix. Pages end in a slash. */
 export function pathFor(lang, page) {
   const prefix = lang === DEFAULT_LANGUAGE ? '' : `/${lang}`
-  return page === 'about' ? `${prefix}/about/` : `${prefix}/`
+  return page === 'tool' ? `${prefix}/` : `${prefix}/${page}/`
 }
 
 /** Which language and page a path is. lang is null when the path has no language prefix. */
 export function parsePath(pathname) {
   const parts = pathname.split('/').filter(Boolean)
   const lang = isLanguage(parts[0]) && parts[0] !== DEFAULT_LANGUAGE ? parts.shift() : null
-  return { lang, page: parts[0] === 'about' ? 'about' : 'tool' }
+  return { lang, page: PAGES.includes(parts[0]) ? parts[0] : 'tool' }
 }

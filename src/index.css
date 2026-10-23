@@ -1157,3 +1157,528 @@ header {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* simple mode: tap a spot, see the best serve, play a game */
+.simple {
+  padding: 1rem 1.1rem 1.2rem;
+}
+.simple-intro h1 {
+  margin: 0 0 0.2rem;
+  font-size: clamp(1.4rem, 3.4vw, 1.9rem);
+}
+.simple-intro p {
+  margin: 0 0 0.9rem;
+  max-width: 62ch;
+  color: var(--soft);
+}
+.simple h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+}
+.simple-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.6rem 1.1rem;
+  align-items: start;
+  padding: 0.7rem 0.85rem 0.1rem;
+  border-radius: 16px;
+  background: #f4f1e8;
+}
+.simple-bar .field {
+  margin-bottom: 0.8rem;
+}
+.field-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.92rem;
+}
+.simple-bar .seg button {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+/* on a phone each toggle sits on one row beside its label, so the court comes into view sooner */
+@media (max-width: 600px) {
+  .simple {
+    padding: 0.8rem 0.75rem 1rem;
+  }
+  .simple-bar {
+    padding: 0.6rem 0.7rem 0.1rem;
+  }
+  .simple-bar .field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+  .simple-bar .field-label {
+    margin: 0;
+  }
+  .simple-bar .field .seg {
+    flex: 0 1 15rem;
+  }
+}
+.simple-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  grid-template-areas:
+    'court info'
+    'game info';
+  gap: 1rem 1.2rem;
+  align-items: start;
+  margin-top: 1rem;
+}
+.simple-court {
+  grid-area: court;
+}
+.simple-info {
+  grid-area: info;
+  transition: opacity 0.15s;
+}
+.simple-info.stale {
+  opacity: 0.6;
+}
+.simple-game {
+  grid-area: game;
+}
+@media (max-width: 860px) {
+  .simple-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'court' 'info' 'game';
+  }
+}
+
+/* the court picker */
+svg.spot-court {
+  display: block;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  aspect-ratio: 12.4 / 14.8;
+  border-radius: 14px;
+  touch-action: none;
+  cursor: crosshair;
+}
+svg.spot-court:focus-visible {
+  outline: 3px solid var(--coral);
+  outline-offset: 2px;
+}
+svg.spot-court text {
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+svg.spot-court .zone-label text {
+  font-size: 0.42px;
+  font-weight: 700;
+  fill: rgba(255, 255, 255, 0.75);
+}
+svg.spot-court .other-box {
+  font-size: 0.45px;
+  fill: rgba(255, 255, 255, 0.55);
+}
+svg.spot-court .who-label {
+  font-size: 0.4px;
+  fill: #fff;
+}
+svg.spot-court .cloud {
+  fill: rgba(255, 224, 138, 0.28);
+  stroke: rgba(255, 224, 138, 0.9);
+  stroke-width: 0.05;
+}
+svg.spot-court .paths {
+  transition: opacity 0.15s;
+}
+svg.spot-court .paths.stale {
+  opacity: 0.3;
+}
+svg.spot-court .land path {
+  stroke: #fff;
+  stroke-width: 0.09;
+  stroke-linecap: round;
+}
+svg.spot-court .land text {
+  font-size: 0.6px;
+  font-weight: 800;
+  fill: #fff;
+  paint-order: stroke;
+  stroke: var(--ink);
+  stroke-width: 0.15;
+}
+svg.spot-court .land.in text {
+  fill: var(--ball);
+}
+svg.spot-court .land:not(.in) path {
+  stroke: #ff8a7a;
+}
+.spot-facts {
+  margin: 0.5rem 0 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+.simple-court .note {
+  margin: 0.3rem 0 0;
+  text-align: center;
+  font-size: 0.82rem;
+}
+
+/* the recommended serve */
+.pick-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 16px;
+  background: var(--card);
+  border: 2px solid var(--line);
+}
+.pick-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.pick-card .rec-serve {
+  font-size: 1.3rem;
+}
+.pick-card .rec-serve .badge {
+  margin-left: 0;
+  font-size: 1rem;
+  padding: 0.05rem 0.6rem;
+}
+.pick-card .rpm {
+  font-size: 0.85rem;
+  color: var(--soft);
+}
+.pick-why {
+  margin: -0.2rem 0 0;
+  color: var(--soft);
+  font-size: 0.9rem;
+}
+.pick-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0.2rem 0 0;
+}
+.pick-stats > div {
+  padding: 0.45rem 0.6rem;
+  border-radius: 12px;
+  background: #f4f1e8;
+}
+.pick-stats dt {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--soft);
+}
+.pick-stats dd {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+.pick-stats dd.sub {
+  margin-top: 0.15rem;
+  font-size: 0.74rem;
+  font-weight: 400;
+  color: var(--soft);
+}
+.simple .low {
+  color: var(--red);
+}
+.pick-card .outcome-bar {
+  margin: 0.2rem 0 0;
+}
+.pick-card .outcome-legend {
+  font-size: 0.8rem;
+  gap: 0.2rem 0.8rem;
+}
+.pick-note {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--soft);
+}
+.simple-info .tip {
+  margin-top: 0.6rem;
+}
+.simple-info h2 {
+  margin-top: 1rem;
+}
+.simple-info > .hint {
+  margin: 0.6rem 0 0;
+  color: var(--soft);
+  font-size: 0.76rem;
+}
+
+/* how hard to return: more bars lit is harder; colors follow the outcome bar */
+.meter {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 0.85rem;
+  vertical-align: -0.1rem;
+}
+.meter span {
+  width: 0.3rem;
+  border-radius: 2px;
+  background: #ddd8ca;
+}
+.meter span:nth-child(1) {
+  height: 40%;
+}
+.meter span:nth-child(2) {
+  height: 60%;
+}
+.meter span:nth-child(3) {
+  height: 80%;
+}
+.meter span:nth-child(4) {
+  height: 100%;
+}
+.meter.m1 .on {
+  background: #ffb35c;
+}
+.meter.m2 .on {
+  background: #4fd1a5;
+}
+.meter.m3 .on {
+  background: #5aa9e6;
+}
+.meter.m4 .on {
+  background: #7c5cff;
+}
+
+/* every spin to the spot */
+.spin-list {
+  display: grid;
+  gap: 0.35rem;
+}
+.spin-head,
+.spin-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.6fr);
+  gap: 0.5rem;
+  align-items: center;
+}
+.spin-head {
+  padding: 0 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--soft);
+}
+.spin-head span:last-child,
+.spin-score {
+  text-align: right;
+}
+button.spin-row {
+  width: 100%;
+  padding: 0.45rem 0.7rem;
+  border-radius: 12px;
+  text-align: left;
+}
+button.spin-row:hover {
+  transform: none;
+  border-color: var(--soft);
+}
+button.spin-row.on {
+  background: var(--card);
+  color: var(--ink);
+  border-color: var(--ink);
+  box-shadow: 0 0 0 1px var(--ink);
+}
+.spin-row.none {
+  padding: 0.45rem 0.7rem;
+  border: 2px dashed var(--line);
+  border-radius: 12px;
+  opacity: 0.75;
+}
+.spin-cant {
+  grid-column: 2 / -1;
+  font-size: 0.85rem;
+  color: var(--soft);
+}
+.spin-name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.15rem 0.35rem;
+}
+.spin-name .badge {
+  margin-left: 0;
+}
+.spin-name small,
+.spin-return small {
+  font-size: 0.75rem;
+  color: var(--soft);
+}
+.pick-star {
+  color: #e0a100;
+  font-size: 0.9rem;
+}
+.spin-margin {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-variant-numeric: tabular-nums;
+}
+.mini-bar {
+  display: block;
+  height: 0.3rem;
+  border-radius: 999px;
+  background: #e6e1d3;
+  overflow: hidden;
+}
+.mini-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--green);
+}
+.spin-return {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.1rem 0.35rem;
+}
+.spin-score {
+  font-size: 1.1rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+/* the practice game */
+.simple-game {
+  padding: 0.75rem 0.85rem;
+  border-radius: 16px;
+  background: #f4f1e8;
+}
+.game-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.game-head h2 {
+  margin: 0;
+}
+.simple-game > .note {
+  margin: 0.3rem 0 0.6rem;
+  font-size: 0.85rem;
+}
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+table.scoreboard {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--ink);
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+.scoreboard th,
+.scoreboard td {
+  padding: 0.25rem 0.7rem;
+  text-align: center;
+}
+.scoreboard thead th {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.65);
+}
+.scoreboard tbody th {
+  text-align: left;
+  font-weight: 700;
+}
+.scoreboard tbody td {
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+.scoreboard td.pts {
+  min-width: 2.8rem;
+  color: var(--ball);
+}
+.scoreboard .serving {
+  margin-right: 0.3rem;
+  font-size: 0.6rem;
+  vertical-align: 0.15rem;
+  color: var(--ball);
+}
+.score-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+}
+.score-side .call,
+.score-side .next {
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.score-side .call {
+  background: #fff4d6;
+}
+.score-side .next {
+  background: var(--card);
+  border: 2px solid var(--line);
+}
+button.serve-it {
+  display: block;
+  width: 100%;
+  margin-top: 0.7rem;
+  padding: 0.55rem 1rem;
+  background: var(--coral);
+  border-color: var(--coral);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.02rem;
+}
+button.serve-it:disabled {
+  opacity: 0.55;
+  cursor: default;
+  transform: none;
+}
+.played {
+  margin: 0.6rem 0 0;
+  padding: 0.5rem 0.8rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  animation: pop 0.35s ease-out;
+}
+.played.ace {
+  background: #e3dcff;
+  color: #5b3fe0;
+}
+.played.winner {
+  background: #d8ebfb;
+  color: #2a74b8;
+}
+.played.tough {
+  background: #d6f5ea;
+  color: #23805f;
+}
+.played.easy {
+  background: #ffe6c8;
+  color: #c06a12;
+}
+.played.fault,
+.played.lost {
+  background: #fde1da;
+  color: var(--red);
+}
+.simple-game > .hint {
+  margin: 0.5rem 0 0;
+  color: var(--soft);
+  font-size: 0.78rem;
+}

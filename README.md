@@ -4,9 +4,22 @@ A 3D tennis serve you can tinker with in the browser. Move the toss, add spin an
 
 It's a free tool I made for me and my friends. If it helps you too, [PayPal donations](https://paypal.me/hyuns89) are always welcome. The About page (`/about/` on the site) explains the math behind it in plain words.
 
+## simple mode
+
+The simple mode (`/simple/` on the site) skips the controls. Tap where you want the serve to land in the service box (or drag the ball, or use the arrow keys) and it shows:
+
+- **the recommended serve**: flat, slice, topspin-slice or kick, and how fast. For every spin it finds the racket angle and aim that land the ball on your spot at a few speeds up to your fastest serve, flies each one with the same small mistakes as the full tool, and keeps the speed that scores best. A one-line reason says why it's the pick (the safest, the hardest to return, both, or the best mix).
+- **margin**: the share that still lands in, with a shaded oval on the court where 9 in 10 of them land, so you can see how close it runs to the lines.
+- **return**: how hard it is to return (easy, medium, hard, very hard), with the bar of aces, return errors, tough and easy returns, and faults.
+- **score**: the points you'd win out of 100 serves like it. On a first serve a miss goes to a safe second serve (worked out the same way), so it can take more risk. The second-serve setting only picks serves that go in 9 times in 10.
+- **every spin to the spot**, with its speed, margin, return difficulty and score. Pick one to see its path, and "Watch it in 3D" loads it into the full tool.
+- **a practice game**: serve each point to your spot against the chosen returner, with a second serve after a fault, the ball flying onto the court, and real tennis scoring (15, 30, 40, deuce, advantage, game). Each serve is hit with a random set of the usual small mistakes, so the results follow the odds shown.
+
+Tapping the other box serves from the other side. The server's hand, height, stance and jump, their fastest serve and the returner level are shared with the full tool.
+
 ## languages
 
-English, Spanish, French, German, Portuguese, Japanese, Korean and Chinese (Simplified). Each language has its own address (English at `/`, the others at `/es/`, `/fr/`, `/de/`, `/pt/`, `/ja/`, `/ko/`, `/zh/`, and the About page at `about/` under each). The menu in the header switches language. On a first visit to the plain address, a browser that prefers one of these languages is sent to it once; after that the visitor's choice sticks.
+English, Spanish, French, German, Portuguese, Japanese, Korean and Chinese (Simplified). Each language has its own address (English at `/`, the others at `/es/`, `/fr/`, `/de/`, `/pt/`, `/ja/`, `/ko/`, `/zh/`, with the simple mode at `simple/` and the About page at `about/` under each). The menu in the header switches language. On a first visit to the plain address, a browser that prefers one of these languages is sent to it once; after that the visitor's choice sticks.
 
 All text lives in [src/locales](src/locales), one file per language, with English as the source. `npm run check:locales` makes sure every translation has the same keys and placeholders as English.
 
@@ -24,7 +37,7 @@ All text lives in [src/locales](src/locales), one file per language, with Englis
   - **stance**: platform (the feet stay apart and you hit where you tossed) or pinpoint (the back foot slides up beside the front foot, then you drive up and into the court, meeting the ball about 15 cm further in and 6 cm higher, and landing inside the baseline).
   - **jump height**: from 0 to 45 cm off the ground. A higher jump meets the ball higher.
 - **swing and spin**:
-  - **serve speed**, from 100 to 230 km/h.
+  - **serve speed**, from 45 to 230 km/h (28 to 143 mph). Slower than that, the ball can't reach the service box at any angle.
   - **brush up**: how much the racket swings up the back of the ball, which adds topspin.
   - **brush across**: how much it swings across the ball. Toward the outside (right for a right-hander, left for a left-hander) adds slice, which curves the ball away from the hitting arm.
   - **contact on the ball**: where the strings meet the ball, on a clock face seen from behind.
@@ -61,7 +74,7 @@ npm run dev
 
 ## search engines
 
-`npm run build` writes a real HTML page for every page in every language (16 in all, via [scripts/build-pages.mjs](scripts/build-pages.mjs)). Each has its own `<html lang>`, title, description, social-sharing tags and structured data (`WebApplication` for the tool, `AboutPage` for the About page), plus the page's text as plain HTML. Search engines can read and index it without running the 3D app, and the app replaces it once it starts. A `robots.txt` is written too. Every page is a plain file, so any static host serves it with no rewrite rules.
+`npm run build` writes a real HTML page for every page in every language (24 in all, via [scripts/build-pages.mjs](scripts/build-pages.mjs)). Each has its own `<html lang>`, title, description, social-sharing tags and structured data (`WebApplication` for the tool and the simple mode, `AboutPage` for the About page), plus the page's text as plain HTML. Search engines can read and index it without running the 3D app, and the app replaces it once it starts. A `robots.txt` is written too. Every page is a plain file, so any static host serves it with no rewrite rules.
 
 Links that need the site's full address (canonical, hreflang between the languages, `og:url`, the share image and `sitemap.xml`) are only written when you tell the build where the site lives:
 

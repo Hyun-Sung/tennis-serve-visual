@@ -39,14 +39,15 @@ export const netHeightAt = (z) =>
  *   yawOffsetDeg (optional) turns the launch direction; positive is to the right.
  *   side (optional, 'deuce' or 'ad') picks the box it has to land in; deuce if left out.
  * @param {{x:number, y:number, z:number}} c contact point
- * @param {{crossX?:number, fast?:boolean, ghost?:boolean}} [opts]
+ * @param {{crossX?:number, fast?:boolean, ghost?:boolean, untilBounce?:boolean}} [opts]
  *   crossX records where the ball crosses that x after the bounce (where the returner meets it).
  *   fast skips the sampled path and stops as soon as the outcome is known, for running many serves.
  *   ghost lets the ball fly through the net and on past a fault, so clearance, bounce and return point
  *   all change smoothly with the serve (for measuring how sensitive it is).
+ *   untilBounce (with fast) stops at the first bounce, for finding where a serve lands.
  */
 export function simulateServe(p, c, opts = {}) {
-  const { crossX = Infinity, fast = false, ghost = false } = opts
+  const { crossX = Infinity, fast = false, ghost = false, untilBounce = false } = opts
   const [z0, z1] = boxZ(p.side)
   const inBox = (x, z) => x >= COURT.net && x <= COURT.serviceLine && z >= z0 && z <= z1
   const v0 = p.speedKmh / 3.6
@@ -100,7 +101,7 @@ export function simulateServe(p, c, opts = {}) {
       if (bounces === 1) ev.bounce = { t, x: pos[0], z: pos[2], speedKmh: s * 3.6 }
       // A ball that dies before reaching the returner: they just step in and take it.
       if (bounces === 2 && !ev.cross && !hitNet) ev.cross = { t, x: pos[0], y: BALL_R, z: pos[2], speedKmh: s * 3.6, short: true }
-      if (fast && !ghost && bounces === 1 && !inBox(pos[0], pos[2])) break
+      if (fast && bounces === 1 && (untilBounce || (!ghost && !inBox(pos[0], pos[2])))) break
       // Tangential friction pulls the contact patch toward rolling, and heavy topspin grips the
       // court and kicks the ball up a little higher than it came in.
       const rim = cross(omega, [0, -BALL_R, 0])
@@ -148,10 +149,13 @@ export function ballAt(sim, t) {
   return { t, x: a.x + f * (b.x - a.x), y: a.y + f * (b.y - a.y), z: a.z + f * (b.z - a.z) }
 }
 
-/** Launch angle that lands the ball at depth targetX, found by bisection. */
+/**
+ * Launch angle that lands the ball at depth targetX, found by bisection. A slow serve has to go up
+ * a long way to carry the net, so the range runs well above level.
+ */
 export function solveAngle(p, c, targetX = COURT.serviceLine - 1.2) {
   let lo = -14
-  let hi = 10
+  let hi = 40
   for (let i = 0; i < 22; i++) {
     const mid = (lo + hi) / 2
     const sim = simulateServe({ ...p, angleDeg: mid }, c, { fast: true })
