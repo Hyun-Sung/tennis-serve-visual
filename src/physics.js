@@ -7,6 +7,8 @@ export const BALL_R = 0.0335
 const MASS = 0.057
 const CD = 0.55
 const K = (0.5 * RHO * Math.PI * BALL_R * BALL_R) / MASS
+// Extra upward bounce per m/s of topspin at the ball's rim.
+const KICK = 0.12
 
 export const COURT = {
   length: 23.77,
@@ -28,8 +30,15 @@ export const netHeightAt = (z) =>
  *   axis is the unit spin axis: -z is topspin, +y curves the ball left (slice), -y right.
  *   yawOffsetDeg (optional) turns the launch direction; positive is to the right.
  * @param {{x:number, y:number, z:number}} c contact point
+ * @param {{crossX?:number, fast?:boolean, ghost?:boolean}} [opts]
+ *   crossX records where the ball crosses that x after the bounce (where the returner meets it).
+ *   fast skips the sampled path and stops as soon as the outcome is known, for running many serves.
+ *   ghost lets the ball fly through the net and on past a fault, so clearance, bounce and return point
+ *   all change smoothly with the serve (for measuring how sensitive it is).
  */
-export function simulateServe(p, c) {
+export function simulateServe(p, c, opts = {}) {
+  const { crossX = Infinity, fast = false, ghost = false } = opts
+  const inBox = (x, z) => x >= COURT.net && x <= COURT.serviceLine && z >= -COURT.halfSingles && z <= 0
   const v0 = p.speedKmh / 3.6
   const a = (p.angleDeg * Math.PI) / 180
   const yaw = Math.atan2(p.aimZ - c.z, COURT.serviceLine - c.x) + ((p.yawOffsetDeg ?? 0) * Math.PI) / 180
@@ -40,7 +49,7 @@ export function simulateServe(p, c) {
   const dt = 1 / 1000
   const sampleEvery = 3
   const points = [{ t: 0, x: pos[0], y: pos[1], z: pos[2] }]
-  const ev = { net: null, bounce: null, result: null, peakAfterBounce: 0 }
+  const ev = { net: null, bounce: null, result: null, peakAfterBounce: 0, cross: null }
   let bounces = 0
   let hitNet = false
 
@@ -66,8 +75,9 @@ export function simulateServe(p, c) {
       const z = prev[2] + f * (pos[2] - prev[2])
       const clearance = y - BALL_R - netHeightAt(z)
       ev.net = { t, y, z, clearance, speedKmh: s * 3.6 }
-      if (clearance < 0) {
+      if (clearance < 0 && !ghost) {
         hitNet = true
+        if (fast) break
         pos[0] = COURT.net - BALL_R
         vel = [-0.12 * vel[0], Math.min(vel[1], 0) * 0.25, vel[2] * 0.3]
         omega = [0, 0, 0]
@@ -78,14 +88,24 @@ export function simulateServe(p, c) {
       pos[1] = BALL_R
       bounces++
       if (bounces === 1) ev.bounce = { t, x: pos[0], z: pos[2], speedKmh: s * 3.6 }
-      // Tangential friction pulls the contact patch toward rolling.
+      // A ball that dies before reaching the returner: they just step in and take it.
+      if (bounces === 2 && !ev.cross && !hitNet) ev.cross = { t, x: pos[0], y: BALL_R, z: pos[2], speedKmh: s * 3.6, short: true }
+      if (fast && !ghost && bounces === 1 && !inBox(pos[0], pos[2])) break
+      // Tangential friction pulls the contact patch toward rolling, and heavy topspin grips the
+      // court and kicks the ball up a little higher than it came in.
       const rim = cross(omega, [0, -BALL_R, 0])
-      vel = [vel[0] - 0.4 * (vel[0] + rim[0]), -0.75 * vel[1], vel[2] - 0.4 * (vel[2] + rim[2])]
+      const kick = KICK * BALL_R * Math.max(0, -omega[2])
+      vel = [vel[0] - 0.4 * (vel[0] + rim[0]), -0.75 * vel[1] + kick, vel[2] - 0.4 * (vel[2] + rim[2])]
       omega = omega.map((o) => o * 0.5)
     }
     if (bounces === 1 && !hitNet) ev.peakAfterBounce = Math.max(ev.peakAfterBounce, pos[1])
+    if (bounces === 1 && !hitNet && !ev.cross && prev[0] < crossX && pos[0] >= crossX) {
+      const f = (crossX - prev[0]) / (pos[0] - prev[0])
+      ev.cross = { t, x: crossX, y: prev[1] + f * (pos[1] - prev[1]), z: prev[2] + f * (pos[2] - prev[2]), speedKmh: s * 3.6 }
+      if (fast) break
+    }
 
-    if (i % sampleEvery === 0) points.push({ t, x: pos[0], y: pos[1], z: pos[2] })
+    if (!fast && i % sampleEvery === 0) points.push({ t, x: pos[0], y: pos[1], z: pos[2] })
     if (bounces >= 2 || pos[0] > COURT.length + 6 || Math.abs(pos[2]) > 12) break
     if (hitNet && Math.hypot(...vel) < 0.3) break
   }
@@ -124,7 +144,7 @@ export function solveAngle(p, c, targetX = COURT.serviceLine - 1.2) {
   let hi = 10
   for (let i = 0; i < 22; i++) {
     const mid = (lo + hi) / 2
-    const sim = simulateServe({ ...p, angleDeg: mid }, c)
+    const sim = simulateServe({ ...p, angleDeg: mid }, c, { fast: true })
     const x = sim.result === 'net' ? -1 : sim.bounce ? sim.bounce.x : 1e9
     if (x < targetX) lo = mid
     else hi = mid

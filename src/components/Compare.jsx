@@ -1,6 +1,8 @@
-import { PALETTE } from '../compare.js'
+import { describeServe, PALETTE } from '../compare.js'
+import { useUnits } from '../units.js'
 
 export default function Compare({ color, onColor, kept, onKeep, onRemove, onClear }) {
+  const units = useUnits()
   return (
     <div className="compare">
       <div className="compare-row">
@@ -25,7 +27,7 @@ export default function Compare({ color, onColor, kept, onKeep, onRemove, onClea
               <li key={k.id}>
                 <span className="dot" style={{ background: k.color }} />
                 <span className="kept-text">
-                  <b>serve {i + 1}</b> {k.label}
+                  <b>serve {i + 1}</b> {describeServe(k.summary, units)}
                 </span>
                 <button className="x" aria-label={`remove serve ${i + 1}`} onClick={() => onRemove(k.id)}>
                   ×

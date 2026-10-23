@@ -499,7 +499,7 @@ svg.top .mark.in text {
 .ball-pick .note {
   text-align: center;
 }
-.controls > .hint {
+.controls-col > .hint {
   margin: 0 0 0.6rem;
   color: var(--soft);
   font-size: 0.78rem;
@@ -602,4 +602,241 @@ svg.top .mark.in text {
   .compare .keep {
     margin-left: 0;
   }
+}
+
+/* risk and reward */
+.risk {
+  padding: 0.75rem 0.85rem;
+  border-radius: 16px;
+  background: #f4f1e8;
+  transition: opacity 0.15s;
+}
+.risk.stale {
+  opacity: 0.6;
+}
+.risk-head {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.tolerance {
+  display: flex;
+  flex-direction: column;
+  min-width: 9rem;
+}
+.risk-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.tolerance b {
+  font-size: 2.2rem;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+.risk-sub {
+  font-size: 0.78rem;
+  color: var(--soft);
+}
+.risk-facts {
+  flex: 1;
+  min-width: 14rem;
+  font-size: 0.9rem;
+}
+.risk-facts p {
+  margin: 0.15rem 0;
+}
+.outcome-bar {
+  display: flex;
+  height: 0.9rem;
+  margin: 0.6rem 0 0.4rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #e6e1d3;
+}
+.outcome-bar span {
+  display: block;
+  height: 100%;
+  transition: width 0.25s;
+}
+.outcome-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+  margin: 0 0 0.3rem;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+}
+.outcome-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.outcome-legend .dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+}
+.risk .hint {
+  margin: 0.2rem 0 0;
+  color: var(--soft);
+  font-size: 0.76rem;
+}
+
+.verdict.ace {
+  background: #e3dcff;
+  animation: pop 0.35s ease-out;
+}
+.verdict.ace b {
+  color: #5b3fe0;
+}
+.verdict.winner {
+  background: #d8ebfb;
+  animation: pop 0.35s ease-out;
+}
+.verdict.winner b {
+  color: #2a74b8;
+}
+.verdict.tough {
+  background: #d6f5ea;
+  animation: pop 0.35s ease-out;
+}
+.verdict.tough b {
+  color: #23805f;
+}
+.verdict.easy {
+  background: #ffe6c8;
+  animation: pop 0.35s ease-out;
+}
+.verdict.easy b {
+  color: #c06a12;
+}
+
+/* risk sits beside where you aim and who you're serving to */
+.outcome-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(220px, 1fr);
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  align-items: stretch;
+}
+.target {
+  padding: 0.75rem 0.85rem;
+  border-radius: 16px;
+  background: #f4f1e8;
+}
+.target h2 {
+  margin: 0.9rem 0 0.45rem;
+  font-size: 1.05rem;
+}
+.target h2:first-child {
+  margin-top: 0;
+}
+.target .slider {
+  margin-bottom: 0;
+}
+@media (max-width: 760px) {
+  .outcome-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* on wide screens the controls split into two columns, so neither runs on forever */
+@media (min-width: 1180px) {
+  .app {
+    max-width: 1640px;
+  }
+  .layout {
+    grid-template-columns: minmax(0, 1fr) 580px;
+  }
+  .controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.1rem;
+    align-items: start;
+  }
+}
+
+/* typed height */
+.height-field {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: -0.3rem 0 0.8rem;
+  font-size: 0.85rem;
+  color: var(--soft);
+}
+.height-field .num {
+  font: inherit;
+  color: var(--ink);
+  padding: 0.2rem 0.35rem;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  text-align: right;
+}
+.height-field .num:focus {
+  outline: none;
+  border-color: var(--coral);
+}
+
+/* topspin and side spin, side by side */
+.spin-part {
+  display: block;
+  margin-top: 0.35rem;
+}
+.spin-part .row {
+  font-size: 0.86rem;
+}
+.spin-note {
+  color: var(--soft);
+  font-size: 0.76rem;
+}
+.spin-bar {
+  display: block;
+  height: 0.35rem;
+  margin-top: 0.15rem;
+  border-radius: 999px;
+  background: #e6e1d3;
+  overflow: hidden;
+}
+.spin-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.2s;
+}
+.spin-bar .top {
+  background: #9ccc3c;
+}
+.spin-bar .side {
+  background: #8f7cf0;
+}
+.readonly .row.total {
+  margin-top: 0.4rem;
+  padding-top: 0.3rem;
+  border-top: 1px solid var(--line);
+}
+
+/* metric / US switch in the header */
+header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.units-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--soft);
+}
+.units-switch .seg button {
+  padding: 0.2rem 0.8rem;
+  font-size: 0.85rem;
 }

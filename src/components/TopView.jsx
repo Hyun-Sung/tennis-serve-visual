@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { RETURNER_READY, returnerZ } from '../outcome.js'
 import { COURT } from '../physics.js'
 
 // Seen from above: x runs toward the receiver, z (the server's right) points down the screen.
@@ -8,7 +9,7 @@ const AIM_MAX = 0.6
 
 const RESULT_TEXT = { in: 'in!', net: 'net', long: 'long', wide: 'out' }
 
-export default function TopView({ flown, sim, ball, aimZ, serverZ, onAim, lineColor = '#e2574c', kept = [] }) {
+export default function TopView({ flown, sim, ball, aimZ, serverZ, onAim, lineColor = '#e2574c', kept = [], ret }) {
   const svgRef = useRef(null)
   const dragging = useRef(false)
   const { length: L, net, serviceLine: S, halfSingles: hs, halfDoubles: hd } = COURT
@@ -74,6 +75,7 @@ export default function TopView({ flown, sim, ball, aimZ, serverZ, onAim, lineCo
       {done.length > 1 && <polyline points={done.join(' ')} fill="none" stroke={lineColor} strokeWidth="0.12" strokeLinecap="round" />}
 
       <circle cx="-0.6" cy={serverZ} r="0.32" fill="#f27b5c" stroke="#fff" strokeWidth="0.07" />
+      <circle cx={RETURNER_READY.x} cy={returnerZ(ret, Math.max(flown, 0))} r="0.32" fill="#5aa9e6" stroke="#fff" strokeWidth="0.07" />
       {flown > 0 && <circle cx={ball.x} cy={ball.z} r="0.2" fill="#d8ef3a" stroke="#a9c21f" strokeWidth="0.05" />}
 
       {bounced && (

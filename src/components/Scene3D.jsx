@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { Line2 } from 'three/addons/lines/Line2.js'
 import { LineGeometry } from 'three/addons/lines/LineGeometry.js'
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js'
+import { RETURNER_READY, returnerZ } from '../outcome.js'
 import { BALL_R, COURT } from '../physics.js'
 import { RELEASE_T } from '../pose.js'
 import { BASE_X, NEUTRAL_BODY, poseTime, SERVER_Z, serverJoints } from '../serve.js'
@@ -19,16 +20,23 @@ const VIEWS = [
   { id: 'coach', label: 'coach' },
 ]
 
-const RECEIVER = { x: 24.4, z: -2.9 }
+const RECEIVER = RETURNER_READY
+const OUTCOME = {
+  ace: ['ACE!', '#7c5cff'],
+  winner: ['return error', '#3d8fd6'],
+  tough: ['tough return', '#2f9e78'],
+  easy: ['easy return', '#e8892c'],
+}
 
-function viewPose(id, sim) {
+function viewPose(id, sim, hand) {
   if (id === 'receiver') return { pos: [RECEIVER.x + 0.2, 1.62, RECEIVER.z], target: [0.6, 1.5, 0.4], fov: 26 }
   if (id === 'net') {
     const z = sim.net ? sim.net.z : -0.8
     return { pos: [COURT.net - 1.1, 1.15, -9.8], target: [COURT.net, 0.95, z], fov: 26 }
   }
   // Side-on close-up of the server, the way coaches film a serve.
-  if (id === 'coach') return { pos: [0.3, 1.75, SERVER_Z + 4.4], target: [0.3, 1.7, SERVER_Z], fov: 48 }
+  // From the hitting-arm side, so a left-hander is filmed from their left.
+  if (id === 'coach') return { pos: [0.3, 1.75, SERVER_Z + 4.4 * (hand === 'left' ? -1 : 1)], target: [0.3, 1.7, SERVER_Z], fov: 48 }
   if (id === 'side') return { pos: [11.9, 3.4, 10.2], target: [11.9, 1.1, -0.5], fov: 64 }
   return { pos: [-5.6, 2.8, SERVER_Z + 1.8], target: [12, 0.9, -1.2], fov: 50 }
 }
@@ -149,6 +157,10 @@ function setup(host, live) {
   clearance.add(gapLine, label)
   scene.add(clearance)
   const lineMats = [pathMat, tossMat, trailMat, gapLine.material]
+  // What the returner made of it, shown over their head once the ball reaches them.
+  const outcomeLabel = labelSprite()
+  scene.add(outcomeLabel)
+  let lastOutcome = null
 
   const resize = () => {
     const w = host.clientWidth
@@ -164,10 +176,11 @@ function setup(host, live) {
 
   // Camera moves between views with a short glide; grabbing the view with the mouse cancels it.
   let shownView = null
+  let shownHand = null
   let glide = null
   controls.addEventListener('start', () => (glide = null))
-  const goTo = (id, sim, instant) => {
-    const to = viewPose(id, sim)
+  const goTo = (id, sim, instant, hand) => {
+    const to = viewPose(id, sim, hand)
     if (instant) {
       camera.position.set(...to.pos)
       controls.target.set(...to.target)
@@ -187,7 +200,8 @@ function setup(host, live) {
 
   let lastSim = null
   let lastPlan = null
-  const rebuild = (plan, sim) => {
+  let lastUnits = null
+  const rebuild = (plan, sim, units) => {
     const pts = sim.points.flatMap((p) => [p.x, p.y, p.z])
     path.geometry.dispose()
     path.geometry = new LineGeometry().setPositions(pts)
@@ -218,8 +232,8 @@ function setup(host, live) {
       gapLine.geometry = new LineGeometry().setPositions([COURT.net, top, sim.net.z, COURT.net, Math.max(sim.net.y - BALL_R, top), sim.net.z])
       gapLine.visible = sim.net.clearance > 0
       label.position.set(COURT.net, Math.max(sim.net.y, top) + 0.3, sim.net.z)
-      const cm = Math.round(sim.net.clearance * 100)
-      label.setText(cm >= 0 ? `clears by ${cm} cm` : 'into the net', cm >= 0 ? '#2f3e66' : '#e2574c')
+      const clears = sim.net.clearance >= 0
+      label.setText(clears ? `clears by ${units.short(sim.net.clearance)}` : 'into the net', clears ? '#2f3e66' : '#e2574c')
     }
   }
 
@@ -284,8 +298,14 @@ function setup(host, live) {
   let raf
   const frame = (now) => {
     raf = requestAnimationFrame(frame)
-    const { t, plan, sim, ball: b, view, kept, lineColor } = live.current
+    const { t, plan, sim, ball: b, view, kept, lineColor, ret, hand, units } = live.current
     if (!plan) return
+    // Redraw whenever the words change, not just the outcome, so a renamed label never lingers.
+    const outcome = OUTCOME[ret?.kind]
+    if (outcome && outcome.join('|') !== lastOutcome) {
+      outcomeLabel.setText(...outcome)
+      lastOutcome = outcome.join('|')
+    }
     if (kept !== lastKept) {
       rebuildKept(kept)
       lastKept = kept
@@ -294,14 +314,16 @@ function setup(host, live) {
       trailMat.color.set(lineColor)
       lastColor = lineColor
     }
-    if (sim !== lastSim || plan !== lastPlan) {
-      rebuild(plan, sim)
+    if (sim !== lastSim || plan !== lastPlan || units !== lastUnits) {
+      rebuild(plan, sim, units)
       lastSim = sim
       lastPlan = plan
+      lastUnits = units
     }
-    if (view !== shownView) {
-      goTo(view, sim, shownView === null)
+    if (view !== shownView || (view === 'coach' && hand !== shownHand)) {
+      goTo(view, sim, shownView === null, hand)
       shownView = view
+      shownHand = hand
     }
     if (glide) {
       const k = Math.min((now - glide.start) / 800, 1)
@@ -315,13 +337,17 @@ function setup(host, live) {
 
     const sj = serverJoints(poseTime(plan, t), plan)
     server.update(sj)
-    const bob = 0.025 * (1 + Math.sin(now / 160))
-    const rj = mirrorJoints(serverJoints(0, NEUTRAL_BODY), RECEIVER.x, RECEIVER.z, BASE_X, SERVER_Z)
+    const flown = t - plan.contactT
+    // The returner bounces on their toes, then sets off toward the ball once they've reacted.
+    const rz = returnerZ(ret, Math.max(flown, 0))
+    const moving = Math.abs(rz - RECEIVER.z) > 0.01
+    const bob = moving ? 0 : 0.025 * (1 + Math.sin(now / 160))
+    const rj = mirrorJoints(serverJoints(0, NEUTRAL_BODY), RECEIVER.x, rz, BASE_X, SERVER_Z)
     for (const p of Object.values(rj)) if (typeof p === 'object') p.y += bob
     receiver.update(rj)
     receiver.group.visible = view !== 'receiver'
-
-    const flown = t - plan.contactT
+    outcomeLabel.visible = !!(ret?.c && OUTCOME[ret.kind] && flown >= ret.c.t)
+    outcomeLabel.position.set(RECEIVER.x, 2.5, rz)
     ball.position.set(b.x, b.y, b.z)
     // Real spin is far too fast to see; this is a slowed-down hint of its axis and rate.
     const turns = flown > 0 ? flown * (plan.flight.rpm / 60) * 0.08 : (t - RELEASE_T) * 0.6
@@ -357,11 +383,11 @@ function setup(host, live) {
   }
 }
 
-export default function Scene3D({ t, plan, sim, ball, view, onView, lineColor, kept }) {
+export default function Scene3D({ t, plan, sim, ball, view, onView, lineColor, kept, ret, hand, units }) {
   const hostRef = useRef(null)
   const live = useRef({})
   useEffect(() => {
-    live.current = { t, plan, sim, ball, view, lineColor, kept }
+    live.current = { t, plan, sim, ball, view, lineColor, kept, ret, hand, units }
   })
   useEffect(() => setup(hostRef.current, live), [])
 

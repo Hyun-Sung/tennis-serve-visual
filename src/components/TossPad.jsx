@@ -1,14 +1,16 @@
 import { useRef } from 'react'
 import { DEFAULT_TOSS, TOSS_LIMITS } from '../serve.js'
+import { useUnits } from '../units.js'
 
 // Looking down from above and behind the server: right is the server's right, up is into the court.
 // Drawn in meters, with side = 0 straight above the hitting shoulder.
 const clamp = (v, [lo, hi]) => Math.min(Math.max(v, lo), hi)
 const snap = (v) => Math.round(v * 20) / 20
 
-export default function TossPad({ toss, stance = 'platform', onChange }) {
+export default function TossPad({ toss, stance = 'platform', lefty = false, onChange }) {
   const ref = useRef(null)
   const dragging = useRef(false)
+  const units = useUnits()
 
   const fromEvent = (e) => {
     const svg = ref.current
@@ -37,7 +39,7 @@ export default function TossPad({ toss, stance = 'platform', onChange }) {
       tabIndex={0}
       role="slider"
       aria-label="toss placement: arrow keys move it forward, back and sideways"
-      aria-valuetext={`${Math.round(toss.forward * 100)} cm forward, ${Math.round(toss.side * 100)} cm sideways`}
+      aria-valuetext={`${units.short(toss.forward)} forward, ${units.short(toss.side)} sideways`}
       onKeyDown={onKey}
       onPointerDown={(e) => {
         dragging.current = true
@@ -57,7 +59,8 @@ export default function TossPad({ toss, stance = 'platform', onChange }) {
       <text x="0" y="-0.9" className="pad-label">into the court</text>
       <text x="0" y="0.44" className="pad-label">behind the baseline</text>
 
-      <g className="pad-player">
+      {/* A left-hander is the same body mirrored about their hitting shoulder at x = 0. */}
+      <g className="pad-player" transform={lefty ? 'scale(-1 1)' : undefined}>
         <ellipse cx="-0.32" cy="0.12" rx="0.05" ry="0.11" fill="#fff" />
         {/* In a pinpoint stance the back foot ends up beside the front one. */}
         <ellipse cx={stance === 'pinpoint' ? -0.16 : -0.08} cy={stance === 'pinpoint' ? 0.22 : 0.33} rx="0.05" ry="0.11" fill="#fff" />
