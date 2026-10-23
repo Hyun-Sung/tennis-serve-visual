@@ -189,6 +189,7 @@ export function planServe(s) {
       z: contact.z - f.contact.z,
     },
     stance: s.stance,
+    finish: finishMix(spin, hs),
     jumpExtra,
     forwardShift: stance.forward,
     scale: k,
@@ -271,6 +272,58 @@ function lerp2(a, b, k) {
   return { x: a.x + (b.x - a.x) * k, y: a.y + (b.y - a.y) * k }
 }
 
+// Where the hitting arm finishes, for a right-hander (a lefty mirrors z). hand is relative to the
+// hip in metres for a 1.85 m player; racket is the direction the racket points from the hand.
+// flat: pronates and carries across the body, finishing low by the opposite hip, racket back past the leg.
+// slice: swings around the outside of the ball, so it comes even further across and lower.
+// kick: brushes up and out toward the hitting side, so it finishes higher and on that side.
+const FINISH = {
+  flat: { hand: [0.38, 0.12, -0.18], racket: [-0.5, -0.65, -0.4] },
+  slice: { hand: [0.36, 0.1, -0.3], racket: [-0.3, -0.6, -0.75] },
+  kick: { hand: [0.42, 0.28, 0.3], racket: [0.15, -0.95, 0.3] },
+}
+
+/** How much of each finish a serve has, from its topspin and its side spin toward slice. */
+function finishMix(spin, hs) {
+  const kick = Math.min(Math.max((spin.topspin - 2200) / 1400, 0), 1)
+  const slice = Math.min(Math.max((spin.sidespin * hs - 800) / 2000, 0), 1)
+  const total = kick + slice
+  const k = total > 1 ? kick / total : kick
+  const sl = total > 1 ? slice / total : slice
+  return { kick: k, slice: sl, flat: 1 - k - sl }
+}
+
+/** 0 until just after contact, 1 through the finish, then back to 0 as they recover. */
+function finishWeight(p) {
+  return smooth((p - CONTACT_T - 0.03) / 0.3) * (1 - smooth((p - 1.95) / 0.35))
+}
+
+const add = (a, b) => ({ x: a.x + b.x, y: a.y + b.y, z: a.z + b.z })
+const sub = (a, b) => ({ x: a.x - b.x, y: a.y - b.y, z: a.z - b.z })
+const scale = (a, s) => ({ x: a.x * s, y: a.y * s, z: a.z * s })
+const lerp3 = (a, b, t) => add(a, scale(sub(b, a), t))
+function norm(a) {
+  const l = Math.hypot(a.x, a.y, a.z) || 1
+  return scale(a, 1 / l)
+}
+
+/** Two-bone arm from the shoulder toward a hand target, with the elbow bending toward pole. */
+function armTo(shoulder, target, upper, fore, pole) {
+  let d = sub(target, shoulder)
+  let len = Math.hypot(d.x, d.y, d.z)
+  const max = (upper + fore) * 0.995
+  const min = Math.abs(upper - fore) + 0.02
+  const fit = Math.min(Math.max(len, min), max)
+  d = scale(d, fit / (len || 1))
+  len = fit
+  const u = scale(d, 1 / len)
+  const along = (upper * upper - fore * fore + len * len) / (2 * len)
+  const out = Math.sqrt(Math.max(upper * upper - along * along, 0))
+  const pu = pole.x * u.x + pole.y * u.y + pole.z * u.z
+  const side = norm(sub(pole, scale(u, pu)))
+  return { elbow: add(shoulder, add(scale(u, along), scale(side, out))), hand: add(shoulder, d) }
+}
+
 /**
  * 3D joints for the server at pose time p. The shoulders coil side-on and uncoil through contact,
  * each arm riding along with its shoulder, and the hitting arm bends toward the actual contact point.
@@ -284,16 +337,15 @@ export function serverJoints(p, body) {
   const side = { hit: SIDE.hit * k * hs, toss: SIDE.toss * k * hs, front: SIDE.front * k * hs, back: SIDE.back * k * hs }
   const j = skeleton(poseAt(p), BASE_X, k)
   const w = Math.exp(-(((p - CONTACT_T) / 0.16) ** 2))
-  // A lefty coils the other way, so their toss shoulder still turns toward the net.
-  const yaw = (hs * torsoYaw(p) * Math.PI) / 180
+  const mix = body.finish ?? { flat: 1, slice: 0, kick: 0 }
+  const fin = finishWeight(p)
+  // A lefty coils the other way, so their toss shoulder still turns toward the net. A kick finish
+  // stays more side-on, since the swing goes up and out rather than around.
+  const yaw = (hs * (torsoYaw(p) - 20 * mix.kick * fin) * Math.PI) / 180
   // Turning a shoulder offset (0, 0, side) about the spine moves it by this much.
   const turn = (side) => ({ x: side * Math.sin(yaw), z: side * (Math.cos(yaw) - 1) })
   const hitTurn = turn(side.hit)
   const tossTurn = turn(side.toss)
-  // After contact the hitting arm keeps going across the body and finishes on the other side.
-  const across = -0.55 * k * hs * smooth((p - CONTACT_T - 0.04) / 0.26)
-  const handTurn = { x: hitTurn.x, z: hitTurn.z + across }
-  const elbowTurn = { x: hitTurn.x, z: hitTurn.z + across * 0.5 }
   const lift = body.jumpExtra * jumpCurve(p)
   const ahead = (body.forwardShift ?? 0) * forwardCurve(p)
 
@@ -319,8 +371,10 @@ export function serverJoints(p, body) {
     f.y = Math.max(f.y, 0)
     return f
   }
-  const racketHead = at(j.racketHead, side.hit, 1, { x: hitTurn.x, z: hitTurn.z + across * 1.3 })
-  let hHand = at(j.hHand, side.hit, 0.8, handTurn)
+  let racketHead = at(j.racketHead, side.hit, 1, hitTurn)
+  let hHand = at(j.hHand, side.hit, 0.8, hitTurn)
+  const hShoulder = at(j.shoulder, side.hit, 0, hitTurn)
+  let hElbow = at(j.hElbow, side.hit + 0.05 * k * hs, 0.35, hitTurn)
   let roll = racketRoll(p)
   // Around contact the racket turns to the serve's racket angle and aim: the face tilts to faceDeg
   // (by leaning the handle) and turns toward the target (by rolling about the handle). The head stays
@@ -335,12 +389,31 @@ export function serverJoints(p, body) {
     }
     roll -= body.faceYawDeg * w
   }
+
+  // After contact the arm swings through to a finish that depends on the serve (see FINISH).
+  if (fin > 0.001) {
+    const hip = at(j.hip, 0)
+    let hand = { x: 0, y: 0, z: 0 }
+    let dir = { x: 0, y: 0, z: 0 }
+    for (const kind of ['flat', 'slice', 'kick']) {
+      const f = FINISH[kind]
+      const m = mix[kind]
+      hand = add(hand, scale({ x: hip.x + f.hand[0] * k, y: hip.y + f.hand[1] * k, z: hip.z + f.hand[2] * k * hs }, m))
+      dir = add(dir, scale(norm({ x: f.racket[0], y: f.racket[1], z: f.racket[2] * hs }), m))
+    }
+    const reach = armTo(hShoulder, hand, BODY.upperArm * k, BODY.forearm * k, { x: 0.6, y: -0.4, z: 0.7 * hs })
+    const keyDir = norm(sub(racketHead, hHand))
+    hHand = lerp3(hHand, reach.hand, fin)
+    hElbow = lerp3(hElbow, reach.elbow, fin)
+    racketHead = add(hHand, scale(norm(lerp3(keyDir, norm(dir), fin)), BODY.racketToHead))
+  }
+
   return {
     hip: at(j.hip, 0),
     neck: at(j.shoulder, 0),
     head: at(j.head, 0),
-    hShoulder: at(j.shoulder, side.hit, 0, hitTurn),
-    hElbow: at(j.hElbow, side.hit + 0.05 * k * hs, 0.35, elbowTurn),
+    hShoulder,
+    hElbow,
     hHand,
     racketHead,
     tShoulder: at(j.shoulder, side.toss, 0, tossTurn),

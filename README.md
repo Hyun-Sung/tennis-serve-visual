@@ -34,7 +34,8 @@ A 3D tennis serve you can tinker with in the browser. Move the toss, add spin an
 - **3D court** with a toon-shaded server and a receiver bouncing on their toes. The server goes through stance, toss, trophy, racket drop, contact and follow-through with proper technique:
   - the shoulders coil side-on and uncoil through contact.
   - the racket drops down the back.
-  - the edge leads the upswing, then the forearm pronates so the strings meet the ball square and keep turning over into the follow-through, which finishes across the body.
+  - the edge leads the upswing, then the forearm pronates so the strings meet the ball square and keep turning over into the follow-through.
+  - the finish depends on the serve's spin. A flat serve carries across the body to finish low by the opposite hip. A slice swings around the outside of the ball and comes even further across. A kick brushes up and out, so it finishes higher on the hitting side with the shoulders more side-on. Mixed serves blend between them.
 - **camera views**: server, receiver, net cam (side-on at the net, for reading the clearance), side, and coach (a side-on close-up of the server). Drag to orbit any of them. Trees and fence panels are hidden while they're between the camera and the court.
 - the dashed path the ball will take, a trail where it has been, a "clears by … cm" or "into the net" label at the net, and a ring where it bounces.
 - **timeline** with every phase plus the net crossing and the bounce. It plays at 1×, ½× or ¼×, and space plays and pauses.
