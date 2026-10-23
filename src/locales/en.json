@@ -122,7 +122,9 @@
       "tough": "tough return",
       "easy": "easy return",
       "fault": "fault"
-    }
+    },
+    "insideOut": "this one goes out toward your hitting-arm side, so you hold back your shoulder turn and steer with the arm: your aim wanders about ±{{yaw}}° instead of ±{{base}}°.",
+    "acrossBody": "this one goes across your body, with your natural swing, so it's easy to repeat."
   },
   "target": {
     "aim": "Aim",
@@ -135,7 +137,12 @@
     "beginner": "a beginner: slow to react and uneasy with pace, so most serves win the point.",
     "club": "a club player: handles a steady serve, but pace, width or a big kick cause trouble.",
     "strong": "a strong club player: quick to react, so serves need pace and placement.",
-    "advanced": "an advanced player: fast hands and feet. you need a big, well-placed serve, or a kick or slice that pulls them off the court."
+    "advanced": "an advanced player: fast hands and feet. you need a big, well-placed serve, or a kick or slice that pulls them off the court.",
+    "court": "Court side",
+    "deuce": "deuce",
+    "ad": "ad",
+    "deuceNote": "serving from right of the centre mark into the box on your left.",
+    "adNote": "serving from left of the centre mark into the box on your right."
   },
   "toss": {
     "title": "Toss",
@@ -276,7 +283,36 @@
       "net": "net",
       "long": "long",
       "wide": "out"
-    }
+    },
+    "first": "1st serve",
+    "second": "2nd serve"
+  },
+  "recommend": {
+    "title": "Recommended serves",
+    "for": "for a {{height}} {{hand}} server on the {{side}} side, against a {{level}} returner. change any of these and the picks update.",
+    "maxSpeed": "Your fastest serve",
+    "maxSpeedHint": "your fastest flat serve. spin takes some of that pace: a kick comes off about a quarter slower.",
+    "first": "First serve",
+    "second": "Second serve",
+    "zone": {
+      "T": "down the T",
+      "body": "into the body",
+      "wide": "out wide"
+    },
+    "in": "goes in",
+    "aces": "aces",
+    "wonWhenIn": "points won when in",
+    "why": {
+      "first": "worth a risk: when it misses you still get a second serve.",
+      "second": "goes in at least {{floor}}% of the time, since a double fault loses the point. of those, it's the one that wins the most."
+    },
+    "insideOut": "it goes out to your hitting-arm side, which is harder to control.",
+    "acrossBody": "it goes across your body, with your natural swing.",
+    "try": "Try it",
+    "total": "together you'd win about <b>{{won}}%</b> of your service points, with <b>{{df}}%</b> double faults.",
+    "keepBoth": "keep both to compare",
+    "method": "found by trying {{n}} serves (four spins, six directions, five speeds) with your height, hand, stance and jump, using the same physics and error tolerance as above. after a tough return the server is assumed to win {{tough}}% of rallies, after an easy one {{easy}}%. a rough guide, not a rule.",
+    "working": "working out your serves…"
   },
   "nav": {
     "tool": "Serve tool",
@@ -341,8 +377,20 @@
       "formula": "can reach = arm and racket + distance run after reacting",
       "note": "a 2.0 returner reacts in about 0.42 s and runs about 3 m/s; a 5.0 returner reacts in about 0.25 s and runs about 5 m/s."
     },
+    "direction": {
+      "title": "8. Court side and your hitting arm",
+      "body": "The ad court isn't just the deuce court flipped. Your arm swings up and across your body, so a serve sent that way (a right-hander's slice out wide on the deuce side) goes with the swing. A serve sent out to your hitting-arm side (a right-hander's serve on the ad side) is hit <b>inside-out</b>: you hold back the shoulder turn and steer with the arm, so the aim, racket angle and pace wander more. A kick relies less on the turn, so it pays less. For a left-hander it's all the other way round, which is why their slice out wide on the ad side is such a weapon.",
+      "formula": "extra error = 4% per degree inside-out + 0.8% per degree across, less for a swing that brushes up",
+      "note": "the aim wanders by the full amount, the racket angle by half and the pace by about a third."
+    },
+    "recommend": {
+      "title": "9. Recommended serves",
+      "body": "Give your height, hand and fastest serve, and the tool tries <b>120</b> serves: four spins, six directions and five speeds, each flown with the same small mistakes as the error tolerance. Spin costs pace: a kick comes off about a quarter slower than your fastest flat serve. The second serve has to go in at least 9 times in 10; of those it picks the one that wins the most points. The first serve can take more risk, because a miss only costs you the gap to your second serve.",
+      "formula": "first serve value = in% × points won when in + (1 − in%) × second serve value",
+      "note": "points won after a return are rough guesses: 58% after a tough return, 42% after an easy one."
+    },
     "limits": {
-      "title": "8. Good to know",
+      "title": "10. Good to know",
       "body": "The physics is meant to be believable, not exact. Drag and lift use typical textbook values, and the toss, jump, brush and returner are simple models of what coaches describe, not measured data. Use it to build intuition, then check it on court."
     }
   }

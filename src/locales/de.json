@@ -122,7 +122,9 @@
       "tough": "schwieriger Return",
       "easy": "leichter Return",
       "fault": "Fehler"
-    }
+    },
+    "insideOut": "dieser geht nach außen zur Seite deines Schlagarms: du hältst die Schulterdrehung zurück und lenkst mit dem Arm, also streut die Richtung um etwa ±{{yaw}}° statt ±{{base}}°.",
+    "acrossBody": "dieser geht quer vor deinem Körper vorbei, mit deinem natürlichen Schwung, und ist leicht zu wiederholen."
   },
   "target": {
     "aim": "Ziel",
@@ -135,7 +137,12 @@
     "beginner": "ein Anfänger: reagiert langsam und mag kein Tempo, also gewinnen die meisten Aufschläge den Punkt.",
     "club": "ein Clubspieler: kommt mit einem soliden Aufschlag klar, aber Tempo, Winkel oder ein starker Kick machen Probleme.",
     "strong": "ein starker Clubspieler: reagiert schnell, also braucht der Aufschlag Tempo und Platzierung.",
-    "advanced": "ein fortgeschrittener Spieler: schnelle Hände und Beine. du brauchst einen harten, gut platzierten Aufschlag oder einen Kick oder Slice, der ihn aus dem Platz zieht."
+    "advanced": "ein fortgeschrittener Spieler: schnelle Hände und Beine. du brauchst einen harten, gut platzierten Aufschlag oder einen Kick oder Slice, der ihn aus dem Platz zieht.",
+    "court": "Platzseite",
+    "deuce": "Einstand",
+    "ad": "Vorteil",
+    "deuceNote": "du stehst rechts vom Mittelzeichen und schlägst ins Feld links von dir auf.",
+    "adNote": "du stehst links vom Mittelzeichen und schlägst ins Feld rechts von dir auf."
   },
   "toss": {
     "title": "Ballwurf",
@@ -276,7 +283,36 @@
       "net": "Netz",
       "long": "lang",
       "wide": "aus"
-    }
+    },
+    "first": "1. Aufschlag",
+    "second": "2. Aufschlag"
+  },
+  "recommend": {
+    "title": "Empfohlene Aufschläge",
+    "for": "für einen {{hand}} mit {{height}} auf der {{side}}-Seite, gegen einen {{level}}-Rückschläger. ändere etwas davon, und die Empfehlung passt sich an.",
+    "maxSpeed": "Dein schnellster Aufschlag",
+    "maxSpeedHint": "dein schnellster flacher Aufschlag. Spin kostet etwas von diesem Tempo: ein Kick kommt etwa ein Viertel langsamer.",
+    "first": "Erster Aufschlag",
+    "second": "Zweiter Aufschlag",
+    "zone": {
+      "T": "durch die Mitte",
+      "body": "auf den Körper",
+      "wide": "weit nach außen"
+    },
+    "in": "kommt rein",
+    "aces": "Asse",
+    "wonWhenIn": "Punkte, wenn drin",
+    "why": {
+      "first": "darf etwas riskieren: geht er daneben, hast du noch den zweiten Aufschlag.",
+      "second": "kommt mindestens zu {{floor}} % rein, denn ein Doppelfehler kostet den Punkt. von diesen gewinnt er die meisten Punkte."
+    },
+    "insideOut": "er geht zur Seite deines Schlagarms, das ist schwerer zu kontrollieren.",
+    "acrossBody": "er geht quer vor deinem Körper, mit deinem natürlichen Schwung.",
+    "try": "Ausprobieren",
+    "total": "zusammen gewinnst du etwa <b>{{won}} %</b> deiner Aufschlagpunkte, mit <b>{{df}} %</b> Doppelfehlern.",
+    "keepBoth": "beide zum Vergleich behalten",
+    "method": "gefunden aus {{n}} Aufschlägen (vier Spins, sechs Richtungen, fünf Tempi) mit deiner Größe, Hand, Stellung und deinem Sprung, mit derselben Physik und Fehlertoleranz wie oben. nach einem schwierigen Return gewinnt der Aufschläger angenommen {{tough}} % der Ballwechsel, nach einem leichten {{easy}} %. eine grobe Orientierung, keine Regel.",
+    "working": "deine Aufschläge werden berechnet…"
   },
   "nav": {
     "tool": "Aufschlag-Tool",
@@ -341,8 +377,20 @@
       "formula": "Reichweite = Arm und Schläger + Laufweg nach der Reaktion",
       "note": "ein 2.0-Rückschläger reagiert in etwa 0,42 s und läuft etwa 3 m/s; ein 5.0-Rückschläger reagiert in etwa 0,25 s und läuft etwa 5 m/s."
     },
+    "direction": {
+      "title": "8. Platzseite und Schlagarm",
+      "body": "Die Vorteilsseite ist nicht einfach die gespiegelte Einstandsseite. Dein Arm schwingt nach oben und quer vor den Körper, also geht ein Aufschlag in diese Richtung (der Slice eines Rechtshänders nach außen auf der Einstandsseite) mit dem Schwung. Ein Aufschlag zur Seite deines Schlagarms (bei einem Rechtshänder auf der Vorteilsseite) wird <b>inside-out</b> geschlagen: du hältst die Schulterdrehung zurück und lenkst mit dem Arm, also streuen Richtung, Schlägerwinkel und Tempo stärker. Ein Kick hängt weniger an der Drehung und zahlt weniger dafür. Bei Linkshändern ist alles umgekehrt, deshalb ist ihr Slice nach außen auf der Vorteilsseite so gefährlich.",
+      "formula": "zusätzliche Streuung = 4 % pro Grad inside-out + 0,8 % pro Grad quer, weniger bei einem Schwung, der nach oben bürstet",
+      "note": "die Richtung streut um den vollen Betrag, der Schlägerwinkel um die Hälfte und das Tempo um etwa ein Drittel."
+    },
+    "recommend": {
+      "title": "9. Empfohlene Aufschläge",
+      "body": "Gib deine Größe, deine Hand und deinen schnellsten Aufschlag an, und das Tool probiert <b>120</b> Aufschläge aus: vier Spins, sechs Richtungen und fünf Tempi, jeder mit denselben kleinen Fehlern wie bei der Fehlertoleranz. Spin kostet Tempo: ein Kick kommt etwa ein Viertel langsamer als dein schnellster flacher Aufschlag. Der zweite Aufschlag muss mindestens 9 von 10 Mal reinkommen; von diesen nimmt das Tool den, der die meisten Punkte gewinnt. Der erste darf mehr riskieren, weil ein Fehler dich nur den Unterschied zu deinem zweiten Aufschlag kostet.",
+      "formula": "Wert des ersten Aufschlags = drin % × Punkte, wenn drin + (1 − drin %) × Wert des zweiten Aufschlags",
+      "note": "die Punkte nach einem Return sind grobe Schätzungen: 58 % nach einem schwierigen Return, 42 % nach einem leichten."
+    },
     "limits": {
-      "title": "8. Gut zu wissen",
+      "title": "10. Gut zu wissen",
       "body": "Die Physik soll glaubwürdig sein, nicht exakt. Luftwiderstand und Auftrieb nutzen typische Lehrbuchwerte, und Ballwurf, Sprung, Bürstbewegung und Rückschläger sind einfache Modelle dessen, was Trainer beschreiben, keine Messdaten. Nutze es, um ein Gefühl zu bekommen, und prüfe es dann auf dem Platz."
     }
   }

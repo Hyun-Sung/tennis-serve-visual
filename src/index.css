@@ -1044,3 +1044,116 @@ header {
   font-size: 0.95rem;
   background: linear-gradient(#bfe3f5 0 45%, #3f7a5a 45% 62%, #3d6fb6 62%);
 }
+
+/* recommended first and second serve for the server as set up */
+.recommend {
+  margin-top: 0.75rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 16px;
+  background: #f4f1e8;
+  transition: opacity 0.15s;
+}
+.recommend.stale {
+  opacity: 0.6;
+}
+.recommend h2 {
+  margin: 0 0 0.2rem;
+  font-size: 1.05rem;
+}
+.rec-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(220px, 1fr);
+  gap: 0.75rem 1.2rem;
+  align-items: start;
+}
+.rec-head .note {
+  margin: 0;
+}
+.rec-head .slider {
+  margin-bottom: 0;
+}
+.rec-cards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.75rem;
+  margin-top: 0.7rem;
+}
+.rec-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.65rem 0.8rem;
+  border-radius: 14px;
+  background: var(--card);
+  border: 2px solid var(--line);
+}
+.rec-kind {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--soft);
+}
+.rec-serve {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.5rem;
+  font-size: 1.05rem;
+}
+.rec-serve .badge {
+  font-size: 0.9rem;
+}
+.rec-card dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.4rem;
+  margin: 0;
+}
+.rec-card dt {
+  font-size: 0.74rem;
+  color: var(--soft);
+}
+.rec-card dd {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.rec-card .hint {
+  margin: 0;
+  flex: 1;
+  color: var(--soft);
+  font-size: 0.8rem;
+}
+.rec-try {
+  align-self: flex-start;
+  background: var(--coral);
+  border-color: var(--coral);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+.rec-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin-top: 0.6rem;
+  font-size: 0.92rem;
+}
+.rec-foot p {
+  margin: 0;
+}
+.recommend > .hint {
+  margin: 0.4rem 0 0;
+  color: var(--soft);
+  font-size: 0.76rem;
+}
+@media (max-width: 760px) {
+  .rec-head,
+  .rec-cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

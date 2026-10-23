@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next'
 export const DONATE_URL = 'https://paypal.me/hyuns89'
 
 // The sections of the explainer, in order; each has title, body, formula and note in about.<id>.
-const SECTIONS = ['flight', 'spin', 'bounce', 'toss', 'swing', 'tolerance', 'returner', 'limits']
+const SECTIONS = ['flight', 'spin', 'bounce', 'toss', 'swing', 'tolerance', 'returner', 'direction', 'recommend', 'limits']
 
 /** How the tool works, in plain words, with the one formula behind each part. */
 export default function About({ onTool, toolHref }) {

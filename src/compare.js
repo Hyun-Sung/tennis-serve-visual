@@ -3,9 +3,11 @@
 export const PALETTE = ['#ffc94d', '#ff6b5b', '#5aa9e6', '#b07cff', '#4fd1a5', '#ff9ad5']
 
 /** What the compare list shows about a kept serve, as raw numbers so it can be shown in either unit system. */
-export function summarize(s, plan, sim, risk, level) {
+export function summarize(s, plan, sim, risk, level, tag = null) {
   return {
+    tag,
     lefty: s.hand === 'left',
+    side: s.side ?? 'deuce',
     speedKmh: s.speedKmh,
     spin: plan.spin.character,
     stance: s.stance,
@@ -20,7 +22,9 @@ export function summarize(s, plan, sim, risk, level) {
 /** One-line summary of a kept serve, in the units and language chosen now (t is the translator). */
 export function describeServe(k, units, t) {
   const parts = [
+    k.tag && t(`compare.${k.tag}`),
     k.lefty && t('compare.lefty'),
+    t(`target.${k.side}`),
     units.speed(k.speedKmh),
     t(`spin.${k.spin}`),
     t(`server.${k.stance}`),

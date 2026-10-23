@@ -2,6 +2,8 @@ import { Trans, useTranslation } from 'react-i18next'
 import { TRIES } from '../outcome.js'
 
 const pct = (x) => Math.round(x * 100)
+// Mistake sizes grow on an awkward direction, so they're no longer round numbers.
+const one = (x) => Number(x.toFixed(1))
 
 // Best outcome for the server first.
 const PARTS = [
@@ -12,9 +14,17 @@ const PARTS = [
   { key: 'fault', color: '#e2574c' },
 ]
 
-export default function Risk({ risk, level, stale }) {
+export default function Risk({ risk, level, stale, direction }) {
   const { t, i18n } = useTranslation()
-  const { inRate, share, window: win, noise } = risk
+  const { inRate, share, window: win, noise, base } = risk
+  // Whether this direction suits the hitting arm, and what that does to the aim.
+  const across = direction?.across ?? 0
+  const sideNote =
+    across < -1.5
+      ? t('risk.insideOut', { yaw: one(noise.yawDeg), base: one(base.yawDeg) })
+      : across > 1.5
+        ? t('risk.acrossBody')
+        : null
   const wonOutright = share.ace + share.winner
   const label = (key) => t(`risk.parts.${key}`)
 
@@ -34,6 +44,7 @@ export default function Risk({ risk, level, stale }) {
               t('risk.misses')
             )}
           </p>
+          {sideNote && <p>{sideNote}</p>}
           <p>
             <Trans
               i18nKey="risk.against"
@@ -58,9 +69,9 @@ export default function Risk({ risk, level, stale }) {
       <p className="hint">
         {t('risk.method', {
           tries: TRIES.toLocaleString(i18n.language),
-          angle: noise.angleDeg,
-          yaw: noise.yawDeg,
-          speed: noise.speed * 100,
+          angle: one(noise.angleDeg),
+          yaw: one(noise.yawDeg),
+          speed: one(noise.speed * 100),
           rpm: noise.rpm * 100,
           brush: noise.brushDeg,
         })}

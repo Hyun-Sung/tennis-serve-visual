@@ -122,7 +122,9 @@
       "tough": "devolução difícil",
       "easy": "devolução fácil",
       "fault": "falta"
-    }
+    },
+    "insideOut": "este vai para o lado do seu braço de golpe: você segura a rotação dos ombros e direciona com o braço, então a direção varia cerca de ±{{yaw}}° em vez de ±{{base}}°.",
+    "acrossBody": "este cruza à frente do seu corpo, com o seu movimento natural, então é fácil de repetir."
   },
   "target": {
     "aim": "Alvo",
@@ -135,7 +137,12 @@
     "beginner": "iniciante: reage devagar e não gosta de velocidade, então a maioria dos saques ganha o ponto.",
     "club": "jogador de clube: lida com um saque regular, mas velocidade, ângulo ou um kick forte complicam.",
     "strong": "jogador de clube forte: reage rápido, então o saque precisa de velocidade e colocação.",
-    "advanced": "jogador avançado: mãos e pés rápidos. você precisa de um saque forte e bem colocado, ou de um kick ou slice que o tire da quadra."
+    "advanced": "jogador avançado: mãos e pés rápidos. você precisa de um saque forte e bem colocado, ou de um kick ou slice que o tire da quadra.",
+    "court": "Lado da quadra",
+    "deuce": "iguais",
+    "ad": "vantagem",
+    "deuceNote": "você saca da direita da marca central para a área à sua esquerda.",
+    "adNote": "você saca da esquerda da marca central para a área à sua direita."
   },
   "toss": {
     "title": "Lançamento",
@@ -276,7 +283,36 @@
       "net": "rede",
       "long": "longa",
       "wide": "fora"
-    }
+    },
+    "first": "1º saque",
+    "second": "2º saque"
+  },
+  "recommend": {
+    "title": "Saques recomendados",
+    "for": "para um jogador {{hand}} de {{height}} no lado de {{side}}, contra um recebedor {{level}}. mude qualquer um desses dados e a recomendação acompanha.",
+    "maxSpeed": "Seu saque mais rápido",
+    "maxSpeedHint": "seu saque chapado mais rápido. o efeito tira parte dessa velocidade: um kick sai cerca de um quarto mais lento.",
+    "first": "Primeiro saque",
+    "second": "Segundo saque",
+    "zone": {
+      "T": "no T",
+      "body": "no corpo",
+      "wide": "aberto"
+    },
+    "in": "entra",
+    "aces": "aces",
+    "wonWhenIn": "pontos ganhos quando entra",
+    "why": {
+      "first": "pode arriscar: se errar, você ainda tem o segundo saque.",
+      "second": "entra pelo menos {{floor}}% das vezes, porque uma dupla falta perde o ponto. entre esses, é o que ganha mais pontos."
+    },
+    "insideOut": "vai para o lado do seu braço de golpe, o que é mais difícil de controlar.",
+    "acrossBody": "cruza à frente do seu corpo, com o seu movimento natural.",
+    "try": "Experimentar",
+    "total": "no total você ganharia cerca de <b>{{won}}%</b> dos seus pontos de saque, com <b>{{df}}%</b> de duplas faltas.",
+    "keepBoth": "guardar os dois para comparar",
+    "method": "encontrado testando {{n}} saques (quatro efeitos, seis direções, cinco velocidades) com a sua altura, mão, base e salto, usando a mesma física e tolerância a erro de cima. depois de uma devolução difícil, supõe-se que o sacador ganha {{tough}}% dos pontos, e depois de uma fácil, {{easy}}%. um guia aproximado, não uma regra.",
+    "working": "calculando seus saques…"
   },
   "nav": {
     "tool": "Ferramenta de saque",
@@ -341,8 +377,20 @@
       "formula": "alcance = braço e raquete + distância corrida após reagir",
       "note": "um recebedor 2.0 reage em cerca de 0,42 s e corre a cerca de 3 m/s; um 5.0 reage em cerca de 0,25 s e corre a cerca de 5 m/s."
     },
+    "direction": {
+      "title": "8. O lado da quadra e o seu braço",
+      "body": "O lado da vantagem não é só o lado de iguais espelhado. Seu braço sobe e cruza à frente do corpo, então um saque nessa direção (o slice aberto de um destro no lado de iguais) vai com o movimento. Um saque para o lado do seu braço de golpe (o de um destro no lado da vantagem) é batido <b>de dentro para fora</b>: você segura a rotação dos ombros e direciona com o braço, então a direção, o ângulo da raquete e a velocidade variam mais. Um kick depende menos da rotação e paga menos por isso. Para um canhoto é tudo ao contrário, e é por isso que o slice aberto dele no lado da vantagem é tão perigoso.",
+      "formula": "erro extra = 4% por grau de dentro para fora + 0,8% por grau cruzado, menos para um movimento que escova para cima",
+      "note": "a direção varia no valor cheio, o ângulo da raquete pela metade e a velocidade em cerca de um terço."
+    },
+    "recommend": {
+      "title": "9. Saques recomendados",
+      "body": "Informe sua altura, sua mão e seu saque mais rápido, e a ferramenta testa <b>120</b> saques: quatro efeitos, seis direções e cinco velocidades, cada um com os mesmos pequenos erros da tolerância a erro. O efeito custa velocidade: um kick sai cerca de um quarto mais lento que o seu saque chapado mais rápido. O segundo saque precisa entrar pelo menos 9 em cada 10 vezes; entre esses, a ferramenta escolhe o que ganha mais pontos. O primeiro pode arriscar mais, porque um erro só custa a diferença para o seu segundo saque.",
+      "formula": "valor do primeiro saque = % dentro × pontos ganhos quando entra + (1 − % dentro) × valor do segundo saque",
+      "note": "os pontos ganhos depois de uma devolução são estimativas aproximadas: 58% depois de uma devolução difícil, 42% depois de uma fácil."
+    },
     "limits": {
-      "title": "8. Bom saber",
+      "title": "10. Bom saber",
       "body": "A física pretende ser convincente, não exata. A resistência e a sustentação usam valores típicos de livro, e o lançamento, o salto, a escovada e o recebedor são modelos simples do que os treinadores descrevem, não dados medidos. Use para ganhar intuição e depois confira na quadra."
     }
   }

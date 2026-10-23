@@ -2,10 +2,11 @@
 // anything with it. The returner model is a simple estimate of what different levels can handle,
 // not measured data.
 
-import { COURT, simulateServe } from './physics.js'
+import { boxZ, COURT, sideSign, simulateServe } from './physics.js'
 
-// The returner waits just behind the baseline, a step wide of the middle of the deuce box.
+// The returner waits just behind the baseline, a step wide of the middle of the box being served to.
 export const RETURNER_READY = { x: 24.2, z: -2.6 }
+export const returnerReady = (side) => ({ x: RETURNER_READY.x, z: RETURNER_READY.z * sideSign(side) })
 // Where they meet the ball: a little in front of their body.
 export const RETURN_X = 23.7
 export const LEVEL_LIMITS = [2, 5]
@@ -45,23 +46,28 @@ const sigmoid = (x) => 1 / (1 + Math.exp(-x))
  * How the returner copes with one serve that landed in, struck at serveKmh.
  * kind is 'ace' (they can't reach it), or a difficulty d where higher is harder,
  * split into chances of a return error (they hit it, but into the net or out), a tough return and an easy return.
+ * courtSide is the side served from ('deuce' or 'ad'), which decides where the returner waits.
  */
-export function evaluateReturn(sim, level, serveKmh) {
-  if (sim.result !== 'in') return { kind: 'fault' }
+export function evaluateReturn(sim, level, serveKmh, courtSide) {
+  const ready = returnerReady(courtSide)
+  if (sim.result !== 'in') return { kind: 'fault', ready }
   const c = sim.cross
   const L = levelParams(level)
-  if (!c) return { kind: 'easy', d: 0, p: { winner: 0, tough: 0, easy: 1 }, L }
-  const side = Math.sign(c.z - RETURNER_READY.z) || 1
-  const D = Math.abs(c.z - RETURNER_READY.z)
+  if (!c) return { kind: 'easy', d: 0, p: { winner: 0, tough: 0, easy: 1 }, L, ready }
+  const side = Math.sign(c.z - ready.z) || 1
+  const D = Math.abs(c.z - ready.z)
   const move = movable(c.t, L)
   const need = Math.max(0, D - L.reach)
-  const base = { c, D, move, need, side, L, t: c.t }
+  const base = { c, D, move, need, side, L, t: c.t, ready }
   if (need > move) return { ...base, kind: 'ace', d: Infinity, p: { winner: 0, tough: 0, easy: 0 } }
 
   // Each part is 0 when comfortable and grows as it gets harder.
   const stretch = move > 0 ? need / move : 0
   const pace = c.speedKmh / L.pace
-  const high = Math.max(0, c.y - L.high) / 0.5
+  // A high bounce is only trouble when it's also quick: with time to spare they back up or step in
+  // and take it at a comfortable height.
+  const spare = clamp01((c.t - L.reaction - L.prep) / 0.5)
+  const high = (Math.max(0, c.y - L.high) / 0.5) * (1 - spare)
   const low = Math.max(0, 0.4 - c.y) / 0.25
   const jam = D < 0.35 ? ((0.35 - D) / 0.35) * Math.min(1, pace) : 0
   const rush = clamp01((L.prep - (c.t - L.reaction)) / L.prep)
@@ -83,10 +89,11 @@ export function evaluateReturn(sim, level, serveKmh) {
 
 /** Where the returner's body is t seconds after contact: they set off once they've reacted. */
 export function returnerZ(ret, t) {
-  if (!ret || ret.kind === 'fault' || !ret.L) return RETURNER_READY.z
+  const home = (ret?.ready ?? RETURNER_READY).z
+  if (!ret || ret.kind === 'fault' || !ret.L) return home
   // Aim to finish about a racket's length from the ball, so they can swing at it.
   const want = Math.max(0, ret.D - (ret.kind === 'ace' ? 0 : 0.7))
-  return RETURNER_READY.z + ret.side * Math.min(movable(Math.min(t, ret.t + 0.2), ret.L), want)
+  return home + ret.side * Math.min(movable(Math.min(t, ret.t + 0.2), ret.L), want)
 }
 
 // The small mistakes any server makes from serve to serve.
@@ -94,6 +101,17 @@ export function returnerZ(ret, t) {
 // slice: with the axis tipped sideways, a few degrees changes how much topspin is left to make the ball dip.
 const NOISE = { angleDeg: 0.6, yawDeg: 1.0, speed: 0.03, rpm: 0.1, brushDeg: 8 }
 export const TRIES = 1024
+// A direction that's awkward for the hitting arm (strain, from swingDirection in serve.js) makes the
+// aim wander most, and the racket angle and pace a little.
+const STRAIN_SPREAD = { angleDeg: 0.5, yawDeg: 1, speed: 0.3 }
+
+/** How big each kind of mistake is for this serve. */
+export function noiseFor(plan) {
+  const s = plan.direction?.strain ?? 0
+  const out = { ...NOISE }
+  for (const [k, f] of Object.entries(STRAIN_SPREAD)) out[k] = NOISE[k] * (1 + f * s)
+  return out
+}
 
 // The tries are spread evenly (a Halton sequence through the normal curve) rather than drawn at
 // random, so the percentages are steady and only move when the serve really changes.
@@ -145,14 +163,14 @@ function angleWindow(flight, contact) {
 }
 
 // Each kind of mistake on its own, g standard deviations in size.
-function nudge(flight, tilt, which, g) {
+function nudge(flight, tilt, which, g, noise) {
   const f = { ...flight }
-  if (which === 0) f.angleDeg = flight.angleDeg + g * NOISE.angleDeg
-  if (which === 1) f.yawOffsetDeg = (flight.yawOffsetDeg ?? 0) + g * NOISE.yawDeg
-  if (which === 2) f.speedKmh = flight.speedKmh * (1 + g * NOISE.speed)
-  if (which === 3) f.rpm = Math.max(0, flight.rpm * (1 + g * NOISE.rpm))
+  if (which === 0) f.angleDeg = flight.angleDeg + g * noise.angleDeg
+  if (which === 1) f.yawOffsetDeg = (flight.yawOffsetDeg ?? 0) + g * noise.yawDeg
+  if (which === 2) f.speedKmh = flight.speedKmh * (1 + g * noise.speed)
+  if (which === 3) f.rpm = Math.max(0, flight.rpm * (1 + g * noise.rpm))
   if (which === 4) {
-    const t = tilt + (g * NOISE.brushDeg * Math.PI) / 180
+    const t = tilt + (g * noise.brushDeg * Math.PI) / 180
     f.axis = [0, Math.sin(t), -Math.cos(t)]
   }
   return f
@@ -181,14 +199,16 @@ function measure(flight, contact) {
  * on its own (a little either way), measures how much each moves the ball, and adds those effects
  * up for each try. That keeps the numbers smooth and quick to work out.
  */
-export function assessServe(plan, level) {
+export function assessServe(plan, level, { window = true } = {}) {
   const { flight, contact } = plan
+  const noise = noiseFor(plan)
+  const [z0, z1] = boxZ(flight.side)
   const tilt = Math.atan2(flight.axis[1], -flight.axis[2])
   const base = measure(flight, contact)
   // How much each metric moves per standard deviation of each mistake.
   const slope = [0, 1, 2, 3, 4].map((which) => {
-    const up = measure(nudge(flight, tilt, which, 1), contact).m
-    const down = measure(nudge(flight, tilt, which, -1), contact).m
+    const up = measure(nudge(flight, tilt, which, 1, noise), contact).m
+    const down = measure(nudge(flight, tilt, which, -1, noise), contact).m
     return up.map((u, k) => (u - down[k]) / 2)
   })
 
@@ -201,17 +221,18 @@ export function assessServe(plan, level) {
       m[k] = v
     }
     const fault =
-      m[CLEAR] < 0 || m[BX] < COURT.net || m[BX] > COURT.serviceLine || m[BZ] < -COURT.halfSingles || m[BZ] > 0
+      m[CLEAR] < 0 || m[BX] < COURT.net || m[BX] > COURT.serviceLine || m[BZ] < z0 || m[BZ] > z1
     if (fault) {
       tally.fault++
       continue
     }
     const sim = { result: 'in', cross: { t: m[CT], y: Math.max(m[CY], 0.05), z: m[CZ], speedKmh: m[CV], short: base.short } }
-    const ret = evaluateReturn(sim, level, flight.speedKmh * (1 + g[2] * NOISE.speed))
+    const ret = evaluateReturn(sim, level, flight.speedKmh * (1 + g[2] * noise.speed), flight.side)
     if (ret.kind === 'ace') tally.ace++
     else for (const k of ['winner', 'tough', 'easy']) tally[k] += ret.p[k]
   }
   const share = {}
   for (const k of Object.keys(tally)) share[k] = tally[k] / TRIES
-  return { inRate: 1 - share.fault, share, window: angleWindow(flight, contact), noise: NOISE }
+  // window is optional so a search over many serves can skip it.
+  return { inRate: 1 - share.fault, share, window: window ? angleWindow(flight, contact) : null, noise, base: NOISE }
 }

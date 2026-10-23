@@ -1,19 +1,23 @@
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { RETURNER_READY, returnerZ } from '../outcome.js'
-import { COURT } from '../physics.js'
+import { returnerReady, returnerZ } from '../outcome.js'
+import { boxZ, COURT, sideSign } from '../physics.js'
 
 // Seen from above: x runs toward the receiver, z (the server's right) points down the screen.
 const VB = { x: -2.5, y: -7, w: 29, h: 14 }
-const AIM_MIN = -4.6
-const AIM_MAX = 0.6
+// How far you can drag the aim, on the deuce side: across the box and a little past the centre line.
+const AIM_RANGE = [-4.6, 0.6]
 
-export default function TopView({ flown, sim, ball, aimZ, serverZ, onAim, lineColor = '#e2574c', kept = [], ret }) {
+export default function TopView({ flown, sim, ball, aimZ, serverZ, side, onAim, lineColor = '#e2574c', kept = [], ret }) {
   const { t } = useTranslation()
   const svgRef = useRef(null)
   const dragging = useRef(false)
   const { length: L, net, serviceLine: S, halfSingles: hs, halfDoubles: hd } = COURT
   const nearService = 2 * net - S
+  const cs = sideSign(side)
+  const [aimMin, aimMax] = cs > 0 ? AIM_RANGE : [-AIM_RANGE[1], -AIM_RANGE[0]]
+  const [boxTop] = boxZ(side)
+  const ready = returnerReady(side)
   const bounced = sim.bounce && flown >= sim.bounce.t
   const path = sim.points.map((p) => `${p.x},${p.z}`).join(' ')
   const done = sim.points.filter((p) => p.t <= flown).map((p) => `${p.x},${p.z}`)
@@ -25,7 +29,7 @@ export default function TopView({ flown, sim, ball, aimZ, serverZ, onAim, lineCo
     pt.x = e.clientX
     pt.y = e.clientY
     const p = pt.matrixTransform(svg.getScreenCTM().inverse())
-    onAim(Math.round(Math.min(Math.max(p.y, AIM_MIN), AIM_MAX) * 20) / 20)
+    onAim(Math.round(Math.min(Math.max(p.y, aimMin), aimMax) * 20) / 20)
   }
 
   return (
@@ -45,7 +49,7 @@ export default function TopView({ flown, sim, ball, aimZ, serverZ, onAim, lineCo
     >
       <rect x={VB.x} y={VB.y} width={VB.w} height={VB.h} rx="0.8" fill="#5f9e6e" />
       <rect x="0" y={-hd} width={L} height={hd * 2} fill="#3d6fb6" />
-      <rect x={net} y={-hs} width={S - net} height={hs} fill="#5a8bd0" opacity="0.8" />
+      <rect x={net} y={boxTop} width={S - net} height={hs} fill="#5a8bd0" opacity="0.8" />
       <g fill="none" stroke="#fff" strokeWidth="0.07">
         <rect x="0" y={-hd} width={L} height={hd * 2} />
         <line x1="0" y1={-hs} x2={L} y2={-hs} />
@@ -57,7 +61,7 @@ export default function TopView({ flown, sim, ball, aimZ, serverZ, onAim, lineCo
         <line x1={L} y1="0" x2={L - 0.25} y2="0" />
       </g>
       <line x1={net} y1={-hd - 0.5} x2={net} y2={hd + 0.5} stroke="#2f3e66" strokeWidth="0.14" />
-      <text x={(net + S) / 2} y={-hs / 2} className="box-label">{t('map.box')}</text>
+      <text x={(net + S) / 2} y={(-cs * hs) / 2} className="box-label">{t('map.box')}</text>
 
       <g className="aim" transform={`translate(${S} ${aimZ})`}>
         <circle r="0.45" fill="none" stroke="#ffe08a" strokeWidth="0.09" strokeDasharray="0.25 0.18" />
@@ -75,7 +79,7 @@ export default function TopView({ flown, sim, ball, aimZ, serverZ, onAim, lineCo
       {done.length > 1 && <polyline points={done.join(' ')} fill="none" stroke={lineColor} strokeWidth="0.12" strokeLinecap="round" />}
 
       <circle cx="-0.6" cy={serverZ} r="0.32" fill="#f27b5c" stroke="#fff" strokeWidth="0.07" />
-      <circle cx={RETURNER_READY.x} cy={returnerZ(ret, Math.max(flown, 0))} r="0.32" fill="#5aa9e6" stroke="#fff" strokeWidth="0.07" />
+      <circle cx={ready.x} cy={returnerZ(ret, Math.max(flown, 0))} r="0.32" fill="#5aa9e6" stroke="#fff" strokeWidth="0.07" />
       {flown > 0 && <circle cx={ball.x} cy={ball.z} r="0.2" fill="#d8ef3a" stroke="#a9c21f" strokeWidth="0.05" />}
 
       {bounced && (

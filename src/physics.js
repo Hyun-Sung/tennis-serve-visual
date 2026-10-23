@@ -22,6 +22,14 @@ export const COURT = {
 
 const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]
 
+// The server stands right of the centre mark and serves to the deuce box (on their left), or left of
+// it and serves to the ad box (on their right). Everything about the ad court is the deuce court
+// mirrored across the centre line, so +1 for deuce, -1 for ad.
+export const COURT_SIDES = ['deuce', 'ad']
+export const sideSign = (side) => (side === 'ad' ? -1 : 1)
+/** The z range of the service box a serve from this side has to land in. */
+export const boxZ = (side) => (side === 'ad' ? [0, COURT.halfSingles] : [-COURT.halfSingles, 0])
+
 export const netHeightAt = (z) =>
   COURT.netCenter + (COURT.netPost - COURT.netCenter) * Math.min(Math.abs(z) / COURT.halfDoubles, 1)
 
@@ -29,6 +37,7 @@ export const netHeightAt = (z) =>
  * @param {{speedKmh:number, angleDeg:number, aimZ:number, axis:number[], rpm:number}} p
  *   axis is the unit spin axis: -z is topspin, +y curves the ball left (slice), -y right.
  *   yawOffsetDeg (optional) turns the launch direction; positive is to the right.
+ *   side (optional, 'deuce' or 'ad') picks the box it has to land in; deuce if left out.
  * @param {{x:number, y:number, z:number}} c contact point
  * @param {{crossX?:number, fast?:boolean, ghost?:boolean}} [opts]
  *   crossX records where the ball crosses that x after the bounce (where the returner meets it).
@@ -38,7 +47,8 @@ export const netHeightAt = (z) =>
  */
 export function simulateServe(p, c, opts = {}) {
   const { crossX = Infinity, fast = false, ghost = false } = opts
-  const inBox = (x, z) => x >= COURT.net && x <= COURT.serviceLine && z >= -COURT.halfSingles && z <= 0
+  const [z0, z1] = boxZ(p.side)
+  const inBox = (x, z) => x >= COURT.net && x <= COURT.serviceLine && z >= z0 && z <= z1
   const v0 = p.speedKmh / 3.6
   const a = (p.angleDeg * Math.PI) / 180
   const yaw = Math.atan2(p.aimZ - c.z, COURT.serviceLine - c.x) + ((p.yawOffsetDeg ?? 0) * Math.PI) / 180
@@ -114,7 +124,7 @@ export function simulateServe(p, c, opts = {}) {
   const b = ev.bounce
   if (hitNet || (b && b.x < COURT.net)) ev.result = 'net'
   else if (!b || b.x > COURT.serviceLine) ev.result = 'long'
-  else if (b.z < -COURT.halfSingles || b.z > 0) ev.result = 'wide'
+  else if (b.z < z0 || b.z > z1) ev.result = 'wide'
   else ev.result = 'in'
 
   return { points, ...ev, duration: points.at(-1).t }

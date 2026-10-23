@@ -5,10 +5,10 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { Line2 } from 'three/addons/lines/Line2.js'
 import { LineGeometry } from 'three/addons/lines/LineGeometry.js'
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js'
-import { RETURNER_READY, returnerZ } from '../outcome.js'
-import { BALL_R, COURT } from '../physics.js'
+import { returnerReady, returnerZ } from '../outcome.js'
+import { BALL_R, COURT, sideSign } from '../physics.js'
 import { RELEASE_T } from '../pose.js'
-import { BASE_X, NEUTRAL_BODY, poseTime, SERVER_Z, serverJoints } from '../serve.js'
+import { BASE_X, NEUTRAL_BODY, poseTime, SERVER_Z, serverJoints, serverZFor } from '../serve.js'
 import { buildWorld } from '../three/court.js'
 import { createFigure, mirrorJoints } from '../three/figure.js'
 import { mesh, toon } from '../three/toon.js'
@@ -16,7 +16,6 @@ import { mesh, toon } from '../three/toon.js'
 // Camera views; each id is also its label's key (views.<id>).
 const VIEWS = ['server', 'receiver', 'net', 'side', 'coach']
 
-const RECEIVER = RETURNER_READY
 // The label over the returner for each outcome (its words come from outcome.<kind>).
 const OUTCOME_COLOR = {
   ace: '#7c5cff',
@@ -25,17 +24,23 @@ const OUTCOME_COLOR = {
   easy: '#e8892c',
 }
 
-function viewPose(id, sim, hand) {
-  if (id === 'receiver') return { pos: [RECEIVER.x + 0.2, 1.62, RECEIVER.z], target: [0.6, 1.5, 0.4], fov: 26 }
+// The views are set up for the deuce court; on the ad court everything is mirrored across the centre line (cs).
+function viewPose(id, sim, hand, side) {
+  const cs = sideSign(side)
+  const serverZ = serverZFor(side)
+  if (id === 'receiver') {
+    const r = returnerReady(side)
+    return { pos: [r.x + 0.2, 1.62, r.z], target: [0.6, 1.5, 0.4 * cs], fov: 26 }
+  }
   if (id === 'net') {
-    const z = sim.net ? sim.net.z : -0.8
-    return { pos: [COURT.net - 1.1, 1.15, -9.8], target: [COURT.net, 0.95, z], fov: 26 }
+    const z = sim.net ? sim.net.z : -0.8 * cs
+    return { pos: [COURT.net - 1.1, 1.15, -9.8 * cs], target: [COURT.net, 0.95, z], fov: 26 }
   }
   // Side-on close-up of the server, the way coaches film a serve.
   // From the hitting-arm side, so a left-hander is filmed from their left.
-  if (id === 'coach') return { pos: [0.3, 1.75, SERVER_Z + 4.4 * (hand === 'left' ? -1 : 1)], target: [0.3, 1.7, SERVER_Z], fov: 48 }
-  if (id === 'side') return { pos: [11.9, 3.4, 10.2], target: [11.9, 1.1, -0.5], fov: 64 }
-  return { pos: [-5.6, 2.8, SERVER_Z + 1.8], target: [12, 0.9, -1.2], fov: 50 }
+  if (id === 'coach') return { pos: [0.3, 1.75, serverZ + 4.4 * (hand === 'left' ? -1 : 1)], target: [0.3, 1.7, serverZ], fov: 48 }
+  if (id === 'side') return { pos: [11.9, 3.4, 10.2 * cs], target: [11.9, 1.1, -0.5 * cs], fov: 64 }
+  return { pos: [-5.6, 2.8, serverZ + 1.8 * cs], target: [12, 0.9, -1.2 * cs], fov: 50 }
 }
 
 function labelSprite() {
@@ -178,10 +183,11 @@ function setup(host, live) {
   // Camera moves between views with a short glide; grabbing the view with the mouse cancels it.
   let shownView = null
   let shownHand = null
+  let shownSide = null
   let glide = null
   controls.addEventListener('start', () => (glide = null))
-  const goTo = (id, sim, instant, hand) => {
-    const to = viewPose(id, sim, hand)
+  const goTo = (id, sim, instant, hand, side) => {
+    const to = viewPose(id, sim, hand, side)
     if (instant) {
       camera.position.set(...to.pos)
       controls.target.set(...to.target)
@@ -323,10 +329,13 @@ function setup(host, live) {
       lastPlan = plan
       lastUnits = units
     }
-    if (view !== shownView || (view === 'coach' && hand !== shownHand)) {
-      goTo(view, sim, shownView === null, hand)
+    // Switching court sides moves every view across to the other side too.
+    const side = plan.side
+    if (view !== shownView || (view === 'coach' && hand !== shownHand) || side !== shownSide) {
+      goTo(view, sim, shownView === null, hand, side)
       shownView = view
       shownHand = hand
+      shownSide = side
     }
     if (glide) {
       const k = Math.min((now - glide.start) / 800, 1)
@@ -342,15 +351,16 @@ function setup(host, live) {
     server.update(sj)
     const flown = t - plan.contactT
     // The returner bounces on their toes, then sets off toward the ball once they've reacted.
+    const home = returnerReady(side)
     const rz = returnerZ(ret, Math.max(flown, 0))
-    const moving = Math.abs(rz - RECEIVER.z) > 0.01
+    const moving = Math.abs(rz - home.z) > 0.01
     const bob = moving ? 0 : 0.025 * (1 + Math.sin(now / 160))
-    const rj = mirrorJoints(serverJoints(0, NEUTRAL_BODY), RECEIVER.x, rz, BASE_X, SERVER_Z)
+    const rj = mirrorJoints(serverJoints(0, NEUTRAL_BODY), home.x, rz, BASE_X, SERVER_Z)
     for (const p of Object.values(rj)) if (typeof p === 'object') p.y += bob
     receiver.update(rj)
     receiver.group.visible = view !== 'receiver'
     outcomeLabel.visible = !!(ret?.c && OUTCOME_COLOR[ret.kind] && flown >= ret.c.t)
-    outcomeLabel.position.set(RECEIVER.x, 2.5, rz)
+    outcomeLabel.position.set(home.x, 2.5, rz)
     ball.position.set(b.x, b.y, b.z)
     // Real spin is far too fast to see; this is a slowed-down hint of its axis and rate.
     const turns = flown > 0 ? flown * (plan.flight.rpm / 60) * 0.08 : (t - RELEASE_T) * 0.6
@@ -370,7 +380,7 @@ function setup(host, live) {
       new THREE.Vector3(sj.head.x, sj.head.y, sj.head.z),
       new THREE.Vector3(sj.hip.x, 0.3, sj.hip.z),
       ball.position,
-      new THREE.Vector3(RECEIVER.x, 1.2, RECEIVER.z),
+      new THREE.Vector3(home.x, 1.2, rz),
       ...COURT_POINTS,
     ])
     renderer.render(scene, camera)

@@ -5,6 +5,7 @@ import About, { DONATE_URL } from './components/About.jsx'
 import Compare from './components/Compare.jsx'
 import Controls from './components/Controls.jsx'
 import Readout from './components/Readout.jsx'
+import Recommend from './components/Recommend.jsx'
 import Risk from './components/Risk.jsx'
 import Target from './components/Target.jsx'
 import { Seg } from './components/Fields.jsx'
@@ -13,17 +14,18 @@ import TopView from './components/TopView.jsx'
 import { assessServe, DEFAULT_LEVEL, evaluateReturn, RETURN_X } from './outcome.js'
 import { simulateServe } from './physics.js'
 import { PHASES } from './pose.js'
+import { DEFAULT_MAX_SPEED } from './recommend.js'
 import {
   ballPosition,
   DEFAULT_FOOTWORK,
   DEFAULT_HAND,
   DEFAULT_HEIGHT,
   DEFAULT_HIT,
+  DEFAULT_SIDE,
   DEFAULT_SWING,
   DEFAULT_TOSS,
   planServe,
   realTime,
-  SERVER_Z,
 } from './serve.js'
 import { LANGUAGES, rememberChoice, switchLanguage } from './i18n.js'
 import { parsePath, pathFor } from './languages.js'
@@ -38,6 +40,7 @@ const firstSystem = () => savedSystem() ?? (navigator.language === 'en-US' ? 'us
 const START = {
   toss: DEFAULT_TOSS,
   hand: DEFAULT_HAND,
+  side: DEFAULT_SIDE,
   height: DEFAULT_HEIGHT,
   ...DEFAULT_FOOTWORK,
   speedKmh: 180,
@@ -59,6 +62,7 @@ export default function App() {
   const [lineColor, setLineColor] = useState(PALETTE[0])
   const [kept, setKept] = useState([])
   const [level, setLevel] = useState(DEFAULT_LEVEL)
+  const [maxKmh, setMaxKmh] = useState(DEFAULT_MAX_SPEED)
   const [system, setSystem] = useState(firstSystem)
   const units = useMemo(() => unitsFor(system), [system])
   const chooseSystem = (v) => {
@@ -104,7 +108,7 @@ export default function App() {
 
   const plan = useMemo(() => planServe(s), [s])
   const sim = useMemo(() => simulateServe(plan.flight, plan.contact, { crossX: RETURN_X }), [plan])
-  const ret = useMemo(() => evaluateReturn(sim, level, plan.flight.speedKmh), [sim, level, plan])
+  const ret = useMemo(() => evaluateReturn(sim, level, plan.flight.speedKmh, plan.side), [sim, level, plan])
   // Simulating 64 slightly-off serves takes a few tens of milliseconds, so let it lag behind a dragged slider.
   const lagPlan = useDeferredValue(plan)
   const lagLevel = useDeferredValue(level)
@@ -166,6 +170,31 @@ export default function App() {
     setKept(next)
     setLineColor(nextColor(next.map((k) => k.color)))
   }
+  // Keep the recommended first and second serve as lines of their own, without changing the current serve.
+  const keepPair = (...serves) => {
+    const next = [...kept]
+    serves.forEach((one, i) => {
+      const p = planServe(one)
+      const flight = simulateServe(p.flight, p.contact, { crossX: RETURN_X })
+      const summary = summarize(one, p, flight, assessServe(p, level, { window: false }), level, i === 0 ? 'first' : 'second')
+      const color = nextColor(next.map((k) => k.color))
+      next.push({ id: Date.now() + i, color, points: flight.points, bounce: flight.bounce, result: flight.result, summary })
+    })
+    setKept(next)
+    setLineColor(nextColor(next.map((k) => k.color)))
+  }
+  // The server as the recommender sees them; a new object only when one of these changes.
+  const who = useMemo(
+    () => ({ height: s.height, hand: s.hand, side: s.side, stance: s.stance, jump: s.jump }),
+    [s.height, s.hand, s.side, s.stance, s.jump],
+  )
+  // Load a recommended serve into the controls and play it.
+  const tryServe = (one) => {
+    const { speedKmh, swing, hit, toss, aimZ, autoSwing } = one
+    setS((p) => ({ ...p, speedKmh, swing, hit, toss, aimZ, autoSwing }))
+    setT(0)
+    setPlaying(true)
+  }
 
   const update = (patch) => setS((p) => ({ ...p, ...patch }))
   // Switching hands mirrors the toss, the brush and the contact point, so it's the same serve played the other way.
@@ -181,6 +210,8 @@ export default function App() {
             hit: { ...p.hit, u: -p.hit.u },
           },
     )
+  // The other side of the court: the aim mirrors with it, so a serve to the T stays a serve to the T.
+  const setSide = (side) => setS((p) => (p.side === side ? p : { ...p, side, aimZ: -p.aimZ }))
   const updateToss = (patch) => setS((p) => ({ ...p, toss: { ...p.toss, ...patch } }))
 
   const phases = PHASES.map((p) => ({ ...p, t: realTime(plan, p.t) }))
@@ -274,14 +305,15 @@ export default function App() {
                 onClear={() => setKept([])}
               />
               <div className="below">
-                <TopView flown={flown} sim={sim} ball={ball} aimZ={s.aimZ} serverZ={SERVER_Z} onAim={(aimZ) => update({ aimZ })}
+                <TopView flown={flown} sim={sim} ball={ball} aimZ={s.aimZ} serverZ={plan.serverZ} side={s.side} onAim={(aimZ) => update({ aimZ })}
                   lineColor={lineColor} kept={kept} ret={ret} />
                 <Readout sim={sim} plan={plan} flown={flown} autoSwing={s.autoSwing} ret={ret} />
               </div>
               <div className="outcome-row">
-                <Risk risk={risk} level={lagLevel} stale={lagPlan !== plan || lagLevel !== level} />
-                <Target aimZ={s.aimZ} onAim={(aimZ) => update({ aimZ })} level={level} onLevel={setLevel} />
+                <Risk risk={risk} direction={lagPlan.direction} level={lagLevel} stale={lagPlan !== plan || lagLevel !== level} />
+                <Target side={s.side} onSide={setSide} aimZ={s.aimZ} onAim={(aimZ) => update({ aimZ })} level={level} onLevel={setLevel} />
               </div>
+              <Recommend who={who} level={lagLevel} maxKmh={maxKmh} onMaxKmh={setMaxKmh} onTry={tryServe} onKeepBoth={keepPair} />
             </section>
 
             <aside className="panel">

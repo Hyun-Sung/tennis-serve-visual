@@ -1,11 +1,14 @@
 // How the toss, footwork and swing shape the serve: where the ball is met, when, with what spin and launch angle.
 // World axes match physics.js: x toward the receiver, y up, z to the server's right.
 
-import { ballAt, COURT, solveAngle } from './physics.js'
+import { ballAt, COURT, sideSign, solveAngle } from './physics.js'
 import { BODY, CONTACT_T, poseAt, racketRoll, RELEASE_T, skeleton, torsoYaw } from './pose.js'
 
 export const BASE_X = -0.3
+// Where the server stands on the deuce side; on the ad side it's the same distance the other side of the centre mark.
 export const SERVER_Z = 0.5
+export const serverZFor = (side) => SERVER_Z * sideSign(side)
+export const DEFAULT_SIDE = 'deuce'
 // The 2D pose lives in the x-y plane; these spread the limbs out sideways in 3D.
 export const SIDE = { hit: 0.2, toss: -0.2, front: -0.1, back: 0.12 }
 const G = 9.81
@@ -42,21 +45,22 @@ export const DEFAULT_HAND = 'right'
 /** +1 for a right-hander, -1 for a left-hander: a lefty is the righty mirrored across the server's spine. */
 export const handSign = (hand) => (hand === 'left' ? -1 : 1)
 
-// Everything that depends only on the server's size and hand, worked out once per combination.
+// Everything that depends only on the server's size, hand and court side, worked out once per combination.
 const frames = new Map()
-function frameFor(k, hs = 1) {
-  const key = `${k.toFixed(3)}/${hs}`
+function frameFor(k, hs = 1, side = DEFAULT_SIDE) {
+  const key = `${k.toFixed(3)}/${hs}/${side}`
   if (!frames.has(key)) {
     const cp = skeleton(poseAt(CONTACT_T), BASE_X, k)
-    const shoulder = { x: cp.shoulder.x, y: cp.shoulder.y, z: SERVER_Z + SIDE.hit * k * hs }
-    const contact = { x: cp.racketHead.x, y: cp.racketHead.y, z: SERVER_Z + SIDE.hit * k * hs }
+    const serverZ = serverZFor(side)
+    const shoulder = { x: cp.shoulder.x, y: cp.shoulder.y, z: serverZ + SIDE.hit * k * hs }
+    const contact = { x: cp.racketHead.x, y: cp.racketHead.y, z: serverZ + SIDE.hit * k * hs }
     frames.set(key, {
       shoulder,
       contact,
       reach: Math.hypot(contact.x - shoulder.x, contact.y - shoulder.y),
       // How far the feet clear the ground at contact in the keyframed pose; the jump slider replaces it.
       authoredJump: Math.min(cp.fFoot.y, cp.bFoot.y),
-      release: serverJoints(RELEASE_T, { ...NEUTRAL_BODY, scale: k, hand: hs }).tHand,
+      release: serverJoints(RELEASE_T, { ...NEUTRAL_BODY, scale: k, hand: hs, serverZ }).tHand,
     })
   }
   return frames.get(key)
@@ -122,10 +126,36 @@ export function spinFromSwing(swing, hit, hs = 1) {
   return { axis, rpm, character, tilt, topspin: part(up), sidespin: part(side) }
 }
 
+// Which way the serve goes, measured against the hitting arm. The arm naturally swings up and across
+// the body (to the left for a right-hander), and the shoulders keep turning through contact. A serve
+// sent across the body goes with that. A serve sent the other way, out to the hitting-arm side
+// (a right-hander's serve to the ad box, a left-hander's to the deuce box), is hit "inside-out": the
+// server has to hold back the shoulder turn and steer the racket with the arm, which is harder to repeat.
+// Brushing up the ball (a kick) relies less on the turn for direction, so it costs less.
+const INSIDE_STRAIN = 0.04 // per degree of inside-out direction
+const ACROSS_STRAIN = 0.008 // per degree across the body: a much smaller cost for a big angle
+const UP_EASES = 0.6 // a swing that's all brush-up pays this much less
+const TURN_PER_DEG = 1.4 // how much more (or less) the shoulders open through the finish, per degree
+const TURN_LIMIT = 22
+
+/**
+ * How the serve's direction suits the hitting arm. across is in degrees, positive across the body
+ * (toward the tossing-arm side) and negative inside-out. strain is 0 for a serve straight down the
+ * court and grows with how hard the direction is to control.
+ */
+export function swingDirection(yawDeg, hs, swingUp) {
+  const across = -yawDeg * hs
+  const ease = 1 - UP_EASES * Math.min(Math.max(swingUp, 0), 1)
+  const strain = ease * (INSIDE_STRAIN * Math.max(-across, 0) + ACROSS_STRAIN * Math.max(across, 0))
+  const turnDeg = Math.min(Math.max(TURN_PER_DEG * across, -TURN_LIMIT), TURN_LIMIT)
+  return { across, strain, turnDeg }
+}
+
 /**
  * Everything the toss decides, plus the launch angle the server ends up with.
  * @param {{toss:{height:number,forward:number,side:number}, speedKmh:number, aimZ:number,
  *   autoSwing:boolean, swingDeg:number, stance:'platform'|'pinpoint', jump:number, height:number, hand:'right'|'left',
+ *   side?:'deuce'|'ad',
  *   swing:{up:number, side:number}, hit:{u:number, v:number}}} s
  *   jump is how far the feet leave the ground at contact, in meters; height is the server's height.
  *   toss.forward is measured from the server: the contact point moves with a taller body or a pinpoint stance.
@@ -135,9 +165,11 @@ export function planServe(s) {
   const { toss } = s
   const k = s.height / BASE_HEIGHT
   const hs = handSign(s.hand)
-  const f = frameFor(k, hs)
+  const side = s.side ?? DEFAULT_SIDE
+  const serverZ = serverZFor(side)
+  const f = frameFor(k, hs, side)
   const stance = STANCES[s.stance]
-  const cz = SERVER_Z + SIDE.hit * k * hs + toss.side
+  const cz = serverZ + SIDE.hit * k * hs + toss.side
   // Jumping (and a pinpoint stance's extra drive) lifts the whole body, so the server meets the ball higher.
   const jumpExtra = s.jump + stance.lift - f.authoredJump
   const jumpLift = jumpExtra * jumpCurve(CONTACT_T)
@@ -153,7 +185,7 @@ export function planServe(s) {
 
   const spin = spinFromSwing(s.swing, s.hit, hs)
   const pitchFromHit = -CONTACT_PITCH_DEG * s.hit.v
-  const base = { speedKmh: s.speedKmh, rpm: spin.rpm, aimZ: s.aimZ, axis: spin.axis, yawOffsetDeg: -CONTACT_YAW_DEG * s.hit.u }
+  const base = { speedKmh: s.speedKmh, rpm: spin.rpm, aimZ: s.aimZ, axis: spin.axis, yawOffsetDeg: -CONTACT_YAW_DEG * s.hit.u, side }
   // The server picks their height, stance, jump, sideways toss, swing and contact point on purpose,
   // so the auto racket angle allows for them. A toss too far forward or back, or below their reach,
   // is a mistake it doesn't know about.
@@ -165,6 +197,7 @@ export function planServe(s) {
   const faceDeg = swingDeg - DEG_PER_M_FORWARD * tossOffset
   const launchDeg = faceDeg + pitchFromHit
   const faceYawDeg = (Math.atan2(s.aimZ - contact.z, COURT.serviceLine - contact.x) * 180) / Math.PI
+  const direction = swingDirection(faceYawDeg, hs, s.swing.up)
 
   return {
     contact,
@@ -182,6 +215,10 @@ export function planServe(s) {
     flight: { ...base, angleDeg: launchDeg },
     faceDeg,
     faceYawDeg,
+    direction,
+    turnDeg: direction.turnDeg,
+    side,
+    serverZ,
     // The arm reaches from wherever the jump and the stance already carried the body.
     delta: {
       x: contact.x - f.contact.x - stance.forward,
@@ -328,7 +365,8 @@ function armTo(shoulder, target, upper, fore, pole) {
  * 3D joints for the server at pose time p. The shoulders coil side-on and uncoil through contact,
  * each arm riding along with its shoulder, and the hitting arm bends toward the actual contact point.
  * body carries the contact correction (delta), the stance, the extra jump height, how far the stance
- * carries the body forward, the body scale and the hand (+1 right, -1 left).
+ * carries the body forward, the body scale, the hand (+1 right, -1 left), where they stand (serverZ)
+ * and how much extra the shoulders turn through the finish (turnDeg).
  */
 export function serverJoints(p, body) {
   const { delta } = body
@@ -341,7 +379,9 @@ export function serverJoints(p, body) {
   const fin = finishWeight(p)
   // A lefty coils the other way, so their toss shoulder still turns toward the net. A kick finish
   // stays more side-on, since the swing goes up and out rather than around.
-  const yaw = (hs * (torsoYaw(p) - 20 * mix.kick * fin) * Math.PI) / 180
+  // The shoulders also open further through the finish on a serve sent across the body, and stay
+  // more closed on one hit inside-out (see swingDirection).
+  const yaw = (hs * (torsoYaw(p) - 20 * mix.kick * fin + (body.turnDeg ?? 0) * fin) * Math.PI) / 180
   // Turning a shoulder offset (0, 0, side) about the spine moves it by this much.
   const turn = (side) => ({ x: side * Math.sin(yaw), z: side * (Math.cos(yaw) - 1) })
   const hitTurn = turn(side.hit)
@@ -361,10 +401,11 @@ export function serverJoints(p, body) {
   }
 
   // reach is how much of the contact correction a joint takes on: 1 for the racket, less up the arm.
+  const serverZ = body.serverZ ?? SERVER_Z
   const at = (q, z, reach = 0, r = { x: 0, z: 0 }) => ({
     x: q.x + r.x + ahead + delta.x * w * reach,
     y: q.y + lift + delta.y * w * reach,
-    z: SERVER_Z + z + r.z + delta.z * w * reach,
+    z: serverZ + z + r.z + delta.z * w * reach,
   })
   const foot = (q, z) => {
     const f = at(q, z)

@@ -15,7 +15,7 @@ const SITE_URL = (process.env.SITE_URL ?? '').replace(/\/+$/, '')
 const root = path.resolve(import.meta.dirname, '..')
 const dist = path.join(root, 'dist')
 const APP_NAME = 'Serve Visualization Tool'
-const ABOUT_SECTIONS = ['flight', 'spin', 'bounce', 'toss', 'swing', 'tolerance', 'returner', 'limits']
+const ABOUT_SECTIONS = ['flight', 'spin', 'bounce', 'toss', 'swing', 'tolerance', 'returner', 'direction', 'recommend', 'limits']
 
 const template = readFileSync(path.join(dist, 'index.html'), 'utf8')
 const seoStart = template.indexOf('<!-- SEO:START')

@@ -122,7 +122,9 @@
       "tough": "resto difícil",
       "easy": "resto fácil",
       "fault": "falta"
-    }
+    },
+    "insideOut": "este va hacia el lado de tu brazo de golpeo: frenas el giro de hombros y diriges con el brazo, así que la dirección varía unos ±{{yaw}}° en vez de ±{{base}}°.",
+    "acrossBody": "este cruza por delante de tu cuerpo, con tu swing natural, así que es fácil de repetir."
   },
   "target": {
     "aim": "Dirección",
@@ -135,7 +137,12 @@
     "beginner": "principiante: reacciona tarde y le incomoda la velocidad, así que casi todos los saques ganan el punto.",
     "club": "jugador de club: maneja un saque regular, pero la velocidad, los ángulos o un buen kick le cuestan.",
     "strong": "jugador de club fuerte: reacciona rápido, así que el saque necesita velocidad y colocación.",
-    "advanced": "jugador avanzado: manos y pies rápidos. necesitas un saque potente y bien colocado, o un kick o cortado que lo saque de la pista."
+    "advanced": "jugador avanzado: manos y pies rápidos. necesitas un saque potente y bien colocado, o un kick o cortado que lo saque de la pista.",
+    "court": "Lado de la pista",
+    "deuce": "iguales",
+    "ad": "ventaja",
+    "deuceNote": "sacas desde la derecha de la marca central al cuadro de tu izquierda.",
+    "adNote": "sacas desde la izquierda de la marca central al cuadro de tu derecha."
   },
   "toss": {
     "title": "Lanzamiento",
@@ -276,7 +283,36 @@
       "net": "red",
       "long": "larga",
       "wide": "fuera"
-    }
+    },
+    "first": "1.er saque",
+    "second": "2.º saque"
+  },
+  "recommend": {
+    "title": "Saques recomendados",
+    "for": "para un jugador {{hand}} de {{height}} en el lado de {{side}}, contra un restador de {{level}}. cambia cualquiera de estos datos y la recomendación se actualiza.",
+    "maxSpeed": "Tu saque más rápido",
+    "maxSpeedHint": "tu saque plano más rápido. el efecto le quita algo de esa velocidad: un kick sale como un cuarto más lento.",
+    "first": "Primer saque",
+    "second": "Segundo saque",
+    "zone": {
+      "T": "a la T",
+      "body": "al cuerpo",
+      "wide": "abierto"
+    },
+    "in": "entra",
+    "aces": "aces",
+    "wonWhenIn": "puntos ganados si entra",
+    "why": {
+      "first": "puede arriesgar: si falla, aún tienes el segundo saque.",
+      "second": "entra al menos el {{floor}}% de las veces, porque una doble falta pierde el punto. de esos, es el que más puntos gana."
+    },
+    "insideOut": "va hacia el lado de tu brazo de golpeo, que es más difícil de controlar.",
+    "acrossBody": "cruza por delante de tu cuerpo, con tu swing natural.",
+    "try": "Probarlo",
+    "total": "en total ganarías cerca del <b>{{won}}%</b> de tus puntos de saque, con <b>{{df}}%</b> de dobles faltas.",
+    "keepBoth": "guardar ambos para comparar",
+    "method": "se obtiene probando {{n}} saques (cuatro efectos, seis direcciones, cinco velocidades) con tu altura, mano, posición y salto, usando la misma física y tolerancia al error de arriba. tras un resto difícil se supone que el sacador gana el {{tough}}% de los puntos, y tras uno fácil el {{easy}}%. una guía aproximada, no una regla.",
+    "working": "calculando tus saques…"
   },
   "nav": {
     "tool": "Herramienta de saque",
@@ -341,8 +377,20 @@
       "formula": "alcance posible = brazo y raqueta + distancia recorrida tras reaccionar",
       "note": "un restador de 2.0 reacciona en unos 0,42 s y corre a unos 3 m/s; uno de 5.0 reacciona en unos 0,25 s y corre a unos 5 m/s."
     },
+    "direction": {
+      "title": "8. El lado de la pista y tu brazo",
+      "body": "El lado de ventaja no es solo el de iguales dado la vuelta. Tu brazo sube y cruza por delante del cuerpo, así que un saque en esa dirección (el cortado abierto de un diestro en el lado de iguales) va con el swing. Un saque hacia el lado de tu brazo de golpeo (el de un diestro en el lado de ventaja) se golpea <b>de dentro hacia fuera</b>: frenas el giro de hombros y diriges con el brazo, así que la dirección, el ángulo de la raqueta y la velocidad varían más. Un kick depende menos del giro y paga menos. Para un zurdo todo es al revés, por eso su cortado abierto en el lado de ventaja es tan peligroso.",
+      "formula": "error extra = 4% por grado de dentro hacia fuera + 0,8% por grado cruzado, menos si el swing cepilla hacia arriba",
+      "note": "la dirección varía en la cantidad completa, el ángulo de la raqueta en la mitad y la velocidad en cerca de un tercio."
+    },
+    "recommend": {
+      "title": "9. Saques recomendados",
+      "body": "Indica tu altura, tu mano y tu saque más rápido, y la herramienta prueba <b>120</b> saques: cuatro efectos, seis direcciones y cinco velocidades, cada uno con los mismos pequeños errores que la tolerancia al error. El efecto cuesta velocidad: un kick sale como un cuarto más lento que tu saque plano más rápido. El segundo saque tiene que entrar al menos 9 de cada 10 veces; de esos, elige el que más puntos gana. El primero puede arriesgar más, porque un fallo solo te cuesta la diferencia con tu segundo saque.",
+      "formula": "valor del primer saque = % dentro × puntos ganados si entra + (1 − % dentro) × valor del segundo saque",
+      "note": "los puntos ganados tras un resto son estimaciones aproximadas: 58% tras un resto difícil, 42% tras uno fácil."
+    },
     "limits": {
-      "title": "8. Conviene saber",
+      "title": "10. Conviene saber",
       "body": "La física pretende ser creíble, no exacta. La resistencia y la sustentación usan valores típicos de libro, y el lanzamiento, el salto, el cepillado y el restador son modelos sencillos de lo que describen los entrenadores, no datos medidos. Úsala para hacerte una idea y luego compruébalo en la pista."
     }
   }

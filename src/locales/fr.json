@@ -122,7 +122,9 @@
       "tough": "retour difficile",
       "easy": "retour facile",
       "fault": "faute"
-    }
+    },
+    "insideOut": "celui-ci part vers le côté de votre bras de frappe : vous retenez la rotation des épaules et dirigez avec le bras, donc la direction varie d'environ ±{{yaw}}° au lieu de ±{{base}}°.",
+    "acrossBody": "celui-ci part en travers de votre corps, avec votre geste naturel, donc il est facile à répéter."
   },
   "target": {
     "aim": "Cible",
@@ -135,7 +137,12 @@
     "beginner": "débutant : réagit lentement et n'aime pas la vitesse, donc la plupart des services gagnent le point.",
     "club": "joueur de club : gère un service régulier, mais la vitesse, les angles ou un gros kick le gênent.",
     "strong": "bon joueur de club : réagit vite, donc le service doit avoir de la vitesse et du placement.",
-    "advanced": "joueur confirmé : mains et jambes rapides. il faut un gros service bien placé, ou un kick ou un slice qui le sort du court."
+    "advanced": "joueur confirmé : mains et jambes rapides. il faut un gros service bien placé, ou un kick ou un slice qui le sort du court.",
+    "court": "Côté du court",
+    "deuce": "égalité",
+    "ad": "avantage",
+    "deuceNote": "vous servez à droite de la marque centrale, vers le carré à votre gauche.",
+    "adNote": "vous servez à gauche de la marque centrale, vers le carré à votre droite."
   },
   "toss": {
     "title": "Lancer",
@@ -276,7 +283,36 @@
       "net": "filet",
       "long": "long",
       "wide": "dehors"
-    }
+    },
+    "first": "1re balle",
+    "second": "2de balle"
+  },
+  "recommend": {
+    "title": "Services conseillés",
+    "for": "pour un serveur {{hand}} de {{height}} côté {{side}}, contre un relanceur {{level}}. changez l'un de ces réglages et les conseils suivent.",
+    "maxSpeed": "Votre service le plus rapide",
+    "maxSpeedHint": "votre service à plat le plus rapide. l'effet en prend une partie : un kick sort environ un quart moins vite.",
+    "first": "Premier service",
+    "second": "Second service",
+    "zone": {
+      "T": "au T",
+      "body": "dans le corps",
+      "wide": "à l'extérieur"
+    },
+    "in": "rentre",
+    "aces": "aces",
+    "wonWhenIn": "points gagnés s'il rentre",
+    "why": {
+      "first": "peut prendre un risque : s'il est faute, il vous reste la seconde balle.",
+      "second": "rentre au moins {{floor}} % du temps, car une double faute perd le point. parmi ceux-là, c'est celui qui gagne le plus de points."
+    },
+    "insideOut": "il part vers le côté de votre bras de frappe, plus difficile à contrôler.",
+    "acrossBody": "il part en travers de votre corps, avec votre geste naturel.",
+    "try": "Essayer",
+    "total": "au total, vous gagneriez environ <b>{{won}} %</b> de vos points de service, avec <b>{{df}} %</b> de doubles fautes.",
+    "keepBoth": "garder les deux pour comparer",
+    "method": "trouvé en essayant {{n}} services (quatre effets, six directions, cinq vitesses) avec votre taille, votre main, votre appui et votre saut, avec la même physique et la même tolérance d'erreur que plus haut. après un retour difficile, le serveur est censé gagner {{tough}} % des échanges, après un retour facile {{easy}} %. un repère, pas une règle.",
+    "working": "calcul de vos services…"
   },
   "nav": {
     "tool": "Outil de service",
@@ -341,8 +377,20 @@
       "formula": "portée = bras et raquette + distance courue après la réaction",
       "note": "un relanceur 2.0 réagit en environ 0,42 s et court à environ 3 m/s ; un relanceur 5.0 réagit en environ 0,25 s et court à environ 5 m/s."
     },
+    "direction": {
+      "title": "8. Le côté du court et votre bras",
+      "body": "Le côté avantage n'est pas seulement le côté égalité en miroir. Votre bras monte et traverse devant le corps, donc un service dans ce sens (le slice extérieur d'un droitier côté égalité) va avec le geste. Un service vers le côté de votre bras de frappe (celui d'un droitier côté avantage) se frappe <b>de l'intérieur vers l'extérieur</b> : vous retenez la rotation des épaules et dirigez avec le bras, donc la direction, l'angle de raquette et la vitesse varient davantage. Un kick dépend moins de la rotation et en paie moins le prix. Pour un gaucher, tout s'inverse : c'est pourquoi son slice extérieur côté avantage est si redoutable.",
+      "formula": "erreur en plus = 4 % par degré vers l'extérieur + 0,8 % par degré en travers, moins pour un geste qui brosse vers le haut",
+      "note": "la direction varie de la quantité entière, l'angle de raquette de moitié et la vitesse d'environ un tiers."
+    },
+    "recommend": {
+      "title": "9. Services conseillés",
+      "body": "Indiquez votre taille, votre main et votre service le plus rapide : l'outil essaie <b>120</b> services, avec quatre effets, six directions et cinq vitesses, chacun avec les mêmes petites erreurs que la tolérance d'erreur. L'effet coûte de la vitesse : un kick sort environ un quart moins vite que votre service à plat le plus rapide. Le second service doit rentrer au moins 9 fois sur 10 ; parmi ceux-là, l'outil prend celui qui gagne le plus de points. Le premier peut risquer davantage, car une faute ne vous coûte que l'écart avec votre second service.",
+      "formula": "valeur du premier service = % dedans × points gagnés s'il rentre + (1 − % dedans) × valeur du second service",
+      "note": "les points gagnés après un retour sont des estimations : 58 % après un retour difficile, 42 % après un retour facile."
+    },
     "limits": {
-      "title": "8. Bon à savoir",
+      "title": "10. Bon à savoir",
       "body": "La physique se veut crédible, pas exacte. La traînée et la portance utilisent des valeurs classiques, et le lancer, le saut, le brossage et le relanceur sont des modèles simples de ce que décrivent les entraîneurs, pas des données mesurées. Servez-vous-en pour vous faire une idée, puis vérifiez sur le court."
     }
   }
