@@ -373,9 +373,9 @@
     },
     "returner": {
       "title": "7. O recebedor",
-      "body": "A ferramenta calcula quando a bola chega ao recebedor e quanto ele precisa se mover. Ele espera o tempo de reação, depois corre, e alcança um pouco mais longe com o braço e a raquete. Se não chegar, é um <b>ace</b>. Caso contrário, menos tempo, uma corrida mais longa, mais velocidade, um kick alto ou um slice baixo tornam a devolução mais difícil, de uma devolução fácil a um erro na devolução.",
-      "formula": "alcance = braço e raquete + distância corrida após reagir",
-      "note": "um recebedor 2.0 reage em cerca de 0,42 s e corre a cerca de 3 m/s; um 5.0 reage em cerca de 0,25 s e corre a cerca de 5 m/s."
+      "body": "O recebedor espera logo atrás da linha de base, cerca de um metro para dentro da linha lateral de simples. A ferramenta calcula quando a bola chega até ele e quanto ele precisa se mover. Ele espera o tempo de reação, depois corre, e alcança ainda mais longe com uma passada longa, o braço e a raquete. Uma bola que vem na direção dele ele pega no lugar de sempre; uma que foge dele ele corta, avançando na diagonal para pegá-la mais cedo na trajetória, no ponto mais próximo que ainda alcança a tempo. Se não houver nenhum, é um <b>ace</b>. Caso contrário, menos tempo, uma corrida mais longa, mais velocidade, um kick alto ou um slice baixo tornam a devolução mais difícil, de uma devolução fácil a um erro na devolução.",
+      "formula": "alcance = passada, braço e raquete + distância corrida após reagir",
+      "note": "um recebedor 2.0 reage em cerca de 0,42 s, corre a cerca de 3 m/s e alcança cerca de 1,65 m; um 5.0 reage em cerca de 0,25 s, corre a cerca de 5 m/s e alcança cerca de 1,9 m."
     },
     "direction": {
       "title": "8. O lado da quadra e o seu braço",

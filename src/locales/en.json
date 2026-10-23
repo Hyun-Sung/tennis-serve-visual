@@ -373,9 +373,9 @@
     },
     "returner": {
       "title": "7. The returner",
-      "body": "The tool works out when the ball reaches the returner and how far they have to move. They wait out their reaction time, then run, and can reach a little further with their arm and racket. If they cannot get there, it is an <b>ace</b>. Otherwise less time, a longer run, more pace, a high kick or a low slice all make the return harder, from an easy return to a return error.",
-      "formula": "can reach = arm and racket + distance run after reacting",
-      "note": "a 2.0 returner reacts in about 0.42 s and runs about 3 m/s; a 5.0 returner reacts in about 0.25 s and runs about 5 m/s."
+      "body": "The returner waits just behind the baseline, about a metre inside the singles sideline. The tool works out when the ball reaches them and how far they have to move. They wait out their reaction time, then run, and can reach further still with a lunge, their arm and the racket. A ball coming toward them they meet at their usual spot; one curving away from them they cut off, moving diagonally forward to meet it earlier on its path, at the nearest point they can still reach in time. If there is no such point, it is an <b>ace</b>. Otherwise less time, a longer run, more pace, a high kick or a low slice all make the return harder, from an easy return to a return error.",
+      "formula": "can reach = lunge, arm and racket + distance run after reacting",
+      "note": "a 2.0 returner reacts in about 0.42 s, runs about 3 m/s and reaches about 1.65 m; a 5.0 returner reacts in about 0.25 s, runs about 5 m/s and reaches about 1.9 m."
     },
     "direction": {
       "title": "8. Court side and your hitting arm",
