@@ -4,11 +4,18 @@
 
 import { boxZ, COURT, sideSign, simulateServe } from './physics.js'
 
-// The returner waits just behind the baseline, a step wide of the middle of the box being served to.
-export const RETURNER_READY = { x: 24.2, z: -2.6 }
+// The returner waits just behind the baseline, about a metre inside the singles sideline of the box
+// being served to, which splits the difference between a serve down the T and one swinging out wide.
+export const RETURNER_READY = { x: 24.2, z: -3.05 }
 export const returnerReady = (side) => ({ x: RETURNER_READY.x, z: RETURNER_READY.z * sideSign(side) })
-// Where they meet the ball: a little in front of their body.
+// Where they usually meet the ball: a little in front of their body.
 export const RETURN_X = 23.7
+// A ball curving away from them can be cut off earlier on its path, up to CUT_OFF in front of that.
+const CUT_OFF = 3
+const MEET_STEP = 0.25
+export const MEET_XS = Array.from({ length: CUT_OFF / MEET_STEP + 1 }, (_, i) => RETURN_X - (CUT_OFF - i * MEET_STEP))
+/** What simulateServe needs to record for the returner. */
+export const RETURN_FLIGHT = { crossX: RETURN_X, meetXs: MEET_XS }
 export const LEVEL_LIMITS = [2, 5]
 export const DEFAULT_LEVEL = 3.5
 
@@ -17,8 +24,8 @@ export const DEFAULT_LEVEL = 3.5
 // reach: arm, racket and a lunge (m). pace: ball speed they handle comfortably at contact (km/h).
 // high: the highest bounce they're comfortable with (m). prep: time they like for the backswing (s).
 // speed: the fastest serve they're used to (km/h).
-const LOW = { reaction: 0.42, accel: 5, vmax: 3, reach: 1.2, pace: 70, high: 1.25, prep: 0.75, speed: 110 }
-const HIGH = { reaction: 0.25, accel: 8, vmax: 5, reach: 1.45, pace: 125, high: 1.7, prep: 0.55, speed: 175 }
+const LOW = { reaction: 0.42, accel: 5, vmax: 3, reach: 1.65, pace: 70, high: 1.25, prep: 0.75, speed: 110 }
+const HIGH = { reaction: 0.25, accel: 8, vmax: 5, reach: 1.9, pace: 125, high: 1.7, prep: 0.55, speed: 175 }
 
 export function levelParams(level) {
   const f = (level - LEVEL_LIMITS[0]) / (LEVEL_LIMITS[1] - LEVEL_LIMITS[0])
@@ -27,7 +34,7 @@ export function levelParams(level) {
   return out
 }
 
-/** How far the returner can travel sideways t seconds after the serve is struck. */
+/** How far the returner can travel t seconds after the serve is struck, in any direction. */
 export function movable(t, L) {
   const tt = t - L.reaction
   if (tt <= 0) return 0
@@ -42,24 +49,49 @@ const WINNER_AT = 0.8
 const EASY_BELOW = 0.35
 const sigmoid = (x) => 1 / (1 + Math.exp(-x))
 
+// How far the ball at q is from where the returner usually meets it (RETURN_X, level with where they wait),
+// how far they'd have to run to get it within reach, and how far they can run by then.
+function reachFor(q, ready, L) {
+  const D = Math.hypot(RETURN_X - q.x, q.z - ready.z)
+  return { c: q, D, need: Math.max(0, D - L.reach), move: movable(q.t, L) }
+}
+
+/**
+ * Where the returner meets the ball. They take the shortest way to its path: for a ball coming toward
+ * them that's their usual spot, but one curving away from them they cut off by moving diagonally
+ * forward, meeting it earlier on its path. That is the nearest point they can still reach in time. If
+ * there's none, it's an ace, and they run for the point they came closest to reaching.
+ */
+function meetingPoint(sim, ready, L) {
+  const c = sim.cross
+  const path = c.short || !sim.path?.length ? [c] : sim.path
+  let best = null
+  let closest = null
+  for (const q of path) {
+    const r = reachFor(q, ready, L)
+    if (r.need <= r.move) {
+      if (!best || r.D <= best.D) best = r
+    } else if (!closest || r.move - r.need > closest.move - closest.need) closest = r
+  }
+  return best ? { ...best, reached: true } : { ...closest, reached: false }
+}
+
 /**
  * How the returner copes with one serve that landed in, struck at serveKmh.
  * kind is 'ace' (they can't reach it), or a difficulty d where higher is harder,
  * split into chances of a return error (they hit it, but into the net or out), a tough return and an easy return.
  * courtSide is the side served from ('deuce' or 'ad'), which decides where the returner waits.
+ * c is where they meet the ball, and D how far that is from their usual spot.
  */
 export function evaluateReturn(sim, level, serveKmh, courtSide) {
   const ready = returnerReady(courtSide)
   if (sim.result !== 'in') return { kind: 'fault', ready }
-  const c = sim.cross
   const L = levelParams(level)
-  if (!c) return { kind: 'easy', d: 0, p: { winner: 0, tough: 0, easy: 1 }, L, ready }
+  if (!sim.cross) return { kind: 'easy', d: 0, p: { winner: 0, tough: 0, easy: 1 }, L, ready }
+  const { c, D, need, move, reached } = meetingPoint(sim, ready, L)
   const side = Math.sign(c.z - ready.z) || 1
-  const D = Math.abs(c.z - ready.z)
-  const move = movable(c.t, L)
-  const need = Math.max(0, D - L.reach)
   const base = { c, D, move, need, side, L, t: c.t, ready }
-  if (need > move) return { ...base, kind: 'ace', d: Infinity, p: { winner: 0, tough: 0, easy: 0 } }
+  if (!reached) return { ...base, kind: 'ace', d: Infinity, p: { winner: 0, tough: 0, easy: 0 } }
 
   // Each part is 0 when comfortable and grows as it gets harder.
   const stretch = move > 0 ? need / move : 0
@@ -87,13 +119,17 @@ export function evaluateReturn(sim, level, serveKmh, courtSide) {
   return { ...base, kind, d, p, parts: { rush, stretch, pace, heat, high, low, jam } }
 }
 
-/** Where the returner's body is t seconds after contact: they set off once they've reacted. */
-export function returnerZ(ret, t) {
-  const home = (ret?.ready ?? RETURNER_READY).z
-  if (!ret || ret.kind === 'fault' || !ret.L) return home
+/**
+ * Where the returner's body is t seconds after contact, as { x, z }: once they've reacted they set off
+ * in a straight line toward where they meet the ball (diagonally forward when they cut it off).
+ */
+export function returnerAt(ret, t) {
+  const home = ret?.ready ?? RETURNER_READY
+  if (!ret || ret.kind === 'fault' || !ret.L || !ret.D) return { x: home.x, z: home.z }
   // Aim to finish about a racket's length from the ball, so they can swing at it.
   const want = Math.max(0, ret.D - (ret.kind === 'ace' ? 0 : 0.7))
-  return home + ret.side * Math.min(movable(Math.min(t, ret.t + 0.2), ret.L), want)
+  const run = Math.min(movable(Math.min(t, ret.t + 0.2), ret.L), want) / ret.D
+  return { x: home.x - run * (RETURN_X - ret.c.x), z: home.z + run * (ret.c.z - home.z) }
 }
 
 // The small mistakes any server makes from serve to serve.
@@ -184,19 +220,23 @@ export function misHit(flight, noise, g) {
   return f
 }
 
-// What matters about a flight: net clearance, where it bounces, and where the returner meets it.
+// What matters about a flight: net clearance, where it bounces, and the ball at each place the returner
+// could meet it (MEET_XS): when it gets there, how high, how far across and how fast.
 const CLEAR = 0
 const BX = 1
 const BZ = 2
-const CT = 3
-const CY = 4
-const CZ = 5
-const CV = 6
+const MEET = 3
 function measure(flight, contact) {
-  const sim = simulateServe(flight, contact, { crossX: RETURN_X, fast: true, ghost: true })
+  const sim = simulateServe(flight, contact, { ...RETURN_FLIGHT, fast: true, ghost: true })
   const b = sim.bounce
   const c = sim.cross
-  return { m: [sim.net ? sim.net.clearance : -1, b ? b.x : 99, b ? b.z : 0, c ? c.t : 9, c ? c.y : 1, c ? c.z : 0, c ? c.speedKmh : 0], short: !!c?.short }
+  const m = [sim.net ? sim.net.clearance : -1, b ? b.x : 99, b ? b.z : 0]
+  // A ball that bounces twice before a line is met where it bounced the second time (c).
+  for (let i = 0; i < MEET_XS.length; i++) {
+    const q = sim.path[i] ?? c
+    m.push(q ? q.t : 9, q ? q.y : 1, q ? q.z : 0, q ? q.speedKmh : 0)
+  }
+  return { m, short: !!c?.short }
 }
 
 /**
@@ -222,6 +262,9 @@ export function assessServe(plan, level, { window = true } = {}) {
 
   const tally = { fault: 0, ace: 0, winner: 0, tough: 0, easy: 0 }
   const m = new Array(base.m.length)
+  // Where the returner could meet the ball, refilled for each try.
+  const path = MEET_XS.map((x) => ({ t: 0, x, y: 0, z: 0, speedKmh: 0 }))
+  const sim = { result: 'in', cross: null, path }
   for (const g of SAMPLES) {
     for (let k = 0; k < m.length; k++) {
       let v = base.m[k]
@@ -234,7 +277,14 @@ export function assessServe(plan, level, { window = true } = {}) {
       tally.fault++
       continue
     }
-    const sim = { result: 'in', cross: { t: m[CT], y: Math.max(m[CY], 0.05), z: m[CZ], speedKmh: m[CV], short: base.short } }
+    for (let i = 0; i < path.length; i++) {
+      const k = MEET + 4 * i
+      path[i].t = m[k]
+      path[i].y = Math.max(m[k + 1], 0.05)
+      path[i].z = m[k + 2]
+      path[i].speedKmh = m[k + 3]
+    }
+    sim.cross = base.short ? { ...path.at(-1), short: true } : path.at(-1)
     const ret = evaluateReturn(sim, level, flight.speedKmh * (1 + g[2] * noise.speed), flight.side)
     if (ret.kind === 'ace') tally.ace++
     else for (const k of ['winner', 'tough', 'easy']) tally[k] += ret.p[k]

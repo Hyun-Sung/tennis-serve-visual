@@ -39,15 +39,17 @@ export const netHeightAt = (z) =>
  *   yawOffsetDeg (optional) turns the launch direction; positive is to the right.
  *   side (optional, 'deuce' or 'ad') picks the box it has to land in; deuce if left out.
  * @param {{x:number, y:number, z:number}} c contact point
- * @param {{crossX?:number, fast?:boolean, ghost?:boolean, untilBounce?:boolean}} [opts]
- *   crossX records where the ball crosses that x after the bounce (where the returner meets it).
+ * @param {{crossX?:number, meetXs?:number[], fast?:boolean, ghost?:boolean, untilBounce?:boolean}} [opts]
+ *   crossX records where the ball crosses that x after the bounce (where the returner usually meets it).
+ *   meetXs (ascending, none past crossX) records where it crosses each of those x after the bounce, as path:
+ *   the places further up its path where the returner could cut it off.
  *   fast skips the sampled path and stops as soon as the outcome is known, for running many serves.
  *   ghost lets the ball fly through the net and on past a fault, so clearance, bounce and return point
  *   all change smoothly with the serve (for measuring how sensitive it is).
  *   untilBounce (with fast) stops at the first bounce, for finding where a serve lands.
  */
 export function simulateServe(p, c, opts = {}) {
-  const { crossX = Infinity, fast = false, ghost = false, untilBounce = false } = opts
+  const { crossX = Infinity, meetXs = [], fast = false, ghost = false, untilBounce = false } = opts
   const [z0, z1] = boxZ(p.side)
   const inBox = (x, z) => x >= COURT.net && x <= COURT.serviceLine && z >= z0 && z <= z1
   const v0 = p.speedKmh / 3.6
@@ -60,7 +62,7 @@ export function simulateServe(p, c, opts = {}) {
   const dt = 1 / 1000
   const sampleEvery = 3
   const points = [{ t: 0, x: pos[0], y: pos[1], z: pos[2] }]
-  const ev = { net: null, bounce: null, result: null, peakAfterBounce: 0, cross: null }
+  const ev = { net: null, bounce: null, result: null, peakAfterBounce: 0, cross: null, path: [] }
   let bounces = 0
   let hitNet = false
 
@@ -110,6 +112,12 @@ export function simulateServe(p, c, opts = {}) {
       omega = omega.map((o) => o * 0.5)
     }
     if (bounces === 1 && !hitNet) ev.peakAfterBounce = Math.max(ev.peakAfterBounce, pos[1])
+    while (bounces === 1 && !hitNet && ev.path.length < meetXs.length && pos[0] >= meetXs[ev.path.length]) {
+      // A line the ball had already passed when it bounced (a long serve) is taken where it bounced.
+      const f = Math.max(0, (meetXs[ev.path.length] - prev[0]) / (pos[0] - prev[0]))
+      const at = (k) => prev[k] + f * (pos[k] - prev[k])
+      ev.path.push({ t, x: at(0), y: at(1), z: at(2), speedKmh: s * 3.6 })
+    }
     if (bounces === 1 && !hitNet && !ev.cross && prev[0] < crossX && pos[0] >= crossX) {
       const f = (crossX - prev[0]) / (pos[0] - prev[0])
       ev.cross = { t, x: crossX, y: prev[1] + f * (pos[1] - prev[1]), z: prev[2] + f * (pos[2] - prev[2]), speedKmh: s * 3.6 }

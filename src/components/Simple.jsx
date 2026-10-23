@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { afterServe, callScore, NEW_GAME } from '../game.js'
-import { LEVEL_LIMITS, RETURN_X } from '../outcome.js'
+import { LEVEL_LIMITS, RETURN_FLIGHT } from '../outcome.js'
 import { COURT, simulateServe } from '../physics.js'
 import { MAX_SPEED_LIMITS, WIN_AFTER } from '../recommend.js'
 import { clampSpot, difficultyWord, IN_FLOOR, playServe, rankOptions, sideOfSpot, spotReport } from '../spot.js'
@@ -145,7 +145,7 @@ export default function Simple({ who, level, onLevel, maxKmh, onMaxKmh, onHand, 
       ranked
         ? ranked.rows
             .filter((r) => r.flight)
-            .map((r) => ({ style: r.style, spread: r.spread, points: simulateServe(r.flight, r.contact, { crossX: RETURN_X }).points }))
+            .map((r) => ({ style: r.style, spread: r.spread, points: simulateServe(r.flight, r.contact, RETURN_FLIGHT).points }))
         : [],
     [ranked],
   )
@@ -157,7 +157,7 @@ export default function Simple({ who, level, onLevel, maxKmh, onMaxKmh, onHand, 
   const serveIt = () => {
     if (!row || busy || flying) return
     const outcome = playServe(row, level, side)
-    setPlayed({ id: Date.now(), sim: outcome.sim, outcome, serveNo: game.serveNo, next: afterServe(game, outcome) })
+    setPlayed({ id: Date.now(), sim: outcome.sim, ret: outcome.ret, outcome, serveNo: game.serveNo, next: afterServe(game, outcome) })
   }
   const onLanded = (id) => {
     if (!played || id !== played.id) return

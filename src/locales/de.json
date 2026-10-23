@@ -460,9 +460,9 @@
     },
     "returner": {
       "title": "7. Der Rückschläger",
-      "body": "Das Tool berechnet, wann der Ball beim Rückschläger ankommt und wie weit er laufen muss. Er wartet seine Reaktionszeit ab, läuft dann los und erreicht mit Arm und Schläger noch etwas mehr. Kommt er nicht hin, ist es ein <b>Ass</b>. Sonst machen weniger Zeit, ein längerer Weg, mehr Tempo, ein hoher Kick oder ein flacher Slice den Return schwerer, vom leichten Return bis zum Returnfehler.",
-      "formula": "Reichweite = Arm und Schläger + Laufweg nach der Reaktion",
-      "note": "ein 2.0-Rückschläger reagiert in etwa 0,42 s und läuft etwa 3 m/s; ein 5.0-Rückschläger reagiert in etwa 0,25 s und läuft etwa 5 m/s."
+      "body": "Der Rückschläger wartet knapp hinter der Grundlinie, etwa einen Meter innerhalb der Einzel-Seitenlinie. Das Tool berechnet, wann der Ball bei ihm ankommt und wie weit er laufen muss. Er wartet seine Reaktionszeit ab, läuft dann los und erreicht mit Ausfallschritt, Arm und Schläger noch mehr. Einen Ball, der auf ihn zukommt, nimmt er an seiner üblichen Stelle; einen, der von ihm wegdreht, schneidet er ab: Er läuft schräg nach vorn und trifft ihn früher auf seiner Bahn, an der nächsten Stelle, die er noch rechtzeitig erreicht. Gibt es keine solche Stelle, ist es ein <b>Ass</b>. Sonst machen weniger Zeit, ein längerer Weg, mehr Tempo, ein hoher Kick oder ein flacher Slice den Return schwerer, vom leichten Return bis zum Returnfehler.",
+      "formula": "Reichweite = Ausfallschritt, Arm und Schläger + Laufweg nach der Reaktion",
+      "note": "ein 2.0-Rückschläger reagiert in etwa 0,42 s, läuft etwa 3 m/s und reicht etwa 1,65 m weit; ein 5.0-Rückschläger reagiert in etwa 0,25 s, läuft etwa 5 m/s und reicht etwa 1,9 m weit."
     },
     "direction": {
       "title": "8. Platzseite und Schlagarm",

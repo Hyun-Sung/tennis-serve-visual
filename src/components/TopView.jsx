@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { returnerReady, returnerZ } from '../outcome.js'
+import { returnerAt, returnerReady } from '../outcome.js'
 import { boxZ, COURT, sideSign } from '../physics.js'
 
 // Seen from above: x runs toward the receiver, z (the server's right) points down the screen.
@@ -17,7 +17,8 @@ export default function TopView({ flown, sim, ball, aimZ, serverZ, side, onAim, 
   const cs = sideSign(side)
   const [aimMin, aimMax] = cs > 0 ? AIM_RANGE : [-AIM_RANGE[1], -AIM_RANGE[0]]
   const [boxTop] = boxZ(side)
-  const ready = returnerReady(side)
+  // returnerAt starts from where the returner waits on this side, even before there's a serve to read.
+  const returner = returnerAt(ret ?? { ready: returnerReady(side) }, Math.max(flown, 0))
   const bounced = sim.bounce && flown >= sim.bounce.t
   const path = sim.points.map((p) => `${p.x},${p.z}`).join(' ')
   const done = sim.points.filter((p) => p.t <= flown).map((p) => `${p.x},${p.z}`)
@@ -79,7 +80,7 @@ export default function TopView({ flown, sim, ball, aimZ, serverZ, side, onAim, 
       {done.length > 1 && <polyline points={done.join(' ')} fill="none" stroke={lineColor} strokeWidth="0.12" strokeLinecap="round" />}
 
       <circle cx="-0.6" cy={serverZ} r="0.32" fill="#f27b5c" stroke="#fff" strokeWidth="0.07" />
-      <circle cx={ready.x} cy={returnerZ(ret, Math.max(flown, 0))} r="0.32" fill="#5aa9e6" stroke="#fff" strokeWidth="0.07" />
+      <circle cx={returner.x} cy={returner.z} r="0.32" fill="#5aa9e6" stroke="#fff" strokeWidth="0.07" />
       {flown > 0 && <circle cx={ball.x} cy={ball.z} r="0.2" fill="#d8ef3a" stroke="#a9c21f" strokeWidth="0.05" />}
 
       {bounced && (

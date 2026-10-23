@@ -2,7 +2,7 @@
 // there. For every spin it finds the racket angle and aim that land the ball on the spot at a few
 // speeds, flies each through the same error model and returner as the full tool, and scores them.
 
-import { assessServe, evaluateReturn, misHit, RETURN_X } from './outcome.js'
+import { assessServe, evaluateReturn, misHit, RETURN_FLIGHT } from './outcome.js'
 import { boxZ, COURT, sideSign, simulateServe } from './physics.js'
 import { SECOND_IN_FLOOR, serveFor, SLOWEST_SERVE, speedCap, STYLES, WIN_AFTER } from './recommend.js'
 import { planServe } from './serve.js'
@@ -206,16 +206,16 @@ function gauss(rand) {
 /**
  * One serve played for real: hit with a random set of the usual small mistakes, then returned (or not)
  * by a returner of this level. won is null after a fault (the point goes on), else whether the server
- * won the point. sim is the flight, for drawing where it landed.
+ * won the point. sim is the flight, for drawing where it landed, and ret how the returner went for it.
  */
 export function playServe(c, level, side, rand = Math.random) {
   const flight = misHit(c.flight, c.noise, Array.from({ length: 5 }, () => gauss(rand)))
-  const sim = simulateServe(flight, c.contact, { crossX: RETURN_X })
+  const sim = simulateServe(flight, c.contact, RETURN_FLIGHT)
   if (sim.result !== 'in') return { kind: 'fault', why: sim.result, sim, won: null }
   const ret = evaluateReturn(sim, level, flight.speedKmh, side)
-  if (ret.kind === 'ace') return { kind: 'ace', sim, won: true }
+  if (ret.kind === 'ace') return { kind: 'ace', sim, ret, won: true }
   const r = rand()
-  if (r < ret.p.winner) return { kind: 'winner', sim, won: true }
+  if (r < ret.p.winner) return { kind: 'winner', sim, ret, won: true }
   const kind = r < ret.p.winner + ret.p.tough ? 'tough' : 'easy'
-  return { kind, sim, won: rand() < WIN_AFTER[kind] }
+  return { kind, sim, ret, won: rand() < WIN_AFTER[kind] }
 }

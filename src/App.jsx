@@ -13,7 +13,7 @@ import { Seg } from './components/Fields.jsx'
 import Timeline from './components/Timeline.jsx'
 import TopView from './components/TopView.jsx'
 import { NEW_GAME } from './game.js'
-import { assessServe, DEFAULT_LEVEL, evaluateReturn, RETURN_X } from './outcome.js'
+import { assessServe, DEFAULT_LEVEL, evaluateReturn, RETURN_FLIGHT } from './outcome.js'
 import { simulateServe } from './physics.js'
 import { PHASES } from './pose.js'
 import { DEFAULT_MAX_SPEED } from './recommend.js'
@@ -121,7 +121,7 @@ export default function App() {
   })
 
   const plan = useMemo(() => planServe(s), [s])
-  const sim = useMemo(() => simulateServe(plan.flight, plan.contact, { crossX: RETURN_X }), [plan])
+  const sim = useMemo(() => simulateServe(plan.flight, plan.contact, RETURN_FLIGHT), [plan])
   const ret = useMemo(() => evaluateReturn(sim, level, plan.flight.speedKmh, plan.side), [sim, level, plan])
   // Simulating 64 slightly-off serves takes a few tens of milliseconds, so let it lag behind a dragged slider.
   const lagPlan = useDeferredValue(plan)
@@ -190,7 +190,7 @@ export default function App() {
     const next = [...kept]
     serves.forEach((one, i) => {
       const p = planServe(one)
-      const flight = simulateServe(p.flight, p.contact, { crossX: RETURN_X })
+      const flight = simulateServe(p.flight, p.contact, RETURN_FLIGHT)
       const summary = summarize(one, p, flight, assessServe(p, level, { window: false }), level, i === 0 ? 'first' : 'second')
       const color = nextColor(next.map((k) => k.color))
       next.push({ id: Date.now() + i, color, points: flight.points, bounce: flight.bounce, result: flight.result, summary })

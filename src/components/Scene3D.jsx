@@ -5,7 +5,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { Line2 } from 'three/addons/lines/Line2.js'
 import { LineGeometry } from 'three/addons/lines/LineGeometry.js'
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js'
-import { returnerReady, returnerZ } from '../outcome.js'
+import { returnerAt, returnerReady } from '../outcome.js'
 import { BALL_R, COURT, sideSign } from '../physics.js'
 import { RELEASE_T } from '../pose.js'
 import { BASE_X, NEUTRAL_BODY, poseTime, SERVER_Z, serverJoints, serverZFor } from '../serve.js'
@@ -350,17 +350,18 @@ function setup(host, live) {
     const sj = serverJoints(poseTime(plan, t), plan)
     server.update(sj)
     const flown = t - plan.contactT
-    // The returner bounces on their toes, then sets off toward the ball once they've reacted.
+    // The returner bounces on their toes, then sets off toward the ball once they've reacted:
+    // sideways, or diagonally forward to cut off a ball curving away from them.
     const home = returnerReady(side)
-    const rz = returnerZ(ret, Math.max(flown, 0))
-    const moving = Math.abs(rz - home.z) > 0.01
+    const r = returnerAt(ret ?? { ready: home }, Math.max(flown, 0))
+    const moving = Math.hypot(r.x - home.x, r.z - home.z) > 0.01
     const bob = moving ? 0 : 0.025 * (1 + Math.sin(now / 160))
-    const rj = mirrorJoints(serverJoints(0, NEUTRAL_BODY), home.x, rz, BASE_X, SERVER_Z)
+    const rj = mirrorJoints(serverJoints(0, NEUTRAL_BODY), r.x, r.z, BASE_X, SERVER_Z)
     for (const p of Object.values(rj)) if (typeof p === 'object') p.y += bob
     receiver.update(rj)
     receiver.group.visible = view !== 'receiver'
     outcomeLabel.visible = !!(ret?.c && OUTCOME_COLOR[ret.kind] && flown >= ret.c.t)
-    outcomeLabel.position.set(home.x, 2.5, rz)
+    outcomeLabel.position.set(r.x, 2.5, r.z)
     ball.position.set(b.x, b.y, b.z)
     // Real spin is far too fast to see; this is a slowed-down hint of its axis and rate.
     const turns = flown > 0 ? flown * (plan.flight.rpm / 60) * 0.08 : (t - RELEASE_T) * 0.6
@@ -380,7 +381,7 @@ function setup(host, live) {
       new THREE.Vector3(sj.head.x, sj.head.y, sj.head.z),
       new THREE.Vector3(sj.hip.x, 0.3, sj.hip.z),
       ball.position,
-      new THREE.Vector3(home.x, 1.2, rz),
+      new THREE.Vector3(r.x, 1.2, r.z),
       ...COURT_POINTS,
     ])
     renderer.render(scene, camera)

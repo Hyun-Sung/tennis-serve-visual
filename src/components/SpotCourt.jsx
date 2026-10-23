@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { returnerReady } from '../outcome.js'
+import { returnerAt, returnerReady } from '../outcome.js'
 import { ballAt, boxZ, COURT } from '../physics.js'
 
 // The far half of the court seen from above and behind the server: right on screen is the server's
@@ -45,7 +45,7 @@ const reducedMotion = () => typeof window !== 'undefined' && window.matchMedia?.
  * Pick where the serve should land. spot is { x, z } in metres; onPlace(spot, fresh) is called with
  * where the pointer is, fresh on the first touch of a drag (a fresh touch in the other box switches
  * sides). paths are the serves to draw, the chosen one with its scatter. played is the last serve hit
- * in the practice game ({ id, sim }); onLanded(id) fires once it has landed. stale dims the paths while
+ * in the practice game ({ id, sim, ret }); onLanded(id) fires once it has landed. stale dims the paths while
  * the ones for a new spot are worked out.
  */
 export default function SpotCourt({ side, spot, onPlace, paths, stale, chosen, played, onLanded, label, valueText }) {
@@ -102,6 +102,8 @@ export default function SpotCourt({ side, spot, onPlace, paths, stale, chosen, p
   const flying = played && flyT != null && flyT < end
   const ball = flying ? ballAt(played.sim, flyT) : null
   const mark = played && flyT != null && played.sim.bounce && flyT >= played.sim.bounce.t ? played.sim.bounce : null
+  // The returner sets off once they've read the played serve, sideways or diagonally forward to cut it off.
+  const returner = played?.ret && flyT != null ? returnerAt(played.ret, flyT) : ready
 
   const chosenPath = paths.find((p) => p.style === chosen)
   const c = chosenPath?.spread ? cloud(chosenPath.spread) : null
@@ -154,8 +156,8 @@ export default function SpotCourt({ side, spot, onPlace, paths, stale, chosen, p
       </text>
       <line x1={-hd - 0.4} y1={-net} x2={hd + 0.4} y2={-net} stroke="#2f3e66" strokeWidth="0.14" />
 
-      <circle cx={ready.z} cy={-ready.x} r="0.3" fill="#5aa9e6" stroke="#fff" strokeWidth="0.06" />
-      <text className="who-label" x={ready.z} y={-ready.x - 0.5}>
+      <circle cx={returner.z} cy={-returner.x} r="0.3" fill="#5aa9e6" stroke="#fff" strokeWidth="0.06" />
+      <text className="who-label" x={returner.z} y={-returner.x - 0.5}>
         {t('simple.returner')}
       </text>
 
