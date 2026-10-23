@@ -1,4 +1,4 @@
-import { DEFAULT_HIT, DEFAULT_SWING, DEFAULT_TOSS, JUMP_LIMITS, TOSS_LIMITS } from '../serve.js'
+import { DEFAULT_HIT, DEFAULT_SWING, DEFAULT_TOSS, HEIGHT_LIMITS, JUMP_LIMITS, STANCES, TOSS_LIMITS } from '../serve.js'
 import BallPicker from './BallPicker.jsx'
 import TossPad from './TossPad.jsx'
 
@@ -40,13 +40,13 @@ const AIMS = [
   { label: 'wide', value: -3.7 },
 ]
 
-const STANCES = [
+const STANCE_OPTIONS = [
   { label: 'platform', value: 'platform' },
   { label: 'pinpoint', value: 'pinpoint' },
 ]
 const STANCE_NOTE = {
-  platform: 'feet stay apart the whole time. steady and simple.',
-  pinpoint: 'the back foot slides up beside the front foot during the toss, then both drive up together.',
+  platform: 'feet stay apart the whole time, and you meet the ball right where you tossed it. steady and simple.',
+  pinpoint: `the back foot slides up beside the front foot, then both drive up and into the court: you meet the ball ${Math.round(STANCES.pinpoint.forward * 100)} cm further in and ${Math.round(STANCES.pinpoint.lift * 100)} cm higher, and land inside the baseline.`,
 }
 
 const cm = (m) => `${Math.abs(Math.round(m * 100))} cm`
@@ -92,14 +92,28 @@ export default function Controls({ s, plan, onChange, onToss }) {
         reset toss
       </button>
 
-      <h2>Footwork</h2>
+      <h2>Server</h2>
+      <Slider
+        label="Height"
+        value={s.height}
+        display={`${s.height.toFixed(2)} m`}
+        min={HEIGHT_LIMITS[0]}
+        max={HEIGHT_LIMITS[1]}
+        step={0.01}
+        onChange={(height) => onChange({ height })}
+        ends={['shorter', 'taller']}
+        hint={`a taller server reaches higher: you meet the ball at ${plan.contact.y.toFixed(2)} m.`}
+      />
       <span className="sub">Stance</span>
-      <Seg label="stance" options={STANCES} value={s.stance} onChange={(stance) => onChange({ stance })} />
+      <Seg label="stance" options={STANCE_OPTIONS} value={s.stance} onChange={(stance) => onChange({ stance })} />
       <p className="note">{STANCE_NOTE[s.stance]}</p>
       <Slider
         label="Jump height"
         value={s.jump}
-        display={s.jump < 0.01 ? 'no jump' : `${cm(s.jump)} off the ground`}
+        display={(() => {
+          const clear = s.jump + STANCES[s.stance].lift
+          return clear < 0.01 ? 'no jump' : `${cm(clear)} off the ground`
+        })()}
         min={JUMP_LIMITS[0]}
         max={JUMP_LIMITS[1]}
         step={0.01}

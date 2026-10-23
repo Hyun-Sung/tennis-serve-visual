@@ -8,7 +8,7 @@ const AIM_MAX = 0.6
 
 const RESULT_TEXT = { in: 'in!', net: 'net', long: 'long', wide: 'out' }
 
-export default function TopView({ flown, sim, ball, aimZ, serverZ, onAim }) {
+export default function TopView({ flown, sim, ball, aimZ, serverZ, onAim, lineColor = '#e2574c', kept = [] }) {
   const svgRef = useRef(null)
   const dragging = useRef(false)
   const { length: L, net, serviceLine: S, halfSingles: hs, halfDoubles: hd } = COURT
@@ -63,8 +63,15 @@ export default function TopView({ flown, sim, ball, aimZ, serverZ, onAim }) {
         <path d="M-0.25,0 H0.25 M0,-0.25 V0.25" stroke="#ffe08a" strokeWidth="0.09" strokeLinecap="round" />
       </g>
 
+      {kept.map((k) => (
+        <g key={k.id}>
+          <polyline points={k.points.map((p) => `${p.x},${p.z}`).join(' ')} fill="none" stroke={k.color} strokeWidth="0.1"
+            strokeLinecap="round" opacity="0.9" />
+          {k.bounce && <circle cx={k.bounce.x} cy={k.bounce.z} r="0.22" fill={k.color} stroke="#fff" strokeWidth="0.05" />}
+        </g>
+      ))}
       <polyline points={path} fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="0.08" strokeDasharray="0.3 0.22" />
-      {done.length > 1 && <polyline points={done.join(' ')} fill="none" stroke="#e2574c" strokeWidth="0.12" strokeLinecap="round" />}
+      {done.length > 1 && <polyline points={done.join(' ')} fill="none" stroke={lineColor} strokeWidth="0.12" strokeLinecap="round" />}
 
       <circle cx="-0.6" cy={serverZ} r="0.32" fill="#f27b5c" stroke="#fff" strokeWidth="0.07" />
       {flown > 0 && <circle cx={ball.x} cy={ball.z} r="0.2" fill="#d8ef3a" stroke="#a9c21f" strokeWidth="0.05" />}

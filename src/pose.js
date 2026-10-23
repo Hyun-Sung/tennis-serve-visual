@@ -84,20 +84,23 @@ const step = (p, len, deg) => {
   return { x: p.x + len * Math.sin(r), y: p.y + len * Math.cos(r) }
 }
 
-/** Joint positions in meters for a pose, with the player's base at x = baseX. */
-export function skeleton(pose, baseX = 0) {
-  const hip = { x: baseX + pose.hx, y: pose.hy }
-  const shoulder = step(hip, BODY.torso, pose.torso)
-  const head = step(shoulder, BODY.neck, pose.torso * 0.6)
-  const hElbow = step(shoulder, BODY.upperArm, pose.hU)
-  const hHand = step(hElbow, BODY.forearm, pose.hF)
+/**
+ * Joint positions in meters for a pose, with the player's base at x = baseX.
+ * k scales the body for a taller or shorter player; the racket stays the same length.
+ */
+export function skeleton(pose, baseX = 0, k = 1) {
+  const hip = { x: baseX + pose.hx * k, y: pose.hy * k }
+  const shoulder = step(hip, BODY.torso * k, pose.torso)
+  const head = step(shoulder, BODY.neck * k, pose.torso * 0.6)
+  const hElbow = step(shoulder, BODY.upperArm * k, pose.hU)
+  const hHand = step(hElbow, BODY.forearm * k, pose.hF)
   const racketHead = step(hHand, BODY.racketToHead, pose.rk)
-  const tElbow = step(shoulder, BODY.upperArm, pose.tU)
-  const tHand = step(tElbow, BODY.forearm, pose.tF)
-  const fKnee = step(hip, BODY.thigh, pose.fT)
-  const fFoot = step(fKnee, BODY.shin, pose.fS)
-  const bKnee = step(hip, BODY.thigh, pose.bT)
-  const bFoot = step(bKnee, BODY.shin, pose.bS)
+  const tElbow = step(shoulder, BODY.upperArm * k, pose.tU)
+  const tHand = step(tElbow, BODY.forearm * k, pose.tF)
+  const fKnee = step(hip, BODY.thigh * k, pose.fT)
+  const fFoot = step(fKnee, BODY.shin * k, pose.fS)
+  const bKnee = step(hip, BODY.thigh * k, pose.bT)
+  const bFoot = step(bKnee, BODY.shin * k, pose.bS)
   const j = { hip, shoulder, head, hElbow, hHand, racketHead, tElbow, tHand, fKnee, fFoot, bKnee, bFoot }
   // Keep the lower foot on the ground instead of sinking through it.
   const lift = Math.max(0, -Math.min(fFoot.y, bFoot.y))

@@ -115,6 +115,7 @@ export function createFigure({ shirt = '#f27b5c', shorts = '#2f3e66', skin = '#f
     chest.rotation.y = j.yaw ?? 0
     pelvis.position.copy(hip)
     head.position.copy(v(j.head))
+    head.scale.setScalar(j.scale ?? 1)
     head.rotation.z = (-(j.lean ?? 0) * 0.5 * Math.PI) / 180
 
     limbs.hUpper.set(v(j.hShoulder), v(j.hElbow))
@@ -126,6 +127,7 @@ export function createFigure({ shirt = '#f27b5c', shorts = '#2f3e66', skin = '#f
     limbs.bThigh.set(v(j.bHip), v(j.bKnee))
     limbs.bShin.set(v(j.bKnee), v(j.bFoot))
     for (const k of Object.keys(joints)) joints[k].position.copy(v(j[k]))
+    for (const s of shoes) s.scale.setScalar(j.scale ?? 1)
     shoes[0].position.set(j.fFoot.x + 0.06 * facing, Math.max(j.fFoot.y, 0.045), j.fFoot.z)
     shoes[1].position.set(j.bFoot.x + 0.06 * facing, Math.max(j.bFoot.y, 0.045), j.bFoot.z)
 

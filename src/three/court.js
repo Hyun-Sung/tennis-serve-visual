@@ -81,19 +81,12 @@ function netMesh() {
   return g
 }
 
-// Trees and fence panels can fade out when they block the camera. Each one is a group with its
-// own materials, tagged userData.occluder, so the scene can fade them one at a time.
+// Trees and fence panels are hidden when they block the camera. Each one is a group tagged
+// userData.occluder, so the scene can hide them one at a time.
 function occluder(parts) {
   const g = new THREE.Group()
-  const materials = []
-  for (const p of parts) {
-    // Transparent from the start: flipping the flag later would need a shader recompile.
-    p.material = p.material.clone()
-    p.material.transparent = true
-    materials.push(p.material)
-    g.add(p)
-  }
-  g.userData = { occluder: true, materials, fade: 1 }
+  g.add(...parts)
+  g.userData = { occluder: true }
   return g
 }
 

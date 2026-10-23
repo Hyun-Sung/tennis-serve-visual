@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { describeServe, nextColor, PALETTE } from './compare.js'
+import Compare from './components/Compare.jsx'
 import Controls from './components/Controls.jsx'
 import Readout from './components/Readout.jsx'
 import Scene3D from './components/Scene3D.jsx'
@@ -6,10 +8,21 @@ import Timeline from './components/Timeline.jsx'
 import TopView from './components/TopView.jsx'
 import { simulateServe } from './physics.js'
 import { PHASES } from './pose.js'
-import { ballPosition, DEFAULT_FOOTWORK, DEFAULT_HIT, DEFAULT_SWING, DEFAULT_TOSS, planServe, realTime, SERVER_Z } from './serve.js'
+import {
+  ballPosition,
+  DEFAULT_FOOTWORK,
+  DEFAULT_HEIGHT,
+  DEFAULT_HIT,
+  DEFAULT_SWING,
+  DEFAULT_TOSS,
+  planServe,
+  realTime,
+  SERVER_Z,
+} from './serve.js'
 
 const START = {
   toss: DEFAULT_TOSS,
+  height: DEFAULT_HEIGHT,
   ...DEFAULT_FOOTWORK,
   speedKmh: 180,
   swing: DEFAULT_SWING,
@@ -25,6 +38,8 @@ export default function App() {
   const [t, setT] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [rate, setRate] = useState(0.5)
+  const [lineColor, setLineColor] = useState(PALETTE[0])
+  const [kept, setKept] = useState([])
 
   const plan = useMemo(() => planServe(s), [s])
   const sim = useMemo(() => simulateServe(plan.flight, plan.contact), [plan])
@@ -78,6 +93,13 @@ export default function App() {
     return () => window.removeEventListener('keydown', onKey)
   }, [serve])
 
+  // Keep the current serve on screen and give the next one its own color.
+  const keepServe = () => {
+    const next = [...kept, { id: Date.now(), color: lineColor, points: sim.points, bounce: sim.bounce, result: sim.result, label: describeServe(s, plan, sim) }]
+    setKept(next)
+    setLineColor(nextColor(next.map((k) => k.color)))
+  }
+
   const update = (patch) => setS((p) => ({ ...p, ...patch }))
   const updateToss = (patch) => setS((p) => ({ ...p, toss: { ...p.toss, ...patch } }))
 
@@ -97,7 +119,7 @@ export default function App() {
 
       <div className="layout">
         <section className="stage">
-          <Scene3D t={t} plan={plan} sim={sim} ball={ball} view={view} onView={setView} />
+          <Scene3D t={t} plan={plan} sim={sim} ball={ball} view={view} onView={setView} lineColor={lineColor} kept={kept} />
           <Timeline t={t} total={total} phases={phases} events={events} onScrub={(v) => (setPlaying(false), setT(v))} />
           <div className="transport">
             <button className="primary" onClick={serve}>
@@ -112,8 +134,17 @@ export default function App() {
               ))}
             </div>
           </div>
+          <Compare
+            color={lineColor}
+            onColor={setLineColor}
+            kept={kept}
+            onKeep={keepServe}
+            onRemove={(id) => setKept((k) => k.filter((x) => x.id !== id))}
+            onClear={() => setKept([])}
+          />
           <div className="below">
-            <TopView flown={flown} sim={sim} ball={ball} aimZ={s.aimZ} serverZ={SERVER_Z} onAim={(aimZ) => update({ aimZ })} />
+            <TopView flown={flown} sim={sim} ball={ball} aimZ={s.aimZ} serverZ={SERVER_Z} onAim={(aimZ) => update({ aimZ })}
+              lineColor={lineColor} kept={kept} />
             <Readout sim={sim} plan={plan} flown={flown} autoSwing={s.autoSwing} />
           </div>
         </section>

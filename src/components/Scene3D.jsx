@@ -103,6 +103,34 @@ function setup(host, live) {
   const pathMat = new LineMaterial({ color: 0xffffff, linewidth: 2, dashed: true, dashSize: 0.3, gapSize: 0.2, transparent: true, opacity: 0.75 })
   const tossMat = new LineMaterial({ color: 0xffffff, linewidth: 1.5, dashed: true, dashSize: 0.08, gapSize: 0.07, transparent: true, opacity: 0.6 })
   const trailMat = new LineMaterial({ color: 0xffc94d, linewidth: 4 })
+  // Serves kept for comparison: a solid line and a bounce ring each, in their own color.
+  const keptGroup = new THREE.Group()
+  scene.add(keptGroup)
+  const keptMats = []
+  let lastKept = null
+  let lastColor = null
+  const rebuildKept = (kept) => {
+    for (const c of keptGroup.children) {
+      c.geometry.dispose()
+      c.material.dispose()
+    }
+    keptGroup.clear()
+    keptMats.length = 0
+    for (const k of kept) {
+      const mat = new LineMaterial({ color: k.color, linewidth: 3 })
+      mat.resolution.set(host.clientWidth, host.clientHeight)
+      keptMats.push(mat)
+      const line = new Line2(new LineGeometry().setPositions(k.points.flatMap((p) => [p.x, p.y, p.z])), mat)
+      line.frustumCulled = false
+      keptGroup.add(line)
+      if (k.bounce) {
+        const ring = new THREE.Mesh(new THREE.RingGeometry(0.12, 0.2, 28), new THREE.MeshBasicMaterial({ color: k.color, side: THREE.DoubleSide }))
+        ring.rotation.x = -Math.PI / 2
+        ring.position.set(k.bounce.x, 0.01, k.bounce.z)
+        keptGroup.add(ring)
+      }
+    }
+  }
   const path = new Line2(new LineGeometry(), pathMat)
   const tossPath = new Line2(new LineGeometry(), tossMat)
   const trail = new Line2(new LineGeometry(), trailMat)
@@ -128,7 +156,7 @@ function setup(host, live) {
     renderer.setSize(w, h, false)
     camera.aspect = w / h
     camera.updateProjectionMatrix()
-    for (const m of lineMats) m.resolution.set(w, h)
+    for (const m of [...lineMats, ...keptMats]) m.resolution.set(w, h)
   }
   const ro = new ResizeObserver(resize)
   ro.observe(host)
@@ -213,11 +241,11 @@ function setup(host, live) {
     geo.instanceCount = Math.max(0, Math.min(count, nSeg))
   }
 
-  // Fade out any tree or fence panel between the camera and what you're watching.
+  // Hide any tree or fence panel between the camera and what you're watching.
   const ray = new THREE.Raycaster()
   const toFocus = new THREE.Vector3()
   // Sight lines run to the players and ball, plus a spread of points over the court,
-  // so anything covering part of the court fades too.
+  // so anything covering part of the court is hidden too.
   const COURT_POINTS = []
   for (const x of [-0.5, 5.5, COURT.net, 18.3, COURT.length]) {
     for (const z of [-COURT.halfDoubles, 0, COURT.halfDoubles]) COURT_POINTS.push(new THREE.Vector3(x, 0.8, z))
@@ -228,7 +256,7 @@ function setup(host, live) {
     o.updateWorldMatrix(true, true)
     o.userData.sphere = new THREE.Box3().setFromObject(o).getBoundingSphere(new THREE.Sphere())
   }
-  const fadeOccluders = (points) => {
+  const hideOccluders = (points) => {
     const blocked = new Set()
     // Anything right in front of the lens takes up half the view, even off the sight lines.
     camera.getWorldDirection(camDir)
@@ -248,25 +276,24 @@ function setup(host, live) {
         if (o) blocked.add(o)
       }
     }
-    for (const o of occluders) {
-      const d = o.userData
-      const goal = blocked.has(o) ? 0.1 : 1
-      if (Math.abs(d.fade - goal) < 0.005) continue
-      d.fade += (goal - d.fade) * 0.18
-      if (Math.abs(d.fade - goal) < 0.01) d.fade = goal
-      for (const m of d.materials) {
-        m.opacity = d.fade
-        m.depthWrite = d.fade === 1
-      }
-    }
+    // Raycasting still sees hidden objects, so a hidden one comes back as soon as it's out of the way.
+    for (const o of occluders) o.visible = !blocked.has(o)
   }
 
   const spinQ = new THREE.Quaternion()
   let raf
   const frame = (now) => {
     raf = requestAnimationFrame(frame)
-    const { t, plan, sim, ball: b, view } = live.current
+    const { t, plan, sim, ball: b, view, kept, lineColor } = live.current
     if (!plan) return
+    if (kept !== lastKept) {
+      rebuildKept(kept)
+      lastKept = kept
+    }
+    if (lineColor !== lastColor) {
+      trailMat.color.set(lineColor)
+      lastColor = lineColor
+    }
     if (sim !== lastSim || plan !== lastPlan) {
       rebuild(plan, sim)
       lastSim = sim
@@ -309,7 +336,7 @@ function setup(host, live) {
     clearance.visible = !!sim.net && flown >= sim.net.t
 
     controls.update()
-    fadeOccluders([
+    hideOccluders([
       controls.target,
       new THREE.Vector3(sj.head.x, sj.head.y, sj.head.z),
       new THREE.Vector3(sj.hip.x, 0.3, sj.hip.z),
@@ -330,11 +357,11 @@ function setup(host, live) {
   }
 }
 
-export default function Scene3D({ t, plan, sim, ball, view, onView }) {
+export default function Scene3D({ t, plan, sim, ball, view, onView, lineColor, kept }) {
   const hostRef = useRef(null)
   const live = useRef({})
   useEffect(() => {
-    live.current = { t, plan, sim, ball, view }
+    live.current = { t, plan, sim, ball, view, lineColor, kept }
   })
   useEffect(() => setup(hostRef.current, live), [])
 

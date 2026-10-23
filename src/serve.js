@@ -13,30 +13,61 @@ const POSE_TOSS = CONTACT_T - RELEASE_T
 // Toss further in front makes the server hit down more; behind makes them hit up.
 const DEG_PER_M_FORWARD = 4
 
-const contactPose = skeleton(poseAt(CONTACT_T), BASE_X)
-const SHOULDER = { x: contactPose.shoulder.x, y: contactPose.shoulder.y, z: SERVER_Z + SIDE.hit }
-export const DEFAULT_CONTACT = { x: contactPose.racketHead.x, y: contactPose.racketHead.y, z: SERVER_Z + SIDE.hit }
-const REACH = Math.hypot(DEFAULT_CONTACT.x - SHOULDER.x, DEFAULT_CONTACT.y - SHOULDER.y)
-// How far the feet clear the ground at contact in the keyframed pose; the jump slider adds to it.
-const AUTHORED_JUMP = Math.min(contactPose.fFoot.y, contactPose.bFoot.y)
 const TAKEOFF = 1.1
 const LANDING = 1.56
 /** 0 on the ground, 1 at the top of the jump (pose time). */
-export const jumpCurve = (p) => (p <= TAKEOFF || p >= LANDING ? 0 : Math.sin((Math.PI * (p - TAKEOFF)) / (LANDING - TAKEOFF)))
+export function jumpCurve(p) {
+  return p <= TAKEOFF || p >= LANDING ? 0 : Math.sin((Math.PI * (p - TAKEOFF)) / (LANDING - TAKEOFF))
+}
+/** How far the body has carried forward into the court: 0 before takeoff, 1 at contact, a little more on landing. */
+function forwardCurve(p) {
+  return smooth((p - TAKEOFF) / (CONTACT_T - TAKEOFF)) + 0.3 * smooth((p - CONTACT_T) / 0.3)
+}
 
+// A pinpoint stance drives up and forward off both feet, so the server meets the ball higher and
+// further into the court, and lands inside the baseline. A platform stance stays put.
+export const STANCES = {
+  platform: { forward: 0, lift: 0 },
+  pinpoint: { forward: 0.15, lift: 0.06 },
+}
 export const DEFAULT_FOOTWORK = { stance: 'platform', jump: 0.15 }
 export const JUMP_LIMITS = [0, 0.45]
-/** A standing server with no adjustments, for the receiver and the ball before the toss. */
-export const NEUTRAL_BODY = { delta: { x: 0, y: 0, z: 0 }, stance: 'platform', jumpExtra: 0 }
-const RELEASE = serverJoints(RELEASE_T, NEUTRAL_BODY).tHand
+const BASE_HEIGHT = 1.85
+export const HEIGHT_LIMITS = [1.5, 2.1]
+export const DEFAULT_HEIGHT = BASE_HEIGHT
 
-export const DEFAULT_TOSS = { height: 3.4, forward: Math.round(DEFAULT_CONTACT.x * 100) / 100, side: 0 }
+/** A standing server with no adjustments, for the receiver and for working out reach. */
+export const NEUTRAL_BODY = { delta: { x: 0, y: 0, z: 0 }, stance: 'platform', jumpExtra: 0, forwardShift: 0, scale: 1 }
+
+// Everything that depends only on the server's size, worked out once per height.
+const frames = new Map()
+function frameFor(k) {
+  const key = k.toFixed(3)
+  if (!frames.has(key)) {
+    const cp = skeleton(poseAt(CONTACT_T), BASE_X, k)
+    const shoulder = { x: cp.shoulder.x, y: cp.shoulder.y, z: SERVER_Z + SIDE.hit * k }
+    const contact = { x: cp.racketHead.x, y: cp.racketHead.y, z: SERVER_Z + SIDE.hit * k }
+    frames.set(key, {
+      shoulder,
+      contact,
+      reach: Math.hypot(contact.x - shoulder.x, contact.y - shoulder.y),
+      // How far the feet clear the ground at contact in the keyframed pose; the jump slider replaces it.
+      authoredJump: Math.min(cp.fFoot.y, cp.bFoot.y),
+      release: serverJoints(RELEASE_T, { ...NEUTRAL_BODY, scale: k }).tHand,
+    })
+  }
+  return frames.get(key)
+}
+const BASE_FRAME = frameFor(1)
+
+export const DEFAULT_TOSS = { height: 3.4, forward: Math.round(BASE_FRAME.contact.x * 100) / 100, side: 0 }
 export const TOSS_LIMITS = { height: [2.2, 5], forward: [-0.4, 0.9], side: [-0.6, 0.6] }
 
 // The server leans toward the toss, sideways more easily than forward, so distance counts for less.
-function reachAt(x, z) {
-  const d = Math.min(Math.hypot(0.75 * (x - SHOULDER.x), 0.5 * (z - SHOULDER.z)), REACH * 0.95)
-  return SHOULDER.y + Math.sqrt(REACH * REACH - d * d)
+// x is measured as if the body hadn't moved forward.
+function reachAt(x, z, f) {
+  const d = Math.min(Math.hypot(0.75 * (x - f.shoulder.x), 0.5 * (z - f.shoulder.z)), f.reach * 0.95)
+  return f.shoulder.y + Math.sqrt(f.reach * f.reach - d * d)
 }
 
 const MAX_RPM = 4000
@@ -82,37 +113,43 @@ export function spinFromSwing(swing, hit) {
 /**
  * Everything the toss decides, plus the launch angle the server ends up with.
  * @param {{toss:{height:number,forward:number,side:number}, speedKmh:number, aimZ:number,
- *   autoSwing:boolean, swingDeg:number, stance:'platform'|'pinpoint', jump:number,
+ *   autoSwing:boolean, swingDeg:number, stance:'platform'|'pinpoint', jump:number, height:number,
  *   swing:{up:number, side:number}, hit:{u:number, v:number}}} s
- *   jump is how far the feet leave the ground at contact, in meters.
+ *   jump is how far the feet leave the ground at contact, in meters; height is the server's height.
+ *   toss.forward is measured from the server: the contact point moves with a taller body or a pinpoint stance.
  */
 export function planServe(s) {
   const { toss } = s
-  const cz = SERVER_Z + SIDE.hit + toss.side
-  // Jumping lifts the whole body, so the server can meet the ball that much higher.
-  const jumpExtra = s.jump - AUTHORED_JUMP
+  const k = s.height / BASE_HEIGHT
+  const f = frameFor(k)
+  const stance = STANCES[s.stance]
+  const cz = SERVER_Z + SIDE.hit * k + toss.side
+  // Jumping (and a pinpoint stance's extra drive) lifts the whole body, so the server meets the ball higher.
+  const jumpExtra = s.jump + stance.lift - f.authoredJump
   const jumpLift = jumpExtra * jumpCurve(CONTACT_T)
-  const reachY = reachAt(toss.forward, cz) + jumpLift
+  const tossOffset = toss.forward - DEFAULT_TOSS.forward
+  const bodyX = f.contact.x + tossOffset
+  const reachY = reachAt(bodyX, cz, f) + jumpLift
   const belowReach = toss.height < reachY
-  const contact = { x: toss.forward, y: Math.min(reachY, toss.height), z: cz }
+  const contact = { x: bodyX + stance.forward, y: Math.min(reachY, toss.height), z: cz }
 
-  const up = Math.sqrt(2 * G * Math.max(toss.height - RELEASE.y, 0.01))
+  const up = Math.sqrt(2 * G * Math.max(toss.height - f.release.y, 0.01))
   const tossTime = up / G + Math.sqrt((2 * (toss.height - contact.y)) / G)
 
   const spin = spinFromSwing(s.swing, s.hit)
   const pitchFromHit = -CONTACT_PITCH_DEG * s.hit.v
   const base = { speedKmh: s.speedKmh, rpm: spin.rpm, aimZ: s.aimZ, axis: spin.axis, yawOffsetDeg: -CONTACT_YAW_DEG * s.hit.u }
-  // The server picks the sideways toss, the jump, the swing and the contact point on purpose, so the
-  // auto swing allows for them. A toss too far forward or back, or below their reach, is a mistake it
-  // doesn't know about.
-  const intended = { x: DEFAULT_CONTACT.x, y: reachAt(DEFAULT_CONTACT.x, cz) + jumpLift, z: cz }
+  // The server picks their height, stance, jump, sideways toss, swing and contact point on purpose,
+  // so the auto racket angle allows for them. A toss too far forward or back, or below their reach,
+  // is a mistake it doesn't know about.
+  const intended = { x: f.contact.x + stance.forward, y: reachAt(f.contact.x, cz, f) + jumpLift, z: cz }
   const autoSwing = solveAngle({ ...base, angleDeg: 0 }, intended) - pitchFromHit
   const swingDeg = s.autoSwing ? autoSwing : s.swingDeg
-  const launchDeg = swingDeg + pitchFromHit - DEG_PER_M_FORWARD * (toss.forward - DEFAULT_TOSS.forward)
+  const launchDeg = swingDeg + pitchFromHit - DEG_PER_M_FORWARD * tossOffset
 
   return {
     contact,
-    release: RELEASE,
+    release: f.release,
     reachY,
     belowReach,
     tossTime,
@@ -123,10 +160,16 @@ export function planServe(s) {
     swingDeg,
     launchDeg,
     flight: { ...base, angleDeg: launchDeg },
-    // The arm reaches from wherever the jump already carried the body.
-    delta: { x: contact.x - DEFAULT_CONTACT.x, y: contact.y - DEFAULT_CONTACT.y - jumpLift, z: contact.z - DEFAULT_CONTACT.z },
+    // The arm reaches from wherever the jump and the stance already carried the body.
+    delta: {
+      x: contact.x - f.contact.x - stance.forward,
+      y: contact.y - f.contact.y - jumpLift,
+      z: contact.z - f.contact.z,
+    },
     stance: s.stance,
     jumpExtra,
+    forwardShift: stance.forward,
+    scale: k,
   }
 }
 
@@ -147,23 +190,24 @@ export function realTime(plan, p) {
 /** The ball for the whole sequence: in hand, tossed, then in flight. */
 export function ballPosition(plan, sim, t) {
   if (t < RELEASE_T) {
-    return { ...serverJoints(t, NEUTRAL_BODY).tHand, phase: 'hand' }
+    return { ...serverJoints(t, plan).tHand, phase: 'hand' }
   }
   if (t < plan.contactT) {
     const u = t - RELEASE_T
     const f = u / plan.tossTime
     const c = plan.contact
+    const r = plan.release
     return {
-      x: RELEASE.x + (c.x - RELEASE.x) * f,
-      y: RELEASE.y + plan.tossVy * u - 0.5 * G * u * u,
-      z: RELEASE.z + (c.z - RELEASE.z) * f,
+      x: r.x + (c.x - r.x) * f,
+      y: r.y + plan.tossVy * u - 0.5 * G * u * u,
+      z: r.z + (c.z - r.z) * f,
       phase: 'toss',
     }
   }
   return { ...ballAt(sim, t - plan.contactT), phase: 'flight' }
 }
 
-// Function declarations, so they're ready when RELEASE is worked out at load time.
+// Function declarations, so they're ready when the frames are worked out at load time.
 function smooth(u) {
   const c = Math.min(Math.max(u, 0), 1)
   return c * c * (3 - 2 * c)
@@ -179,9 +223,9 @@ function pinpointWeight(p) {
 }
 
 /** Two-bone leg reaching for a foot target, with the knee bending toward the net. */
-function legTo(hip, target) {
-  const a = BODY.thigh
-  const b = BODY.shin
+function legTo(hip, target, k) {
+  const a = BODY.thigh * k
+  const b = BODY.shin * k
   let dx = target.x - hip.x
   let dy = target.y - hip.y
   let d = Math.hypot(dx, dy)
@@ -207,38 +251,43 @@ function lerp2(a, b, k) {
 /**
  * 3D joints for the server at pose time p. The shoulders coil side-on and uncoil through contact,
  * each arm riding along with its shoulder, and the hitting arm bends toward the actual contact point.
- * body carries the contact correction (delta), the stance and the extra jump height.
+ * body carries the contact correction (delta), the stance, the extra jump height, how far the stance
+ * carries the body forward, and the body scale.
  */
 export function serverJoints(p, body) {
   const { delta } = body
-  const j = skeleton(poseAt(p), BASE_X)
+  const k = body.scale ?? 1
+  const side = { hit: SIDE.hit * k, toss: SIDE.toss * k, front: SIDE.front * k, back: SIDE.back * k }
+  const j = skeleton(poseAt(p), BASE_X, k)
   const w = Math.exp(-(((p - CONTACT_T) / 0.16) ** 2))
   const yaw = (torsoYaw(p) * Math.PI) / 180
   // Turning a shoulder offset (0, 0, side) about the spine moves it by this much.
   const turn = (side) => ({ x: side * Math.sin(yaw), z: side * (Math.cos(yaw) - 1) })
-  const hitTurn = turn(SIDE.hit)
-  const tossTurn = turn(SIDE.toss)
+  const hitTurn = turn(side.hit)
+  const tossTurn = turn(side.toss)
   // After contact the hitting arm keeps going across the body and finishes on the left side.
-  const across = -0.55 * smooth((p - CONTACT_T - 0.04) / 0.26)
+  const across = -0.55 * k * smooth((p - CONTACT_T - 0.04) / 0.26)
   const handTurn = { x: hitTurn.x, z: hitTurn.z + across }
   const elbowTurn = { x: hitTurn.x, z: hitTurn.z + across * 0.5 }
   const lift = body.jumpExtra * jumpCurve(p)
+  const ahead = (body.forwardShift ?? 0) * forwardCurve(p)
 
   let bKnee = j.bKnee
   let bFoot = j.bFoot
-  let backZ = SIDE.back
+  let backZ = side.back
   const pin = body.stance === 'pinpoint' ? pinpointWeight(p) : 0
   if (pin > 0) {
-    const leg = legTo(j.hip, { x: j.fFoot.x - 0.13, y: 0 })
+    const leg = legTo(j.hip, { x: j.fFoot.x - 0.13 * k, y: 0 }, k)
     bKnee = lerp2(j.bKnee, leg.knee, pin)
     bFoot = lerp2(j.bFoot, leg.foot, pin)
-    backZ = SIDE.back + (0.04 - SIDE.back) * pin
+    backZ = side.back + (0.04 * k - side.back) * pin
   }
 
-  const at = (q, z, k = 0, r = { x: 0, z: 0 }) => ({
-    x: q.x + r.x + delta.x * w * k,
-    y: q.y + lift + delta.y * w * k,
-    z: SERVER_Z + z + r.z + delta.z * w * k,
+  // reach is how much of the contact correction a joint takes on: 1 for the racket, less up the arm.
+  const at = (q, z, reach = 0, r = { x: 0, z: 0 }) => ({
+    x: q.x + r.x + ahead + delta.x * w * reach,
+    y: q.y + lift + delta.y * w * reach,
+    z: SERVER_Z + z + r.z + delta.z * w * reach,
   })
   const foot = (q, z) => {
     const f = at(q, z)
@@ -249,21 +298,22 @@ export function serverJoints(p, body) {
     hip: at(j.hip, 0),
     neck: at(j.shoulder, 0),
     head: at(j.head, 0),
-    hShoulder: at(j.shoulder, SIDE.hit, 0, hitTurn),
-    hElbow: at(j.hElbow, SIDE.hit + 0.05, 0.35, elbowTurn),
-    hHand: at(j.hHand, SIDE.hit, 0.8, handTurn),
-    racketHead: at(j.racketHead, SIDE.hit, 1, { x: hitTurn.x, z: hitTurn.z + across * 1.3 }),
-    tShoulder: at(j.shoulder, SIDE.toss, 0, tossTurn),
-    tElbow: at(j.tElbow, SIDE.toss - 0.04, 0, tossTurn),
-    tHand: at(j.tHand, SIDE.toss, 0, tossTurn),
-    fHip: at(j.hip, SIDE.front),
-    fKnee: at(j.fKnee, SIDE.front),
-    fFoot: foot(j.fFoot, SIDE.front),
-    bHip: at(j.hip, SIDE.back),
+    hShoulder: at(j.shoulder, side.hit, 0, hitTurn),
+    hElbow: at(j.hElbow, side.hit + 0.05 * k, 0.35, elbowTurn),
+    hHand: at(j.hHand, side.hit, 0.8, handTurn),
+    racketHead: at(j.racketHead, side.hit, 1, { x: hitTurn.x, z: hitTurn.z + across * 1.3 }),
+    tShoulder: at(j.shoulder, side.toss, 0, tossTurn),
+    tElbow: at(j.tElbow, side.toss - 0.04 * k, 0, tossTurn),
+    tHand: at(j.tHand, side.toss, 0, tossTurn),
+    fHip: at(j.hip, side.front),
+    fKnee: at(j.fKnee, side.front),
+    fFoot: foot(j.fFoot, side.front),
+    bHip: at(j.hip, side.back),
     bKnee: at(bKnee, backZ),
     bFoot: foot(bFoot, backZ),
     lean: poseAt(p).torso,
     yaw,
     roll: (racketRoll(p) * Math.PI) / 180,
+    scale: k,
   }
 }
