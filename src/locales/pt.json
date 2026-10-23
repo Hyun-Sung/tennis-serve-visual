@@ -1,0 +1,348 @@
+{
+  "app": {
+    "tagline": "ajuste o lançamento, os pés e o golpe, e veja se a bola passa a rede.",
+    "units": "Unidades",
+    "language": "Idioma"
+  },
+  "units": {
+    "metric": "métrico",
+    "us": "EUA"
+  },
+  "transport": {
+    "pause": "pausar",
+    "serveAgain": "sacar de novo",
+    "serve": "saque!",
+    "replay": "repetir",
+    "speed": "velocidade de reprodução"
+  },
+  "views": {
+    "label": "câmera",
+    "server": "sacador",
+    "receiver": "recebedor",
+    "net": "rede",
+    "side": "lateral",
+    "coach": "treinador",
+    "orbit": "arraste para olhar ao redor"
+  },
+  "scene": {
+    "clearsBy": "passa {{d}} acima",
+    "intoNet": "na rede"
+  },
+  "outcome": {
+    "ace": "ACE!",
+    "winner": "erro na devolução",
+    "tough": "devolução difícil",
+    "easy": "devolução fácil",
+    "fault": "falta"
+  },
+  "phase": {
+    "time": "tempo",
+    "stance": "posição",
+    "toss": "lançamento",
+    "trophy": "troféu",
+    "racket drop": "queda da raquete",
+    "contact": "contato",
+    "follow-through": "terminação",
+    "net": "rede",
+    "bounce": "quique"
+  },
+  "verdict": {
+    "pending": "bola no ar",
+    "in": {
+      "title": "dentro!",
+      "sub": "bem dentro da área de saque"
+    },
+    "net": {
+      "title": "falta",
+      "sub": "na rede"
+    },
+    "long": {
+      "title": "falta",
+      "sub": "longa, passou da linha de saque"
+    },
+    "wide": {
+      "title": "falta",
+      "sub": "fora da área de saque"
+    },
+    "ace": {
+      "title": "ace!",
+      "sub": "o recebedor não alcançou"
+    },
+    "winner": {
+      "title": "erro na devolução",
+      "sub": "ele provavelmente acerta a bola, mas ela não passa a rede ou sai"
+    },
+    "tough": {
+      "title": "devolução difícil",
+      "sub": "a bola volta, mas sob pressão"
+    },
+    "easy": {
+      "title": "devolução fácil",
+      "sub": "ele teve tempo de se posicionar e bater"
+    },
+    "because": "{{sub}}: {{reason}}"
+  },
+  "reason": {
+    "rush": "pouco tempo para bater",
+    "stretch": "puxado para fora",
+    "heat": "mais rápida do que ele está acostumado",
+    "pace": "chega muito rápida",
+    "high": "quicou alto",
+    "low": "ficou baixa",
+    "jam": "no corpo"
+  },
+  "stats": {
+    "overNet": "acima da rede",
+    "contactHeight": "altura do contato",
+    "launchAngle": "ângulo de saída",
+    "speedAtNet": "velocidade na rede",
+    "speedAtBounce": "velocidade no quique",
+    "bounceHeight": "altura do quique",
+    "timeToReturner": "tempo até o recebedor",
+    "returnerMoves": "o recebedor precisa se mover"
+  },
+  "tips": {
+    "lowToss": "lance mais alto para bater com o braço estendido, ou salte mais.",
+    "net": "lance um pouco mais para trás, escove para cima para mais topspin ou bata mais embaixo na bola.",
+    "longAuto": "lance um pouco mais à frente ou escove para cima para mais topspin e trazê-la para baixo.",
+    "longManual": "incline a raquete um pouco para baixo ou escove para cima para mais topspin.",
+    "wide": "mire um pouco mais para dentro da área de saque."
+  },
+  "risk": {
+    "label": "Tolerância a erro",
+    "sub": "entram mesmo com pequenos erros",
+    "window": "o ângulo da raquete pode variar <b>{{down}}°</b> antes de bater na rede, ou <b>+{{up}}°</b> antes de sair longa.",
+    "misses": "mesmo com o golpe perfeito, este saque erra. mude algo para fazê-lo entrar.",
+    "against": "contra um recebedor <b>{{level}}</b>: <b>{{won}}%</b> dos pontos ganhos direto, <b>{{fault}}%</b> de faltas.",
+    "method": "a partir de {{tries}} tentativas deste saque, cada uma um pouco diferente: cerca de ±{{angle}}° no ângulo da raquete, ±{{yaw}}° na direção, ±{{speed}}% na velocidade, ±{{rpm}}% no efeito e ±{{brush}}° na direção da escovada. esse último explica por que o slice é mais arriscado: com o efeito inclinado de lado, uma escovada um pouco diferente muda quanto a bola cai. um erro na devolução quer dizer que ele provavelmente acerta a bola, mas na rede ou fora. uma devolução fácil quer dizer que ele tem tempo de se posicionar e bater.",
+    "parts": {
+      "ace": "ace",
+      "winner": "erro na devolução",
+      "tough": "devolução difícil",
+      "easy": "devolução fácil",
+      "fault": "falta"
+    }
+  },
+  "target": {
+    "aim": "Alvo",
+    "T": "T",
+    "body": "corpo",
+    "wide": "aberto",
+    "drag": "ou arraste no mapa da quadra.",
+    "returner": "Recebedor",
+    "level": "Nível (NTRP)",
+    "beginner": "iniciante: reage devagar e não gosta de velocidade, então a maioria dos saques ganha o ponto.",
+    "club": "jogador de clube: lida com um saque regular, mas velocidade, ângulo ou um kick forte complicam.",
+    "strong": "jogador de clube forte: reage rápido, então o saque precisa de velocidade e colocação.",
+    "advanced": "jogador avançado: mãos e pés rápidos. você precisa de um saque forte e bem colocado, ou de um kick ou slice que o tire da quadra."
+  },
+  "toss": {
+    "title": "Lançamento",
+    "inFront": "{{d}} à frente",
+    "behind": "{{d}} atrás",
+    "aboveShoulder": "acima do ombro do golpe",
+    "toLeft": "{{d}} à esquerda",
+    "toRight": "{{d}} à direita",
+    "placement": "{{forward}}, {{side}}",
+    "height": "Altura do lançamento",
+    "aboveReach": "{{d}} acima do seu alcance",
+    "belowReach": "{{d}} abaixo do seu alcance",
+    "atReach": "no seu alcance",
+    "wayAbove": "bem acima",
+    "peaksBelow": "chega a {{apex}}, abaixo do seu alcance de {{reach}}, então você bate mais baixo.",
+    "peaks": "chega a {{apex}} do chão e sobe com sua altura e seu salto. no ar por {{t}} s.",
+    "reset": "redefinir lançamento",
+    "padLabel": "posição do lançamento: as setas o movem para frente, para trás e para os lados",
+    "padValue": "{{forward}} à frente, {{side}} para o lado",
+    "padCourt": "para dentro da quadra",
+    "padBehind": "atrás da linha de base"
+  },
+  "server": {
+    "title": "Sacador",
+    "hand": "Mão",
+    "right": "destro",
+    "left": "canhoto",
+    "mirror": "trocar espelha o lançamento, a escovada e o ponto de contato, então é o mesmo saque com a outra mão.",
+    "height": "Altura",
+    "shorter": "mais baixo",
+    "taller": "mais alto",
+    "heightHint": "um sacador mais alto alcança mais alto: você bate na bola a {{h}}.",
+    "typeIt": "ou digite:",
+    "heightCm": "altura em centímetros",
+    "heightFt": "altura, pés",
+    "heightIn": "altura, polegadas",
+    "stance": "Posição",
+    "platform": "plataforma",
+    "pinpoint": "pés juntos",
+    "platformNote": "os pés ficam afastados o tempo todo e você bate na bola exatamente onde a lançou. estável e simples.",
+    "pinpointNote": "o pé de trás desliza para junto do pé da frente e os dois impulsionam para cima e para dentro da quadra: você bate na bola {{forward}} mais à frente e {{lift}} mais alto, e cai dentro da quadra.",
+    "jump": "Altura do salto",
+    "noJump": "sem salto",
+    "bigJump": "salto alto",
+    "offGround": "{{d}} acima do chão",
+    "jumpHint": "saltar mais alto faz você bater na bola mais alto, o que dá mais margem sobre a rede."
+  },
+  "swing": {
+    "title": "Golpe e efeito",
+    "lede": "A força do golpe, como a raquete escova a bola e onde na bola você faz o contato.",
+    "speed": "Velocidade do saque",
+    "slower": "mais lento",
+    "faster": "mais rápido",
+    "speedHint": "uma bola mais rápida tem menos tempo para cair, então precisa de mais efeito para entrar.",
+    "up": "Escovar para cima (topspin)",
+    "straight": "golpe reto",
+    "upBack": "por trás para cima",
+    "upHint": "escovar a bola por trás para cima adiciona topspin, que a puxa para dentro da área de saque.",
+    "across": "Escovar de lado (efeito lateral)",
+    "none": "nenhum",
+    "pctLeft": "{{p}}% à esquerda",
+    "pctRight": "{{p}}% à direita",
+    "endLeft": "← esquerda",
+    "endRight": "direita →",
+    "endLeftSlice": "← esquerda (slice)",
+    "endRightSlice": "direita (slice) →",
+    "acrossHintRighty": "escovar para a direita adiciona slice, que curva a bola para a esquerda.",
+    "acrossHintLefty": "escovar para a esquerda adiciona slice, que curva a bola para a direita.",
+    "contact": "Contato na bola",
+    "contactHintRighty": "embaixo na bola adiciona topspin e a eleva. o lado direito (3 horas) adiciona slice e a empurra para a esquerda. em cima na bola a achata e a faz descer.",
+    "contactHintLefty": "embaixo na bola adiciona topspin e a eleva. o lado esquerdo (9 horas) adiciona slice e a empurra para a direita. em cima na bola a achata e a faz descer.",
+    "result": "Efeito resultante",
+    "topspin": "Topspin",
+    "dipKick": "cai, depois quica alto",
+    "sidespin": "Efeito lateral",
+    "curvesLeft": "curva à esquerda",
+    "curvesRight": "curva à direita",
+    "total": "Total",
+    "reset": "redefinir golpe",
+    "notes": {
+      "flat": "quase sem efeito: a bola vai reta e rápida, com pouca margem sobre a rede.",
+      "topspin": "a bola cai dentro da área de saque, então pode passar mais alta sobre a rede.",
+      "kick": "muito topspin: uma grande queda, depois um quique alto.",
+      "topspin-slice_right": "cai e curva um pouco para a esquerda.",
+      "topspin-slice_left": "cai e curva um pouco para a direita.",
+      "slice_right": "principalmente efeito lateral: curva para a esquerda e fica baixa depois do quique.",
+      "slice_left": "principalmente efeito lateral: curva para a direita e fica baixa depois do quique.",
+      "reverse_right": "efeito lateral ao contrário: curva para a direita.",
+      "reverse_left": "efeito lateral ao contrário: curva para a esquerda."
+    }
+  },
+  "spin": {
+    "flat": "chapado",
+    "topspin": "topspin",
+    "kick": "kick",
+    "topspin-slice": "topspin-slice",
+    "slice": "slice",
+    "reverse": "invertido"
+  },
+  "racket": {
+    "title": "Ângulo da raquete",
+    "auto": "auto: o sacador inclina a raquete para a bola entrar na área de saque, como se o lançamento fosse perfeito",
+    "angle": "Ângulo da raquete",
+    "hint": "negativo fecha a face e manda a bola para baixo. um lançamento à frente a inclina para baixo, atrás para cima. na animação, a raquete se inclina igual no contato."
+  },
+  "ball": {
+    "centre": "o centro da bola",
+    "low": "{{clock}} horas, embaixo na bola",
+    "high": "{{clock}} horas, em cima na bola",
+    "side": "{{clock}} horas, na lateral da bola",
+    "caption": "você bate em {{where}}. a seta é a sua escovada.",
+    "label": "ponto de contato na bola: as setas o movem",
+    "valueClock": "{{clock}} horas",
+    "valueCentre": "centro da bola"
+  },
+  "map": {
+    "label": "quadra vista de cima; arraste para mirar",
+    "box": "área de saque",
+    "in": "dentro!",
+    "net": "rede",
+    "long": "longa",
+    "wide": "fora"
+  },
+  "compare": {
+    "newLine": "Linha do novo saque",
+    "colors": "cor da linha do novo saque",
+    "custom": "escolher qualquer cor",
+    "customLabel": "cor de linha personalizada",
+    "keep": "guardar este saque para comparar",
+    "serveN": "saque {{n}}",
+    "remove": "remover saque {{n}}",
+    "clear": "limpar tudo",
+    "lefty": "canhoto",
+    "pctIn": "{{p}}% dentro",
+    "aces": "{{p}}% aces contra {{level}}",
+    "result": {
+      "in": "dentro",
+      "net": "rede",
+      "long": "longa",
+      "wide": "fora"
+    }
+  },
+  "nav": {
+    "tool": "Ferramenta de saque",
+    "about": "Sobre e a matemática"
+  },
+  "footer": {
+    "free": "uma ferramenta gratuita para mim e meus amigos.",
+    "about": "como funciona",
+    "donate": "doar com PayPal"
+  },
+  "seo": {
+    "title": "Serve Visualization Tool: simulador gratuito de saque de tênis em 3D",
+    "description": "Um simulador gratuito de saque de tênis em 3D. Ajuste o lançamento, a posição, o salto, o golpe, o efeito e a velocidade, veja se a bola passa a rede e descubra sua tolerância a erro e suas chances de ace contra recebedores de nível NTRP 2.0 a 5.0.",
+    "aboutTitle": "Como funciona o Serve Visualization Tool: a matemática do saque de tênis, explicada de forma simples",
+    "aboutDescription": "Como a ferramenta gratuita Serve Visualization Tool modela um saque de tênis: o voo da bola, o efeito, o quique, o lançamento, a tolerância a erro e o recebedor, explicados em palavras simples com as fórmulas por trás.",
+    "noscript": "Esta ferramenta interativa em 3D precisa do JavaScript ativado."
+  },
+  "about": {
+    "title": "Sobre o Serve Visualization Tool",
+    "intro": "Fiz esta ferramenta gratuita para ajudar a mim e aos meus amigos a melhorar o saque: ver como o lançamento, os pés e o golpe mudam para onde a bola vai e o quão difícil ela é de devolver. Se ela também ajudar você, doações pelo PayPal são sempre bem-vindas, mas nunca esperadas.",
+    "donate": "Doar com PayPal",
+    "back": "← voltar para a ferramenta de saque",
+    "flight": {
+      "title": "1. Como a bola voa",
+      "body": "A bola avança em passos minúsculos, <b>1.000 vezes por segundo</b>. A cada passo, três coisas agem sobre ela: a gravidade a puxa para baixo, a resistência do ar a freia e o efeito a empurra para baixo ou para o lado. Soma-se tudo, atualiza-se a velocidade, atualiza-se a posição e repete-se.",
+      "formula": "aceleração = gravidade + resistência + empurrão do efeito",
+      "note": "a gravidade é 9,81 m/s² para baixo. a resistência cresce com o quadrado da velocidade, então um saque a 200 km/h sofre quatro vezes a resistência de um a 100 km/h."
+    },
+    "spin": {
+      "title": "2. Por que o efeito curva a bola",
+      "body": "Uma bola girando arrasta o ar ao redor. O <b>topspin</b> joga ar para cima atrás da bola, então a bola é empurrada para baixo: ela cai dentro da área de saque, o que permite passar mais alto sobre a rede. O <b>efeito lateral</b> empurra a bola para o lado, por isso o slice faz curva.",
+      "formula": "sustentação ≈ 1 ÷ (2 + v ÷ (r × ω))",
+      "note": "v é a velocidade da bola, r o raio e ω a rapidez com que ela gira. mais efeito, ou uma bola mais lenta, significa um empurrão mais forte."
+    },
+    "bounce": {
+      "title": "3. O quique",
+      "body": "Ao tocar o chão, a bola mantém cerca de <b>75%</b> da velocidade para baixo, agora para cima. O atrito com a quadra a freia e faz o giro tender a rolar. Muito topspin agarra a quadra e faz a bola subir mais: esse é o saque kick.",
+      "formula": "velocidade para cima depois = 0,75 × velocidade para baixo antes + kick",
+      "note": "o kick é um pequeno empurrão extra que cresce com o topspin."
+    },
+    "toss": {
+      "title": "4. O lançamento e onde você bate na bola",
+      "body": "Seu <b>alcance</b> é a altura em que a raquete consegue encontrar a bola: sua altura, seu braço e a raquete, mais o seu salto. A altura do lançamento é medida acima desse alcance, então jogadores mais altos e saltos maiores lançam mais alto. Um lançamento que não chega ao seu alcance obriga um contato mais baixo. Um lançamento à frente inclina a raquete para baixo; um atrás, para cima.",
+      "formula": "tempo no ar = √(2 × subida ÷ g) + √(2 × descida ÷ g)",
+      "note": "a subida é quanto a bola sobe depois de sair da sua mão, a descida é quanto ela cai até onde você bate, e g é a gravidade."
+    },
+    "swing": {
+      "title": "5. O efeito do seu golpe",
+      "body": "Escovar a bola por trás para cima gera <b>topspin</b>; escová-la de lado gera <b>efeito lateral</b>. Onde você bate na bola se soma à escovada: embaixo na bola adiciona topspin, o lado de fora adiciona slice. As duas partes se combinam como os lados de um triângulo retângulo.",
+      "formula": "efeito total = √(topspin² + efeito lateral²)",
+      "note": "por exemplo, 1.800 rpm de topspin e 3.200 rpm de efeito lateral dão cerca de 3.650 rpm no total."
+    },
+    "tolerance": {
+      "title": "6. Tolerância a erro",
+      "body": "Ninguém saca igual duas vezes. A ferramenta refaz o seu saque com cada tipo de pequeno erro separadamente (ângulo da raquete, direção, velocidade, efeito e direção da escovada), mede quanto cada um desloca a bola e soma esses efeitos em <b>1.024</b> tentativas distribuídas por igual. A parte que ainda cai dentro da área de saque é a sua tolerância a erro.",
+      "formula": "tolerância a erro = tentativas que entram ÷ todas as tentativas",
+      "note": "o slice é mais arriscado porque uma escovada um pouco diferente muda quanto topspin sobra para trazer a bola para baixo."
+    },
+    "returner": {
+      "title": "7. O recebedor",
+      "body": "A ferramenta calcula quando a bola chega ao recebedor e quanto ele precisa se mover. Ele espera o tempo de reação, depois corre, e alcança um pouco mais longe com o braço e a raquete. Se não chegar, é um <b>ace</b>. Caso contrário, menos tempo, uma corrida mais longa, mais velocidade, um kick alto ou um slice baixo tornam a devolução mais difícil, de uma devolução fácil a um erro na devolução.",
+      "formula": "alcance = braço e raquete + distância corrida após reagir",
+      "note": "um recebedor 2.0 reage em cerca de 0,42 s e corre a cerca de 3 m/s; um 5.0 reage em cerca de 0,25 s e corre a cerca de 5 m/s."
+    },
+    "limits": {
+      "title": "8. Bom saber",
+      "body": "A física pretende ser convincente, não exata. A resistência e a sustentação usam valores típicos de livro, e o lançamento, o salto, a escovada e o recebedor são modelos simples do que os treinadores descrevem, não dados medidos. Use para ganhar intuição e depois confira na quadra."
+    }
+  }
+}

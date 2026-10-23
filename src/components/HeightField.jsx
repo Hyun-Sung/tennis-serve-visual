@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { HEIGHT_LIMITS } from '../serve.js'
 import { useUnits } from '../units.js'
 
@@ -14,6 +15,7 @@ const toFeet = (m) => {
  * valid number updates the server straight away; leaving the box snaps it into the supported range.
  */
 export default function HeightField({ meters, onChange }) {
+  const { t } = useTranslation()
   const unit = useUnits().us ? 'ft' : 'cm'
   // What's in the boxes while typing. null means "show the current height".
   const [draft, setDraft] = useState(null)
@@ -53,17 +55,17 @@ export default function HeightField({ meters, onChange }) {
 
   return (
     <div className="height-field">
-      <span>or type it:</span>
+      <span>{t('server.typeIt')}</span>
       {unit === 'cm' ? (
         <>
-          {box('cm', 'height in centimetres', '4.2rem')}
+          {box('cm', t('server.heightCm'), '4.2rem')}
           <span>cm</span>
         </>
       ) : (
         <>
-          {box('ft', 'height, feet', '2.8rem')}
+          {box('ft', t('server.heightFt'), '2.8rem')}
           <span>ft</span>
-          {box('inch', 'height, inches', '2.8rem')}
+          {box('inch', t('server.heightIn'), '2.8rem')}
           <span>in</span>
         </>
       )}

@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { DEFAULT_TOSS, TOSS_LIMITS } from '../serve.js'
 import { useUnits } from '../units.js'
 
@@ -11,6 +12,7 @@ export default function TossPad({ toss, stance = 'platform', lefty = false, onCh
   const ref = useRef(null)
   const dragging = useRef(false)
   const units = useUnits()
+  const { t } = useTranslation()
 
   const fromEvent = (e) => {
     const svg = ref.current
@@ -38,8 +40,8 @@ export default function TossPad({ toss, stance = 'platform', lefty = false, onCh
       viewBox="-0.75 -1 1.5 1.5"
       tabIndex={0}
       role="slider"
-      aria-label="toss placement: arrow keys move it forward, back and sideways"
-      aria-valuetext={`${units.short(toss.forward)} forward, ${units.short(toss.side)} sideways`}
+      aria-label={t('toss.padLabel')}
+      aria-valuetext={t('toss.padValue', { forward: units.short(toss.forward), side: units.short(toss.side) })}
       onKeyDown={onKey}
       onPointerDown={(e) => {
         dragging.current = true
@@ -56,8 +58,8 @@ export default function TossPad({ toss, stance = 'platform', lefty = false, onCh
         {[-0.5, -0.25, 0.25, 0.5].map((x) => <line key={`x${x}`} x1={x} y1="-1" x2={x} y2="0.5" />)}
         {[-0.75, -0.5, -0.25, 0.25].map((y) => <line key={`y${y}`} x1="-0.75" y1={y} x2="0.75" y2={y} />)}
       </g>
-      <text x="0" y="-0.9" className="pad-label">into the court</text>
-      <text x="0" y="0.44" className="pad-label">behind the baseline</text>
+      <text x="0" y="-0.9" className="pad-label">{t('toss.padCourt')}</text>
+      <text x="0" y="0.44" className="pad-label">{t('toss.padBehind')}</text>
 
       {/* A left-hander is the same body mirrored about their hitting shoulder at x = 0. */}
       <g className="pad-player" transform={lefty ? 'scale(-1 1)' : undefined}>

@@ -1,0 +1,348 @@
+{
+  "app": {
+    "tagline": "stell Ballwurf, Beinarbeit und Schlag ein und sieh, ob der Ball über das Netz geht.",
+    "units": "Einheiten",
+    "language": "Sprache"
+  },
+  "units": {
+    "metric": "metrisch",
+    "us": "US"
+  },
+  "transport": {
+    "pause": "Pause",
+    "serveAgain": "noch einmal aufschlagen",
+    "serve": "Aufschlag!",
+    "replay": "Wiederholung",
+    "speed": "Wiedergabegeschwindigkeit"
+  },
+  "views": {
+    "label": "Kamera",
+    "server": "Aufschläger",
+    "receiver": "Rückschläger",
+    "net": "Netz",
+    "side": "Seite",
+    "coach": "Trainer",
+    "orbit": "ziehen, um sich umzusehen"
+  },
+  "scene": {
+    "clearsBy": "{{d}} über dem Netz",
+    "intoNet": "ins Netz"
+  },
+  "outcome": {
+    "ace": "ASS!",
+    "winner": "Returnfehler",
+    "tough": "schwieriger Return",
+    "easy": "leichter Return",
+    "fault": "Fehler"
+  },
+  "phase": {
+    "time": "Zeit",
+    "stance": "Stand",
+    "toss": "Ballwurf",
+    "trophy": "Trophäe",
+    "racket drop": "Schlägerfall",
+    "contact": "Treffpunkt",
+    "follow-through": "Ausschwung",
+    "net": "Netz",
+    "bounce": "Aufsprung"
+  },
+  "verdict": {
+    "pending": "Ball in der Luft",
+    "in": {
+      "title": "drin!",
+      "sub": "genau im Aufschlagfeld"
+    },
+    "net": {
+      "title": "Fehler",
+      "sub": "ins Netz"
+    },
+    "long": {
+      "title": "Fehler",
+      "sub": "lang, hinter der Aufschlaglinie"
+    },
+    "wide": {
+      "title": "Fehler",
+      "sub": "neben dem Aufschlagfeld"
+    },
+    "ace": {
+      "title": "Ass!",
+      "sub": "der Rückschläger kam nicht hin"
+    },
+    "winner": {
+      "title": "Returnfehler",
+      "sub": "er trifft ihn wahrscheinlich, aber der Ball geht ins Netz oder ins Aus"
+    },
+    "tough": {
+      "title": "schwieriger Return",
+      "sub": "er kommt zurück, aber unter Druck"
+    },
+    "easy": {
+      "title": "leichter Return",
+      "sub": "er hatte Zeit, sich einzustellen und zu schlagen"
+    },
+    "because": "{{sub}}: {{reason}}"
+  },
+  "reason": {
+    "rush": "kaum Zeit zum Schlagen",
+    "stretch": "weit nach außen gezogen",
+    "heat": "schneller, als er es gewohnt ist",
+    "pace": "kommt sehr schnell",
+    "high": "springt hoch ab",
+    "low": "bleibt flach",
+    "jam": "direkt auf den Körper"
+  },
+  "stats": {
+    "overNet": "über dem Netz",
+    "contactHeight": "Treffhöhe",
+    "launchAngle": "Abflugwinkel",
+    "speedAtNet": "Tempo am Netz",
+    "speedAtBounce": "Tempo beim Aufsprung",
+    "bounceHeight": "Absprunghöhe",
+    "timeToReturner": "Zeit bis zum Rückschläger",
+    "returnerMoves": "Laufweg des Rückschlägers"
+  },
+  "tips": {
+    "lowToss": "wirf höher, damit du in voller Streckung triffst, oder spring höher.",
+    "net": "wirf etwas weiter zurück, bürste stärker nach oben für mehr Topspin oder triff den Ball tiefer.",
+    "longAuto": "wirf etwas weiter nach vorn oder bürste stärker nach oben, damit mehr Topspin ihn herunterholt.",
+    "longManual": "neig den Schläger etwas nach unten oder bürste stärker nach oben für mehr Topspin.",
+    "wide": "ziel etwas weiter ins Aufschlagfeld hinein."
+  },
+  "risk": {
+    "label": "Fehlertoleranz",
+    "sub": "landen trotz kleiner Fehler im Feld",
+    "window": "der Schlägerwinkel darf um <b>{{down}}°</b> abweichen, bevor der Ball ins Netz geht, oder um <b>+{{up}}°</b>, bevor er lang geht.",
+    "misses": "selbst perfekt geschlagen geht dieser Aufschlag daneben. ändere etwas, damit er ins Feld geht.",
+    "against": "gegen einen <b>{{level}}</b>-Rückschläger: <b>{{won}} %</b> direkte Punkte, <b>{{fault}} %</b> Fehler.",
+    "method": "aus {{tries}} Versuchen dieses Aufschlags, jeder ein wenig anders: etwa ±{{angle}}° Schlägerwinkel, ±{{yaw}}° Richtung, ±{{speed}} % Tempo, ±{{rpm}} % Spin und ±{{brush}}° in der Bürstrichtung. das Letzte erklärt, warum Slice riskanter ist: wenn der Spin zur Seite gekippt ist, ändert eine leicht andere Bürstbewegung, wie stark der Ball fällt. ein Returnfehler heißt, er trifft den Ball wahrscheinlich, aber ins Netz oder ins Aus. ein leichter Return heißt, er hat Zeit, sich einzustellen und zu schlagen.",
+    "parts": {
+      "ace": "Ass",
+      "winner": "Returnfehler",
+      "tough": "schwieriger Return",
+      "easy": "leichter Return",
+      "fault": "Fehler"
+    }
+  },
+  "target": {
+    "aim": "Ziel",
+    "T": "T",
+    "body": "Körper",
+    "wide": "außen",
+    "drag": "oder auf der Platzkarte ziehen.",
+    "returner": "Rückschläger",
+    "level": "Niveau (NTRP)",
+    "beginner": "ein Anfänger: reagiert langsam und mag kein Tempo, also gewinnen die meisten Aufschläge den Punkt.",
+    "club": "ein Clubspieler: kommt mit einem soliden Aufschlag klar, aber Tempo, Winkel oder ein starker Kick machen Probleme.",
+    "strong": "ein starker Clubspieler: reagiert schnell, also braucht der Aufschlag Tempo und Platzierung.",
+    "advanced": "ein fortgeschrittener Spieler: schnelle Hände und Beine. du brauchst einen harten, gut platzierten Aufschlag oder einen Kick oder Slice, der ihn aus dem Platz zieht."
+  },
+  "toss": {
+    "title": "Ballwurf",
+    "inFront": "{{d}} vorn",
+    "behind": "{{d}} hinten",
+    "aboveShoulder": "über deiner Schlagschulter",
+    "toLeft": "{{d}} nach links",
+    "toRight": "{{d}} nach rechts",
+    "placement": "{{forward}}, {{side}}",
+    "height": "Wurfhöhe",
+    "aboveReach": "{{d}} über deiner Reichweite",
+    "belowReach": "{{d}} unter deiner Reichweite",
+    "atReach": "auf Reichweite",
+    "wayAbove": "weit darüber",
+    "peaksBelow": "höchster Punkt bei {{apex}}, unter deiner Reichweite von {{reach}}, also triffst du tiefer.",
+    "peaks": "höchster Punkt {{apex}} über dem Boden, steigt mit deiner Größe und deinem Sprung. {{t}} s in der Luft.",
+    "reset": "Ballwurf zurücksetzen",
+    "padLabel": "Platzierung des Ballwurfs: Pfeiltasten bewegen ihn nach vorn, hinten und zur Seite",
+    "padValue": "{{forward}} nach vorn, {{side}} zur Seite",
+    "padCourt": "ins Feld",
+    "padBehind": "hinter der Grundlinie"
+  },
+  "server": {
+    "title": "Aufschläger",
+    "hand": "Hand",
+    "right": "Rechtshänder",
+    "left": "Linkshänder",
+    "mirror": "beim Wechseln werden Ballwurf, Bürstbewegung und Treffpunkt gespiegelt, es ist also derselbe Aufschlag mit der anderen Hand.",
+    "height": "Größe",
+    "shorter": "kleiner",
+    "taller": "größer",
+    "heightHint": "ein größerer Aufschläger reicht höher: du triffst den Ball in {{h}} Höhe.",
+    "typeIt": "oder eintippen:",
+    "heightCm": "Größe in Zentimetern",
+    "heightFt": "Größe, Fuß",
+    "heightIn": "Größe, Zoll",
+    "stance": "Standposition",
+    "platform": "Plattform",
+    "pinpoint": "Pinpoint",
+    "platformNote": "die Füße bleiben die ganze Zeit auseinander, und du triffst den Ball genau dort, wo du ihn hingeworfen hast. stabil und einfach.",
+    "pinpointNote": "der hintere Fuß rutscht neben den vorderen, dann drücken beide nach oben und ins Feld: du triffst den Ball {{forward}} weiter vorn und {{lift}} höher und landest im Feld.",
+    "jump": "Sprunghöhe",
+    "noJump": "kein Sprung",
+    "bigJump": "hoher Sprung",
+    "offGround": "{{d}} über dem Boden",
+    "jumpHint": "höher springen heißt höher treffen, das gibt mehr Spielraum über dem Netz."
+  },
+  "swing": {
+    "title": "Schlag und Spin",
+    "lede": "Wie hart du schlägst, wie der Schläger den Ball bürstet und wo du den Ball triffst.",
+    "speed": "Aufschlagtempo",
+    "slower": "langsamer",
+    "faster": "schneller",
+    "speedHint": "ein schnellerer Ball hat weniger Zeit zu fallen und braucht deshalb mehr Spin, um im Feld zu landen.",
+    "up": "Nach oben bürsten (Topspin)",
+    "straight": "gerade durch",
+    "upBack": "hinten nach oben",
+    "upHint": "den Ball hinten nach oben zu bürsten gibt Topspin, der ihn ins Aufschlagfeld zieht.",
+    "across": "Seitlich bürsten (Seitenspin)",
+    "none": "keiner",
+    "pctLeft": "{{p}} % links",
+    "pctRight": "{{p}} % rechts",
+    "endLeft": "← links",
+    "endRight": "rechts →",
+    "endLeftSlice": "← links (Slice)",
+    "endRightSlice": "rechts (Slice) →",
+    "acrossHintRighty": "nach rechts bürsten gibt Slice, der den Ball nach links ziehen lässt.",
+    "acrossHintLefty": "nach links bürsten gibt Slice, der den Ball nach rechts ziehen lässt.",
+    "contact": "Treffpunkt am Ball",
+    "contactHintRighty": "unten am Ball gibt Topspin und hebt ihn an. die rechte Seite (3 Uhr) gibt Slice und drückt ihn nach links. oben am Ball macht ihn flacher und drückt ihn nach unten.",
+    "contactHintLefty": "unten am Ball gibt Topspin und hebt ihn an. die linke Seite (9 Uhr) gibt Slice und drückt ihn nach rechts. oben am Ball macht ihn flacher und drückt ihn nach unten.",
+    "result": "Ergebnis-Spin",
+    "topspin": "Topspin",
+    "dipKick": "fällt, dann springt er hoch",
+    "sidespin": "Seitenspin",
+    "curvesLeft": "dreht nach links",
+    "curvesRight": "dreht nach rechts",
+    "total": "Gesamt",
+    "reset": "Schlag zurücksetzen",
+    "notes": {
+      "flat": "fast kein Spin: der Ball fliegt gerade und schnell, mit wenig Spielraum über dem Netz.",
+      "topspin": "der Ball fällt ins Aufschlagfeld, kann also höher über das Netz gehen.",
+      "kick": "viel Topspin: fällt stark, dann ein hoher Absprung.",
+      "topspin-slice_right": "fällt und dreht ein wenig nach links.",
+      "topspin-slice_left": "fällt und dreht ein wenig nach rechts.",
+      "slice_right": "vor allem Seitenspin: dreht nach links und bleibt nach dem Aufsprung flach.",
+      "slice_left": "vor allem Seitenspin: dreht nach rechts und bleibt nach dem Aufsprung flach.",
+      "reverse_right": "Seitenspin in die andere Richtung: dreht nach rechts.",
+      "reverse_left": "Seitenspin in die andere Richtung: dreht nach links."
+    }
+  },
+  "spin": {
+    "flat": "flach",
+    "topspin": "Topspin",
+    "kick": "Kick",
+    "topspin-slice": "Topspin-Slice",
+    "slice": "Slice",
+    "reverse": "Reverse"
+  },
+  "racket": {
+    "title": "Schlägerwinkel",
+    "auto": "automatisch: der Aufschläger neigt den Schläger so, dass der Ball im Feld landet, als wäre der Ballwurf perfekt",
+    "angle": "Schlägerwinkel",
+    "hint": "negativ schließt die Schlagfläche und schickt den Ball nach unten. ein Ballwurf vorn neigt ihn nach unten, hinten nach oben. in der Animation neigt sich der Schläger beim Treffen genauso."
+  },
+  "ball": {
+    "centre": "die Mitte des Balls",
+    "low": "{{clock}} Uhr, unten am Ball",
+    "high": "{{clock}} Uhr, oben am Ball",
+    "side": "{{clock}} Uhr, an der Seite des Balls",
+    "caption": "du triffst {{where}}. der Pfeil ist deine Bürstbewegung.",
+    "label": "Treffpunkt am Ball: Pfeiltasten bewegen ihn",
+    "valueClock": "{{clock}} Uhr",
+    "valueCentre": "Mitte des Balls"
+  },
+  "map": {
+    "label": "Platz von oben; ziehen zum Zielen",
+    "box": "Aufschlagfeld",
+    "in": "drin!",
+    "net": "Netz",
+    "long": "lang",
+    "wide": "aus"
+  },
+  "compare": {
+    "newLine": "Linie für den neuen Aufschlag",
+    "colors": "Linienfarbe für den neuen Aufschlag",
+    "custom": "beliebige Farbe wählen",
+    "customLabel": "eigene Linienfarbe",
+    "keep": "diesen Aufschlag zum Vergleichen behalten",
+    "serveN": "Aufschlag {{n}}",
+    "remove": "Aufschlag {{n}} entfernen",
+    "clear": "alle löschen",
+    "lefty": "Linkshänder",
+    "pctIn": "{{p}} % drin",
+    "aces": "{{p}} % Asse gegen {{level}}",
+    "result": {
+      "in": "drin",
+      "net": "Netz",
+      "long": "lang",
+      "wide": "aus"
+    }
+  },
+  "nav": {
+    "tool": "Aufschlag-Tool",
+    "about": "Über das Tool & die Mathematik"
+  },
+  "footer": {
+    "free": "ein kostenloses Tool für mich und meine Freunde.",
+    "about": "so funktioniert es",
+    "donate": "mit PayPal spenden"
+  },
+  "seo": {
+    "title": "Serve Visualization Tool: kostenloser 3D-Tennisaufschlag-Simulator",
+    "description": "Ein kostenloser 3D-Simulator für den Tennisaufschlag. Stell Ballwurf, Stand, Sprung, Schlag, Spin und Tempo ein, sieh, ob der Ball über das Netz geht, und erfahre deine Fehlertoleranz und deine Chancen auf ein Ass gegen Rückschläger von NTRP 2.0 bis 5.0.",
+    "aboutTitle": "So funktioniert das Serve Visualization Tool: die Mathematik des Tennisaufschlags einfach erklärt",
+    "aboutDescription": "Wie das kostenlose Serve Visualization Tool einen Tennisaufschlag nachbildet: Ballflug, Spin, Absprung, Ballwurf, Fehlertoleranz und Rückschläger, einfach erklärt mit den Formeln dahinter.",
+    "noscript": "Dieses interaktive 3D-Tool braucht aktiviertes JavaScript."
+  },
+  "about": {
+    "title": "Über das Serve Visualization Tool",
+    "intro": "Ich habe dieses kostenlose Tool gebaut, um mir und meinen Freunden beim Aufschlag zu helfen: zu sehen, wie Ballwurf, Beinarbeit und Schlag verändern, wohin der Ball fliegt, und wie schwer er zurückzuspielen ist. Wenn es dir auch hilft, sind Spenden über PayPal immer willkommen, aber nie erwartet.",
+    "donate": "Mit PayPal spenden",
+    "back": "← zurück zum Aufschlag-Tool",
+    "flight": {
+      "title": "1. Wie der Ball fliegt",
+      "body": "Der Ball wird in winzigen Schritten bewegt, <b>1.000-mal pro Sekunde</b>. Bei jedem Schritt wirken drei Dinge: die Schwerkraft zieht ihn nach unten, der Luftwiderstand bremst ihn, und der Spin drückt ihn nach unten oder zur Seite. Zusammenzählen, Geschwindigkeit anpassen, Position anpassen, wiederholen.",
+      "formula": "Beschleunigung = Schwerkraft + Luftwiderstand + Spin-Kraft",
+      "note": "die Schwerkraft beträgt 9,81 m/s² nach unten. der Luftwiderstand wächst mit dem Quadrat der Geschwindigkeit, ein Aufschlag mit 200 km/h spürt also viermal so viel davon wie einer mit 100 km/h."
+    },
+    "spin": {
+      "title": "2. Warum Spin den Ball ablenkt",
+      "body": "Ein sich drehender Ball zieht die Luft mit sich. <b>Topspin</b> wirft hinter dem Ball Luft nach oben, also wird der Ball nach unten gedrückt: er fällt ins Aufschlagfeld, sodass du höher über das Netz spielen kannst. <b>Seitenspin</b> drückt den Ball zur Seite, darum dreht ein Slice ab.",
+      "formula": "Auftrieb ≈ 1 ÷ (2 + v ÷ (r × ω))",
+      "note": "v ist die Geschwindigkeit des Balls, r sein Radius und ω, wie schnell er sich dreht. mehr Spin oder ein langsamerer Ball bedeutet eine stärkere Kraft."
+    },
+    "bounce": {
+      "title": "3. Der Absprung",
+      "body": "Beim Aufprall behält der Ball etwa <b>75 %</b> seiner Geschwindigkeit nach unten, jetzt nach oben. Die Reibung mit dem Platz bremst ihn und bringt seine Drehung Richtung Rollen. Viel Topspin greift auf dem Platz und lässt den Ball höher abspringen: das ist der Kick-Aufschlag.",
+      "formula": "Geschwindigkeit nach oben danach = 0,75 × Geschwindigkeit nach unten davor + Kick",
+      "note": "der Kick ist ein kleiner zusätzlicher Schub, der mit dem Topspin wächst."
+    },
+    "toss": {
+      "title": "4. Der Ballwurf und wo du den Ball triffst",
+      "body": "Deine <b>Reichweite</b> ist die Höhe, in der der Schläger den Ball treffen kann: deine Körpergröße, Arm und Schläger, plus dein Sprung. Die Wurfhöhe wird über dieser Reichweite gemessen, größere Spieler und höhere Sprünge werfen also höher. Ein Ballwurf, der unter deiner Reichweite bleibt, erzwingt einen tieferen Treffpunkt. Ein Wurf nach vorn neigt den Schläger nach unten, einer nach hinten nach oben.",
+      "formula": "Zeit in der Luft = √(2 × Steigen ÷ g) + √(2 × Fallen ÷ g)",
+      "note": "Steigen ist, wie hoch der Ball nach dem Loslassen steigt, Fallen, wie weit er bis zum Treffpunkt zurückfällt, und g ist die Schwerkraft."
+    },
+    "swing": {
+      "title": "5. Spin aus deinem Schlag",
+      "body": "Den Ball hinten nach oben zu bürsten erzeugt <b>Topspin</b>, ihn seitlich zu bürsten erzeugt <b>Seitenspin</b>. Wo du den Ball triffst, kommt dazu: unten am Ball gibt Topspin, außen gibt Slice. Die beiden Teile verbinden sich wie die Seiten eines rechtwinkligen Dreiecks.",
+      "formula": "Gesamtspin = √(Topspin² + Seitenspin²)",
+      "note": "zum Beispiel ergeben 1.800 U/min Topspin und 3.200 U/min Seitenspin zusammen etwa 3.650 U/min."
+    },
+    "tolerance": {
+      "title": "6. Fehlertoleranz",
+      "body": "Niemand schlägt zweimal genau gleich auf. Das Tool fliegt deinen Aufschlag mit jeder Art kleinen Fehlers einzeln erneut (Schlägerwinkel, Richtung, Tempo, Spin und Bürstrichtung), misst, wie weit jeder den Ball verschiebt, und zählt diese Effekte über <b>1.024</b> gleichmäßig verteilte Versuche zusammen. Der Anteil, der trotzdem im Aufschlagfeld landet, ist deine Fehlertoleranz.",
+      "formula": "Fehlertoleranz = Versuche im Feld ÷ alle Versuche",
+      "note": "Slice ist riskanter, weil eine leicht andere Bürstbewegung verändert, wie viel Topspin übrig bleibt, um den Ball herunterzuholen."
+    },
+    "returner": {
+      "title": "7. Der Rückschläger",
+      "body": "Das Tool berechnet, wann der Ball beim Rückschläger ankommt und wie weit er laufen muss. Er wartet seine Reaktionszeit ab, läuft dann los und erreicht mit Arm und Schläger noch etwas mehr. Kommt er nicht hin, ist es ein <b>Ass</b>. Sonst machen weniger Zeit, ein längerer Weg, mehr Tempo, ein hoher Kick oder ein flacher Slice den Return schwerer, vom leichten Return bis zum Returnfehler.",
+      "formula": "Reichweite = Arm und Schläger + Laufweg nach der Reaktion",
+      "note": "ein 2.0-Rückschläger reagiert in etwa 0,42 s und läuft etwa 3 m/s; ein 5.0-Rückschläger reagiert in etwa 0,25 s und läuft etwa 5 m/s."
+    },
+    "limits": {
+      "title": "8. Gut zu wissen",
+      "body": "Die Physik soll glaubwürdig sein, nicht exakt. Luftwiderstand und Auftrieb nutzen typische Lehrbuchwerte, und Ballwurf, Sprung, Bürstbewegung und Rückschläger sind einfache Modelle dessen, was Trainer beschreiben, keine Messdaten. Nutze es, um ein Gefühl zu bekommen, und prüfe es dann auf dem Platz."
+    }
+  }
+}

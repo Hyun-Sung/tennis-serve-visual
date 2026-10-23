@@ -3,10 +3,8 @@
 
 import { createContext, useContext } from 'react'
 
-export const UNIT_SYSTEMS = [
-  { value: 'metric', label: 'metric' },
-  { value: 'us', label: 'US' },
-]
+// Each value is also its label's key (units.<value>).
+export const UNIT_SYSTEMS = ['metric', 'us']
 
 const M_PER_IN = 0.0254
 const KMH_PER_MPH = 1.609344

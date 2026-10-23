@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     sourcemap: false,
-    // three.js alone is ~700 kB before gzip.
-    chunkSizeWarningLimit: 1000,
+    // three.js alone is ~700 kB before gzip, plus the eight translations.
+    chunkSizeWarningLimit: 1400,
   },
 })

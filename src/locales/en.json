@@ -1,0 +1,348 @@
+{
+  "app": {
+    "tagline": "set the toss, footwork and swing, and watch whether the ball clears the net.",
+    "units": "Units",
+    "language": "Language"
+  },
+  "units": {
+    "metric": "metric",
+    "us": "US"
+  },
+  "transport": {
+    "pause": "pause",
+    "serveAgain": "serve again",
+    "serve": "serve!",
+    "replay": "replay",
+    "speed": "playback speed"
+  },
+  "views": {
+    "label": "camera",
+    "server": "server",
+    "receiver": "receiver",
+    "net": "net cam",
+    "side": "side",
+    "coach": "coach",
+    "orbit": "drag to look around"
+  },
+  "scene": {
+    "clearsBy": "clears by {{d}}",
+    "intoNet": "into the net"
+  },
+  "outcome": {
+    "ace": "ACE!",
+    "winner": "return error",
+    "tough": "tough return",
+    "easy": "easy return",
+    "fault": "fault"
+  },
+  "phase": {
+    "time": "time",
+    "stance": "stance",
+    "toss": "toss",
+    "trophy": "trophy",
+    "racket drop": "racket drop",
+    "contact": "contact",
+    "follow-through": "follow-through",
+    "net": "net",
+    "bounce": "bounce"
+  },
+  "verdict": {
+    "pending": "ball in the air",
+    "in": {
+      "title": "in!",
+      "sub": "right in the box"
+    },
+    "net": {
+      "title": "fault",
+      "sub": "into the net"
+    },
+    "long": {
+      "title": "fault",
+      "sub": "long, past the service line"
+    },
+    "wide": {
+      "title": "fault",
+      "sub": "outside the box"
+    },
+    "ace": {
+      "title": "ace!",
+      "sub": "the returner couldn't reach it"
+    },
+    "winner": {
+      "title": "return error",
+      "sub": "there's a good chance they hit it, but it doesn't clear the net or goes out"
+    },
+    "tough": {
+      "title": "tough return",
+      "sub": "it comes back, but under pressure"
+    },
+    "easy": {
+      "title": "easy return",
+      "sub": "they had time to set up and swing"
+    },
+    "because": "{{sub}}: {{reason}}"
+  },
+  "reason": {
+    "rush": "not much time to swing",
+    "stretch": "pulled out wide",
+    "heat": "faster than they are used to",
+    "pace": "coming through quickly",
+    "high": "kicked up high",
+    "low": "stayed low",
+    "jam": "jammed at the body"
+  },
+  "stats": {
+    "overNet": "over the net",
+    "contactHeight": "contact height",
+    "launchAngle": "launch angle",
+    "speedAtNet": "speed at net",
+    "speedAtBounce": "speed at bounce",
+    "bounceHeight": "bounce height",
+    "timeToReturner": "time to returner",
+    "returnerMoves": "returner has to move"
+  },
+  "tips": {
+    "lowToss": "toss higher so you can hit it at full reach, or jump higher.",
+    "net": "toss a little further back, brush up for more topspin, or hit lower on the ball.",
+    "longAuto": "toss a little further in front, or brush up for more topspin to bring it down.",
+    "longManual": "angle the racket down a touch, or brush up for more topspin.",
+    "wide": "aim a bit more inside the box."
+  },
+  "risk": {
+    "label": "Error tolerance",
+    "sub": "land in when hit with small mistakes",
+    "window": "the racket angle can be off by <b>{{down}}°</b> before it hits the net, or <b>+{{up}}°</b> before it goes long.",
+    "misses": "even hit perfectly, this serve misses. change something to bring it in.",
+    "against": "against a <b>{{level}}</b> returner: <b>{{won}}%</b> of points won outright, <b>{{fault}}%</b> faults.",
+    "method": "from {{tries}} tries at this serve, each a little off: about ±{{angle}}° racket angle, ±{{yaw}}° aim, ±{{speed}}% speed, ±{{rpm}}% spin and ±{{brush}}° in brush direction. that last one is why slice is riskier: with the spin tipped sideways, a slightly different brush changes how much the ball dips. a return error means they likely hit it, but into the net or out. an easy return means they have time to set up and swing.",
+    "parts": {
+      "ace": "ace",
+      "winner": "return error",
+      "tough": "tough return",
+      "easy": "easy return",
+      "fault": "fault"
+    }
+  },
+  "target": {
+    "aim": "Aim",
+    "T": "T",
+    "body": "body",
+    "wide": "wide",
+    "drag": "or drag on the court map.",
+    "returner": "Returner",
+    "level": "Level (NTRP)",
+    "beginner": "a beginner: slow to react and uneasy with pace, so most serves win the point.",
+    "club": "a club player: handles a steady serve, but pace, width or a big kick cause trouble.",
+    "strong": "a strong club player: quick to react, so serves need pace and placement.",
+    "advanced": "an advanced player: fast hands and feet. you need a big, well-placed serve, or a kick or slice that pulls them off the court."
+  },
+  "toss": {
+    "title": "Toss",
+    "inFront": "{{d}} in front",
+    "behind": "{{d}} behind",
+    "aboveShoulder": "above your hitting shoulder",
+    "toLeft": "{{d}} to the left",
+    "toRight": "{{d}} to the right",
+    "placement": "{{forward}}, {{side}}",
+    "height": "Toss height",
+    "aboveReach": "{{d}} above your reach",
+    "belowReach": "{{d}} below your reach",
+    "atReach": "at your reach",
+    "wayAbove": "way above",
+    "peaksBelow": "peaks at {{apex}}, below your {{reach}} reach, so you hit it lower.",
+    "peaks": "peaks {{apex}} off the ground and rises with your height and jump. in the air for {{t}} s.",
+    "reset": "reset toss",
+    "padLabel": "toss placement: arrow keys move it forward, back and sideways",
+    "padValue": "{{forward}} forward, {{side}} sideways",
+    "padCourt": "into the court",
+    "padBehind": "behind the baseline"
+  },
+  "server": {
+    "title": "Server",
+    "hand": "Hand",
+    "right": "right-handed",
+    "left": "left-handed",
+    "mirror": "switching mirrors your toss, brush and contact point, so it's the same serve played the other way.",
+    "height": "Height",
+    "shorter": "shorter",
+    "taller": "taller",
+    "heightHint": "a taller server reaches higher: you meet the ball at {{h}}.",
+    "typeIt": "or type it:",
+    "heightCm": "height in centimetres",
+    "heightFt": "height, feet",
+    "heightIn": "height, inches",
+    "stance": "Stance",
+    "platform": "platform",
+    "pinpoint": "pinpoint",
+    "platformNote": "feet stay apart the whole time, and you meet the ball right where you tossed it. steady and simple.",
+    "pinpointNote": "the back foot slides up beside the front foot, then both drive up and into the court: you meet the ball {{forward}} further in and {{lift}} higher, and land inside the baseline.",
+    "jump": "Jump height",
+    "noJump": "no jump",
+    "bigJump": "big jump",
+    "offGround": "{{d}} off the ground",
+    "jumpHint": "jumping higher meets the ball higher, which gives more room over the net."
+  },
+  "swing": {
+    "title": "Swing and spin",
+    "lede": "How hard you hit, how your racket brushes the ball, and where on the ball you make contact.",
+    "speed": "Serve speed",
+    "slower": "slower",
+    "faster": "faster",
+    "speedHint": "a faster ball has less time to drop, so it needs more spin to land in.",
+    "up": "Brush up (topspin)",
+    "straight": "straight through",
+    "upBack": "up the back",
+    "upHint": "swinging up the back of the ball adds topspin, which pulls it down into the box.",
+    "across": "Brush across (side spin)",
+    "none": "none",
+    "pctLeft": "{{p}}% left",
+    "pctRight": "{{p}}% right",
+    "endLeft": "← left",
+    "endRight": "right →",
+    "endLeftSlice": "← left (slice)",
+    "endRightSlice": "right (slice) →",
+    "acrossHintRighty": "brushing across to the right adds slice, which curves the ball left.",
+    "acrossHintLefty": "brushing across to the left adds slice, which curves the ball right.",
+    "contact": "Contact on the ball",
+    "contactHintRighty": "low on the ball adds topspin and sends it up. the right side (3 o'clock) adds slice and pushes it left. high on the ball flattens it out and drives it down.",
+    "contactHintLefty": "low on the ball adds topspin and sends it up. the left side (9 o'clock) adds slice and pushes it right. high on the ball flattens it out and drives it down.",
+    "result": "Resulting spin",
+    "topspin": "Topspin",
+    "dipKick": "dip, then kick up",
+    "sidespin": "Side spin",
+    "curvesLeft": "curves left",
+    "curvesRight": "curves right",
+    "total": "Total",
+    "reset": "reset swing",
+    "notes": {
+      "flat": "almost no spin: the ball flies straight and fast, with little room over the net.",
+      "topspin": "the ball dips down into the box, so it can cross the net higher.",
+      "kick": "heavy topspin: a big dip, then a high bounce.",
+      "topspin-slice_right": "dips and curves a little to the left.",
+      "topspin-slice_left": "dips and curves a little to the right.",
+      "slice_right": "mostly side spin: curves left and stays low after the bounce.",
+      "slice_left": "mostly side spin: curves right and stays low after the bounce.",
+      "reverse_right": "side spin the other way: curves right.",
+      "reverse_left": "side spin the other way: curves left."
+    }
+  },
+  "spin": {
+    "flat": "flat",
+    "topspin": "topspin",
+    "kick": "kick",
+    "topspin-slice": "topspin-slice",
+    "slice": "slice",
+    "reverse": "reverse"
+  },
+  "racket": {
+    "title": "Racket angle",
+    "auto": "auto: the server angles the racket to land in the box, as if the toss were perfect",
+    "angle": "Racket angle",
+    "hint": "negative closes the face and drives the ball down. a toss in front tilts it down, behind tilts it up. the racket in the animation tilts to match at contact."
+  },
+  "ball": {
+    "centre": "dead centre of the ball",
+    "low": "{{clock}} o'clock, low on the ball",
+    "high": "{{clock}} o'clock, high on the ball",
+    "side": "{{clock}} o'clock, the side of the ball",
+    "caption": "hitting at {{where}}. the arrow is your brush.",
+    "label": "contact point on the ball: arrow keys move it",
+    "valueClock": "{{clock}} o'clock",
+    "valueCentre": "centre of the ball"
+  },
+  "map": {
+    "label": "court from above; drag to aim",
+    "box": "service box",
+    "in": "in!",
+    "net": "net",
+    "long": "long",
+    "wide": "out"
+  },
+  "compare": {
+    "newLine": "New serve line",
+    "colors": "line color for the new serve",
+    "custom": "pick any color",
+    "customLabel": "custom line color",
+    "keep": "keep this serve to compare",
+    "serveN": "serve {{n}}",
+    "remove": "remove serve {{n}}",
+    "clear": "clear all",
+    "lefty": "lefty",
+    "pctIn": "{{p}}% in",
+    "aces": "{{p}}% aces vs {{level}}",
+    "result": {
+      "in": "in",
+      "net": "net",
+      "long": "long",
+      "wide": "out"
+    }
+  },
+  "nav": {
+    "tool": "Serve tool",
+    "about": "About & the math"
+  },
+  "footer": {
+    "free": "a free tool for me and my friends.",
+    "about": "how it works",
+    "donate": "donate with PayPal"
+  },
+  "seo": {
+    "title": "Serve Visualization Tool: free 3D tennis serve simulator",
+    "description": "A free 3D tennis serve simulator. Adjust your toss, stance, jump, swing, spin and speed, watch whether the ball clears the net, and see your error tolerance and your chances of an ace against returners from NTRP 2.0 to 5.0.",
+    "aboutTitle": "How the Serve Visualization Tool works: the tennis serve math, explained simply",
+    "aboutDescription": "How the free Serve Visualization Tool models a tennis serve: ball flight, spin, the bounce, the toss, error tolerance and the returner, explained in plain words with the formulas behind them.",
+    "noscript": "This interactive 3D tool needs JavaScript turned on."
+  },
+  "about": {
+    "title": "About the Serve Visualization Tool",
+    "intro": "I made this free tool to help me and my friends work on our serves: to see how the toss, footwork and swing change where the ball goes, and how hard it is to return. If it helps you too, PayPal donations are always welcome, but never expected.",
+    "donate": "Donate with PayPal",
+    "back": "← back to the serve tool",
+    "flight": {
+      "title": "1. How the ball flies",
+      "body": "The ball is moved forward in tiny steps, <b>1,000 times a second</b>. At each step three things act on it: gravity pulls it down, air drag slows it, and spin pushes it down or sideways. Add them up, update the speed, update the position, and repeat.",
+      "formula": "acceleration = gravity + drag + spin push",
+      "note": "gravity is 9.81 m/s² straight down. drag grows with the square of the speed, so a 200 km/h serve feels four times the drag of a 100 km/h one."
+    },
+    "spin": {
+      "title": "2. Why spin bends the ball",
+      "body": "A spinning ball drags the air around with it. <b>Topspin</b> throws air up behind the ball, so the ball is pushed down: it dips into the box, which lets you hit higher over the net. <b>Side spin</b> pushes the ball sideways, which is why a slice curves.",
+      "formula": "lift ≈ 1 ÷ (2 + v ÷ (r × ω))",
+      "note": "v is the ball's speed, r its radius and ω how fast it spins. more spin, or a slower ball, means a stronger push."
+    },
+    "bounce": {
+      "title": "3. The bounce",
+      "body": "When the ball lands it keeps about <b>75%</b> of its downward speed, now going up. Friction with the court slows it and pulls its spin toward rolling. Heavy topspin grips the court and kicks the ball up higher: that is the kick serve.",
+      "formula": "speed up after = 0.75 × speed down before + kick",
+      "note": "the kick is a small extra push that grows with topspin."
+    },
+    "toss": {
+      "title": "4. The toss and where you hit the ball",
+      "body": "Your <b>reach</b> is how high the racket can meet the ball: your height, your arm and racket, plus your jump. The toss height is measured above that reach, so taller players and bigger jumps toss higher. A toss that peaks below your reach forces a lower contact. A toss in front tilts the racket down; one behind tilts it up.",
+      "formula": "time in the air = √(2 × rise ÷ g) + √(2 × fall ÷ g)",
+      "note": "rise is how far the ball climbs after it leaves your hand, fall is how far it drops back to where you hit it, and g is gravity."
+    },
+    "swing": {
+      "title": "5. Spin from your swing",
+      "body": "Brushing up the back of the ball makes <b>topspin</b>; brushing across it makes <b>side spin</b>. Where you hit the ball adds to the brush: low on the ball adds topspin, the outside adds slice. The two parts combine like the sides of a right triangle.",
+      "formula": "total spin = √(topspin² + side spin²)",
+      "note": "for example, 1,800 rpm of topspin and 3,200 rpm of side spin make about 3,650 rpm in total."
+    },
+    "tolerance": {
+      "title": "6. Error tolerance",
+      "body": "Nobody hits the same serve twice. The tool flies your serve again with each kind of small mistake on its own (racket angle, aim, speed, spin and brush direction), measures how far each one moves the ball, then adds those effects up over <b>1,024</b> evenly spread tries. The share that still lands in the box is your error tolerance.",
+      "formula": "error tolerance = tries that land in ÷ all tries",
+      "note": "slice is riskier because a slightly different brush changes how much topspin is left to bring the ball down."
+    },
+    "returner": {
+      "title": "7. The returner",
+      "body": "The tool works out when the ball reaches the returner and how far they have to move. They wait out their reaction time, then run, and can reach a little further with their arm and racket. If they cannot get there, it is an <b>ace</b>. Otherwise less time, a longer run, more pace, a high kick or a low slice all make the return harder, from an easy return to a return error.",
+      "formula": "can reach = arm and racket + distance run after reacting",
+      "note": "a 2.0 returner reacts in about 0.42 s and runs about 3 m/s; a 5.0 returner reacts in about 0.25 s and runs about 5 m/s."
+    },
+    "limits": {
+      "title": "8. Good to know",
+      "body": "The physics is meant to be believable, not exact. Drag and lift use typical textbook values, and the toss, jump, brush and returner are simple models of what coaches describe, not measured data. Use it to build intuition, then check it on court."
+    }
+  }
+}

@@ -1,0 +1,348 @@
+{
+  "app": {
+    "tagline": "réglez le lancer, le jeu de jambes et la frappe, et regardez si la balle passe le filet.",
+    "units": "Unités",
+    "language": "Langue"
+  },
+  "units": {
+    "metric": "métrique",
+    "us": "US"
+  },
+  "transport": {
+    "pause": "pause",
+    "serveAgain": "servir encore",
+    "serve": "servez !",
+    "replay": "rejouer",
+    "speed": "vitesse de lecture"
+  },
+  "views": {
+    "label": "caméra",
+    "server": "serveur",
+    "receiver": "relanceur",
+    "net": "filet",
+    "side": "côté",
+    "coach": "entraîneur",
+    "orbit": "faites glisser pour regarder autour"
+  },
+  "scene": {
+    "clearsBy": "passe de {{d}}",
+    "intoNet": "dans le filet"
+  },
+  "outcome": {
+    "ace": "ACE !",
+    "winner": "faute en retour",
+    "tough": "retour difficile",
+    "easy": "retour facile",
+    "fault": "faute"
+  },
+  "phase": {
+    "time": "temps",
+    "stance": "position",
+    "toss": "lancer",
+    "trophy": "trophée",
+    "racket drop": "armé de raquette",
+    "contact": "impact",
+    "follow-through": "accompagnement",
+    "net": "filet",
+    "bounce": "rebond"
+  },
+  "verdict": {
+    "pending": "balle en l'air",
+    "in": {
+      "title": "bonne !",
+      "sub": "pile dans le carré"
+    },
+    "net": {
+      "title": "faute",
+      "sub": "dans le filet"
+    },
+    "long": {
+      "title": "faute",
+      "sub": "longue, au-delà de la ligne de service"
+    },
+    "wide": {
+      "title": "faute",
+      "sub": "hors du carré"
+    },
+    "ace": {
+      "title": "ace !",
+      "sub": "le relanceur n'a pas pu l'atteindre"
+    },
+    "winner": {
+      "title": "faute en retour",
+      "sub": "il la touche sans doute, mais elle ne passe pas le filet ou sort"
+    },
+    "tough": {
+      "title": "retour difficile",
+      "sub": "elle revient, mais sous pression"
+    },
+    "easy": {
+      "title": "retour facile",
+      "sub": "il a eu le temps de se placer et de frapper"
+    },
+    "because": "{{sub}} : {{reason}}"
+  },
+  "reason": {
+    "rush": "peu de temps pour frapper",
+    "stretch": "sorti du court",
+    "heat": "plus rapide que d'habitude pour lui",
+    "pace": "arrive très vite",
+    "high": "rebond très haut",
+    "low": "restée basse",
+    "jam": "dans le corps"
+  },
+  "stats": {
+    "overNet": "au-dessus du filet",
+    "contactHeight": "hauteur d'impact",
+    "launchAngle": "angle de départ",
+    "speedAtNet": "vitesse au filet",
+    "speedAtBounce": "vitesse au rebond",
+    "bounceHeight": "hauteur du rebond",
+    "timeToReturner": "temps jusqu'au relanceur",
+    "returnerMoves": "le relanceur doit se déplacer"
+  },
+  "tips": {
+    "lowToss": "lancez plus haut pour frapper bras tendu, ou sautez plus haut.",
+    "net": "lancez un peu plus en arrière, brossez vers le haut pour plus de lift, ou frappez plus bas sur la balle.",
+    "longAuto": "lancez un peu plus devant, ou brossez vers le haut pour plus de lift et la faire redescendre.",
+    "longManual": "inclinez un peu la raquette vers le bas, ou brossez vers le haut pour plus de lift.",
+    "wide": "visez un peu plus à l'intérieur du carré."
+  },
+  "risk": {
+    "label": "Tolérance d'erreur",
+    "sub": "rentrent même frappées avec de petites erreurs",
+    "window": "l'angle de raquette peut varier de <b>{{down}}°</b> avant de toucher le filet, ou de <b>+{{up}}°</b> avant de sortir long.",
+    "misses": "même frappé parfaitement, ce service est faute. changez quelque chose pour le faire rentrer.",
+    "against": "contre un relanceur <b>{{level}}</b> : <b>{{won}} %</b> de points gagnés directement, <b>{{fault}} %</b> de fautes.",
+    "method": "sur {{tries}} essais de ce service, chacun un peu différent : environ ±{{angle}}° d'angle de raquette, ±{{yaw}}° de direction, ±{{speed}} % de vitesse, ±{{rpm}} % d'effet et ±{{brush}}° dans la direction du brossage. ce dernier point explique pourquoi le slice est plus risqué : avec l'effet incliné sur le côté, un brossage un peu différent change la façon dont la balle plonge. une faute en retour veut dire qu'il la touche sans doute, mais dans le filet ou dehors. un retour facile veut dire qu'il a le temps de se placer et de frapper.",
+    "parts": {
+      "ace": "ace",
+      "winner": "faute en retour",
+      "tough": "retour difficile",
+      "easy": "retour facile",
+      "fault": "faute"
+    }
+  },
+  "target": {
+    "aim": "Cible",
+    "T": "T",
+    "body": "corps",
+    "wide": "extérieur",
+    "drag": "ou faites glisser sur le plan du court.",
+    "returner": "Relanceur",
+    "level": "Niveau (NTRP)",
+    "beginner": "débutant : réagit lentement et n'aime pas la vitesse, donc la plupart des services gagnent le point.",
+    "club": "joueur de club : gère un service régulier, mais la vitesse, les angles ou un gros kick le gênent.",
+    "strong": "bon joueur de club : réagit vite, donc le service doit avoir de la vitesse et du placement.",
+    "advanced": "joueur confirmé : mains et jambes rapides. il faut un gros service bien placé, ou un kick ou un slice qui le sort du court."
+  },
+  "toss": {
+    "title": "Lancer",
+    "inFront": "{{d}} devant",
+    "behind": "{{d}} derrière",
+    "aboveShoulder": "au-dessus de votre épaule de frappe",
+    "toLeft": "{{d}} à gauche",
+    "toRight": "{{d}} à droite",
+    "placement": "{{forward}}, {{side}}",
+    "height": "Hauteur du lancer",
+    "aboveReach": "{{d}} au-dessus de votre allonge",
+    "belowReach": "{{d}} sous votre allonge",
+    "atReach": "à votre allonge",
+    "wayAbove": "bien au-dessus",
+    "peaksBelow": "culmine à {{apex}}, sous votre allonge de {{reach}}, donc vous frappez plus bas.",
+    "peaks": "culmine à {{apex}} du sol et monte avec votre taille et votre saut. en l'air pendant {{t}} s.",
+    "reset": "réinitialiser le lancer",
+    "padLabel": "placement du lancer : les flèches le déplacent en avant, en arrière et sur les côtés",
+    "padValue": "{{forward}} en avant, {{side}} sur le côté",
+    "padCourt": "vers le court",
+    "padBehind": "derrière la ligne de fond"
+  },
+  "server": {
+    "title": "Serveur",
+    "hand": "Main",
+    "right": "droitier",
+    "left": "gaucher",
+    "mirror": "changer de main inverse le lancer, le brossage et le point d'impact : c'est le même service joué de l'autre main.",
+    "height": "Taille",
+    "shorter": "plus petit",
+    "taller": "plus grand",
+    "heightHint": "un serveur plus grand frappe plus haut : vous touchez la balle à {{h}}.",
+    "typeIt": "ou saisissez-la :",
+    "heightCm": "taille en centimètres",
+    "heightFt": "taille, pieds",
+    "heightIn": "taille, pouces",
+    "stance": "Position",
+    "platform": "plateforme",
+    "pinpoint": "pieds joints",
+    "platformNote": "les pieds restent écartés tout du long et vous frappez la balle là où vous l'avez lancée. stable et simple.",
+    "pinpointNote": "le pied arrière glisse à côté du pied avant, puis les deux poussent vers le haut et vers le court : vous touchez la balle {{forward}} plus loin et {{lift}} plus haut, et retombez dans le court.",
+    "jump": "Hauteur du saut",
+    "noJump": "sans saut",
+    "bigJump": "grand saut",
+    "offGround": "{{d}} au-dessus du sol",
+    "jumpHint": "sauter plus haut fait frapper la balle plus haut, ce qui laisse plus de marge au-dessus du filet."
+  },
+  "swing": {
+    "title": "Frappe et effet",
+    "lede": "La force de frappe, la façon dont la raquette brosse la balle et l'endroit où vous la touchez.",
+    "speed": "Vitesse du service",
+    "slower": "plus lent",
+    "faster": "plus rapide",
+    "speedHint": "une balle plus rapide a moins de temps pour descendre, elle a donc besoin de plus d'effet pour rentrer.",
+    "up": "Brossage vers le haut (lift)",
+    "straight": "frappe à plat",
+    "upBack": "du bas vers le haut",
+    "upHint": "brosser la balle de bas en haut ajoute du lift, qui la fait plonger dans le carré.",
+    "across": "Brossage latéral (effet latéral)",
+    "none": "aucun",
+    "pctLeft": "{{p}} % à gauche",
+    "pctRight": "{{p}} % à droite",
+    "endLeft": "← gauche",
+    "endRight": "droite →",
+    "endLeftSlice": "← gauche (slice)",
+    "endRightSlice": "droite (slice) →",
+    "acrossHintRighty": "brosser vers la droite ajoute du slice, qui courbe la balle vers la gauche.",
+    "acrossHintLefty": "brosser vers la gauche ajoute du slice, qui courbe la balle vers la droite.",
+    "contact": "Contact sur la balle",
+    "contactHintRighty": "bas sur la balle ajoute du lift et la fait monter. le côté droit (3 h) ajoute du slice et la pousse vers la gauche. haut sur la balle l'aplatit et la fait descendre.",
+    "contactHintLefty": "bas sur la balle ajoute du lift et la fait monter. le côté gauche (9 h) ajoute du slice et la pousse vers la droite. haut sur la balle l'aplatit et la fait descendre.",
+    "result": "Effet obtenu",
+    "topspin": "Lift",
+    "dipKick": "plonge, puis rebondit haut",
+    "sidespin": "Effet latéral",
+    "curvesLeft": "courbe à gauche",
+    "curvesRight": "courbe à droite",
+    "total": "Total",
+    "reset": "réinitialiser la frappe",
+    "notes": {
+      "flat": "presque pas d'effet : la balle va droit et vite, avec peu de marge au-dessus du filet.",
+      "topspin": "la balle plonge dans le carré, elle peut donc passer plus haut au-dessus du filet.",
+      "kick": "beaucoup de lift : une grosse plongée, puis un rebond haut.",
+      "topspin-slice_right": "plonge et courbe un peu vers la gauche.",
+      "topspin-slice_left": "plonge et courbe un peu vers la droite.",
+      "slice_right": "surtout de l'effet latéral : courbe vers la gauche et reste basse après le rebond.",
+      "slice_left": "surtout de l'effet latéral : courbe vers la droite et reste basse après le rebond.",
+      "reverse_right": "effet latéral inversé : courbe vers la droite.",
+      "reverse_left": "effet latéral inversé : courbe vers la gauche."
+    }
+  },
+  "spin": {
+    "flat": "à plat",
+    "topspin": "lifté",
+    "kick": "kick",
+    "topspin-slice": "lift-slice",
+    "slice": "slice",
+    "reverse": "inversé"
+  },
+  "racket": {
+    "title": "Angle de raquette",
+    "auto": "auto : le serveur incline la raquette pour viser le carré, comme si le lancer était parfait",
+    "angle": "Angle de raquette",
+    "hint": "négatif ferme le tamis et envoie la balle vers le bas. un lancer devant l'incline vers le bas, derrière vers le haut. dans l'animation, la raquette s'incline de même à l'impact."
+  },
+  "ball": {
+    "centre": "le centre de la balle",
+    "low": "{{clock}} h, bas sur la balle",
+    "high": "{{clock}} h, haut sur la balle",
+    "side": "{{clock}} h, sur le côté de la balle",
+    "caption": "vous frappez à {{where}}. la flèche montre votre brossage.",
+    "label": "point de contact sur la balle : les flèches le déplacent",
+    "valueClock": "{{clock}} h",
+    "valueCentre": "centre de la balle"
+  },
+  "map": {
+    "label": "court vu de dessus ; faites glisser pour viser",
+    "box": "carré de service",
+    "in": "bonne !",
+    "net": "filet",
+    "long": "long",
+    "wide": "dehors"
+  },
+  "compare": {
+    "newLine": "Ligne du nouveau service",
+    "colors": "couleur de ligne du nouveau service",
+    "custom": "choisir une couleur",
+    "customLabel": "couleur de ligne personnalisée",
+    "keep": "garder ce service pour comparer",
+    "serveN": "service {{n}}",
+    "remove": "retirer le service {{n}}",
+    "clear": "tout effacer",
+    "lefty": "gaucher",
+    "pctIn": "{{p}} % bons",
+    "aces": "{{p}} % d'aces contre {{level}}",
+    "result": {
+      "in": "bon",
+      "net": "filet",
+      "long": "long",
+      "wide": "dehors"
+    }
+  },
+  "nav": {
+    "tool": "Outil de service",
+    "about": "À propos et les calculs"
+  },
+  "footer": {
+    "free": "un outil gratuit pour moi et mes amis.",
+    "about": "comment ça marche",
+    "donate": "faire un don avec PayPal"
+  },
+  "seo": {
+    "title": "Serve Visualization Tool : simulateur gratuit de service au tennis en 3D",
+    "description": "Un simulateur gratuit de service au tennis en 3D. Réglez le lancer, la position, le saut, la frappe, l'effet et la vitesse, regardez si la balle passe le filet, et voyez votre tolérance d'erreur et vos chances de faire un ace contre des relanceurs de niveau NTRP 2.0 à 5.0.",
+    "aboutTitle": "Comment fonctionne Serve Visualization Tool : les calculs du service au tennis, expliqués simplement",
+    "aboutDescription": "Comment l'outil gratuit Serve Visualization Tool modélise un service au tennis : le vol de la balle, l'effet, le rebond, le lancer, la tolérance d'erreur et le relanceur, expliqués simplement avec les formules derrière.",
+    "noscript": "Cet outil interactif en 3D a besoin que JavaScript soit activé."
+  },
+  "about": {
+    "title": "À propos de Serve Visualization Tool",
+    "intro": "J'ai créé cet outil gratuit pour aider mes amis et moi à travailler notre service : voir comment le lancer, le jeu de jambes et la frappe changent la trajectoire de la balle, et à quel point elle est difficile à retourner. S'il vous aide aussi, les dons via PayPal sont toujours les bienvenus, mais jamais attendus.",
+    "donate": "Faire un don avec PayPal",
+    "back": "← retour à l'outil de service",
+    "flight": {
+      "title": "1. Comment la balle vole",
+      "body": "La balle avance par tout petits pas, <b>1 000 fois par seconde</b>. À chaque pas, trois choses agissent sur elle : la gravité la tire vers le bas, la résistance de l'air la freine et l'effet la pousse vers le bas ou sur le côté. On additionne, on met à jour la vitesse, puis la position, et on recommence.",
+      "formula": "accélération = gravité + traînée + poussée de l'effet",
+      "note": "la gravité vaut 9,81 m/s² vers le bas. la traînée croît avec le carré de la vitesse : un service à 200 km/h subit quatre fois la traînée d'un service à 100 km/h."
+    },
+    "spin": {
+      "title": "2. Pourquoi l'effet courbe la balle",
+      "body": "Une balle qui tourne entraîne l'air avec elle. Le <b>lift</b> projette l'air vers le haut derrière la balle, donc la balle est poussée vers le bas : elle plonge dans le carré, ce qui permet de passer plus haut au-dessus du filet. L'<b>effet latéral</b> pousse la balle sur le côté, c'est pour ça qu'un slice se courbe.",
+      "formula": "portance ≈ 1 ÷ (2 + v ÷ (r × ω))",
+      "note": "v est la vitesse de la balle, r son rayon et ω sa vitesse de rotation. plus d'effet, ou une balle plus lente, donne une poussée plus forte."
+    },
+    "bounce": {
+      "title": "3. Le rebond",
+      "body": "Quand la balle touche le sol, elle garde environ <b>75 %</b> de sa vitesse vers le bas, maintenant vers le haut. Le frottement avec le court la ralentit et pousse sa rotation vers un roulement. Beaucoup de lift accroche le court et fait rebondir la balle plus haut : c'est le service kické.",
+      "formula": "vitesse vers le haut après = 0,75 × vitesse vers le bas avant + kick",
+      "note": "le kick est une petite poussée en plus qui grandit avec le lift."
+    },
+    "toss": {
+      "title": "4. Le lancer et l'endroit où vous frappez",
+      "body": "Votre <b>allonge</b> est la hauteur à laquelle la raquette peut toucher la balle : votre taille, votre bras et la raquette, plus votre saut. La hauteur du lancer se mesure au-dessus de cette allonge, donc les joueurs plus grands et les sauts plus hauts lancent plus haut. Un lancer qui culmine sous votre allonge oblige à frapper plus bas. Un lancer devant incline la raquette vers le bas ; un lancer derrière l'incline vers le haut.",
+      "formula": "temps en l'air = √(2 × montée ÷ g) + √(2 × descente ÷ g)",
+      "note": "la montée est la hauteur gagnée après avoir quitté la main, la descente ce qu'elle redescend jusqu'au point d'impact, et g est la gravité."
+    },
+    "swing": {
+      "title": "5. L'effet donné par la frappe",
+      "body": "Brosser la balle de bas en haut donne du <b>lift</b> ; la brosser sur le côté donne de l'<b>effet latéral</b>. L'endroit où vous frappez s'ajoute au brossage : bas sur la balle ajoute du lift, l'extérieur ajoute du slice. Les deux parties se combinent comme les côtés d'un triangle rectangle.",
+      "formula": "effet total = √(lift² + effet latéral²)",
+      "note": "par exemple, 1 800 tr/min de lift et 3 200 tr/min d'effet latéral donnent environ 3 650 tr/min au total."
+    },
+    "tolerance": {
+      "title": "6. Tolérance d'erreur",
+      "body": "Personne ne sert deux fois pareil. L'outil rejoue votre service avec chaque type de petite erreur séparément (angle de raquette, direction, vitesse, effet et direction du brossage), mesure de combien chacune déplace la balle, puis additionne ces effets sur <b>1 024</b> essais répartis régulièrement. La part qui retombe encore dans le carré est votre tolérance d'erreur.",
+      "formula": "tolérance d'erreur = essais qui rentrent ÷ tous les essais",
+      "note": "le slice est plus risqué car un brossage un peu différent change la quantité de lift qui reste pour faire redescendre la balle."
+    },
+    "returner": {
+      "title": "7. Le relanceur",
+      "body": "L'outil calcule quand la balle atteint le relanceur et la distance qu'il doit parcourir. Il attend son temps de réaction, puis court, et peut aller un peu plus loin grâce à son bras et sa raquette. S'il n'y arrive pas, c'est un <b>ace</b>. Sinon, moins de temps, une course plus longue, plus de vitesse, un kick haut ou un slice bas rendent le retour plus dur, du retour facile à la faute en retour.",
+      "formula": "portée = bras et raquette + distance courue après la réaction",
+      "note": "un relanceur 2.0 réagit en environ 0,42 s et court à environ 3 m/s ; un relanceur 5.0 réagit en environ 0,25 s et court à environ 5 m/s."
+    },
+    "limits": {
+      "title": "8. Bon à savoir",
+      "body": "La physique se veut crédible, pas exacte. La traînée et la portance utilisent des valeurs classiques, et le lancer, le saut, le brossage et le relanceur sont des modèles simples de ce que décrivent les entraîneurs, pas des données mesurées. Servez-vous-en pour vous faire une idée, puis vérifiez sur le court."
+    }
+  }
+}

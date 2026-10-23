@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { HIT_RADIUS } from '../serve.js'
 
 // The ball as the server sees it from behind: 12 o'clock on top, 3 o'clock on the right.
@@ -11,6 +12,7 @@ function clockOf(hit) {
 }
 
 export default function BallPicker({ hit, swing, onChange }) {
+  const { t } = useTranslation()
   const ref = useRef(null)
   const dragging = useRef(false)
 
@@ -40,9 +42,9 @@ export default function BallPicker({ hit, swing, onChange }) {
   const x = hit.u
   const y = -hit.v
   const clock = clockOf(hit)
-  const where = !clock
-    ? 'dead centre of the ball'
-    : `${clock} o'clock, ${hit.v < -0.15 ? 'low on' : hit.v > 0.15 ? 'high on' : 'the side of'} the ball`
+  // Around the clock face: 11 to 1 is high on the ball, 5 to 7 is low, the rest is its side.
+  const part = [11, 12, 1].includes(clock) ? 'ball.high' : [5, 6, 7].includes(clock) ? 'ball.low' : 'ball.side'
+  const where = !clock ? t('ball.centre') : t(part, { clock })
 
   return (
     <div className="ball-pick">
@@ -52,8 +54,8 @@ export default function BallPicker({ hit, swing, onChange }) {
         viewBox="-1.25 -1.25 2.5 2.5"
         tabIndex={0}
         role="slider"
-        aria-label="contact point on the ball: arrow keys move it"
-        aria-valuetext={clock ? `${clock} o'clock` : 'centre of the ball'}
+        aria-label={t('ball.label')}
+        aria-valuetext={clock ? t('ball.valueClock', { clock }) : t('ball.valueCentre')}
         onKeyDown={onKey}
         onPointerDown={(e) => {
           dragging.current = true
@@ -81,7 +83,7 @@ export default function BallPicker({ hit, swing, onChange }) {
         )}
         <circle cx={x} cy={y} r="0.13" fill="#e2574c" stroke="#fff" strokeWidth="0.04" />
       </svg>
-      <p className="note">hitting at {where}. the arrow is your brush.</p>
+      <p className="note">{t('ball.caption', { where })}</p>
     </div>
   )
 }

@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { RETURNER_READY, returnerZ } from '../outcome.js'
 import { COURT } from '../physics.js'
 
@@ -7,9 +8,8 @@ const VB = { x: -2.5, y: -7, w: 29, h: 14 }
 const AIM_MIN = -4.6
 const AIM_MAX = 0.6
 
-const RESULT_TEXT = { in: 'in!', net: 'net', long: 'long', wide: 'out' }
-
 export default function TopView({ flown, sim, ball, aimZ, serverZ, onAim, lineColor = '#e2574c', kept = [], ret }) {
+  const { t } = useTranslation()
   const svgRef = useRef(null)
   const dragging = useRef(false)
   const { length: L, net, serviceLine: S, halfSingles: hs, halfDoubles: hd } = COURT
@@ -34,7 +34,7 @@ export default function TopView({ flown, sim, ball, aimZ, serverZ, onAim, lineCo
       className="top"
       viewBox={`${VB.x} ${VB.y} ${VB.w} ${VB.h}`}
       role="img"
-      aria-label="court from above; drag to aim"
+      aria-label={t('map.label')}
       onPointerDown={(e) => {
         dragging.current = true
         e.currentTarget.setPointerCapture(e.pointerId)
@@ -57,7 +57,7 @@ export default function TopView({ flown, sim, ball, aimZ, serverZ, onAim, lineCo
         <line x1={L} y1="0" x2={L - 0.25} y2="0" />
       </g>
       <line x1={net} y1={-hd - 0.5} x2={net} y2={hd + 0.5} stroke="#2f3e66" strokeWidth="0.14" />
-      <text x={(net + S) / 2} y={-hs / 2} className="box-label">service box</text>
+      <text x={(net + S) / 2} y={-hs / 2} className="box-label">{t('map.box')}</text>
 
       <g className="aim" transform={`translate(${S} ${aimZ})`}>
         <circle r="0.45" fill="none" stroke="#ffe08a" strokeWidth="0.09" strokeDasharray="0.25 0.18" />
@@ -81,7 +81,7 @@ export default function TopView({ flown, sim, ball, aimZ, serverZ, onAim, lineCo
       {bounced && (
         <g transform={`translate(${sim.bounce.x} ${sim.bounce.z})`} className={`mark ${sim.result}`}>
           <ellipse rx="0.32" ry="0.22" />
-          <text y="-0.7">{RESULT_TEXT[sim.result]}</text>
+          <text y="-0.7">{t(`map.${sim.result}`)}</text>
         </g>
       )}
     </svg>

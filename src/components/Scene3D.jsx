@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { Line2 } from 'three/addons/lines/Line2.js'
@@ -12,20 +13,16 @@ import { buildWorld } from '../three/court.js'
 import { createFigure, mirrorJoints } from '../three/figure.js'
 import { mesh, toon } from '../three/toon.js'
 
-const VIEWS = [
-  { id: 'server', label: 'server' },
-  { id: 'receiver', label: 'receiver' },
-  { id: 'net', label: 'net cam' },
-  { id: 'side', label: 'side' },
-  { id: 'coach', label: 'coach' },
-]
+// Camera views; each id is also its label's key (views.<id>).
+const VIEWS = ['server', 'receiver', 'net', 'side', 'coach']
 
 const RECEIVER = RETURNER_READY
-const OUTCOME = {
-  ace: ['ACE!', '#7c5cff'],
-  winner: ['return error', '#3d8fd6'],
-  tough: ['tough return', '#2f9e78'],
-  easy: ['easy return', '#e8892c'],
+// The label over the returner for each outcome (its words come from outcome.<kind>).
+const OUTCOME_COLOR = {
+  ace: '#7c5cff',
+  winner: '#3d8fd6',
+  tough: '#2f9e78',
+  easy: '#e8892c',
 }
 
 function viewPose(id, sim, hand) {
@@ -53,7 +50,11 @@ function labelSprite() {
   sprite.setText = (text, bg) => {
     const ctx = canvas.getContext('2d')
     ctx.clearRect(0, 0, 512, 128)
-    ctx.font = '800 64px ui-rounded, "Segoe UI", system-ui, sans-serif'
+    // Shrink the type to fit, since some languages say it in many more characters.
+    const family = 'ui-rounded, "Segoe UI", system-ui, sans-serif'
+    ctx.font = `800 64px ${family}`
+    const size = Math.max(28, Math.min(64, (64 * 440) / ctx.measureText(text).width))
+    ctx.font = `800 ${size}px ${family}`
     const w = Math.min(ctx.measureText(text).width + 60, 512)
     ctx.fillStyle = bg
     ctx.beginPath()
@@ -201,7 +202,8 @@ function setup(host, live) {
   let lastSim = null
   let lastPlan = null
   let lastUnits = null
-  const rebuild = (plan, sim, units) => {
+  let lastTr = null
+  const rebuild = (plan, sim, units, tr) => {
     const pts = sim.points.flatMap((p) => [p.x, p.y, p.z])
     path.geometry.dispose()
     path.geometry = new LineGeometry().setPositions(pts)
@@ -233,7 +235,7 @@ function setup(host, live) {
       gapLine.visible = sim.net.clearance > 0
       label.position.set(COURT.net, Math.max(sim.net.y, top) + 0.3, sim.net.z)
       const clears = sim.net.clearance >= 0
-      label.setText(clears ? `clears by ${units.short(sim.net.clearance)}` : 'into the net', clears ? '#2f3e66' : '#e2574c')
+      label.setText(clears ? tr('scene.clearsBy', { d: units.short(sim.net.clearance) }) : tr('scene.intoNet'), clears ? '#2f3e66' : '#e2574c')
     }
   }
 
@@ -298,10 +300,10 @@ function setup(host, live) {
   let raf
   const frame = (now) => {
     raf = requestAnimationFrame(frame)
-    const { t, plan, sim, ball: b, view, kept, lineColor, ret, hand, units } = live.current
+    const { t, plan, sim, ball: b, view, kept, lineColor, ret, hand, units, tr } = live.current
     if (!plan) return
     // Redraw whenever the words change, not just the outcome, so a renamed label never lingers.
-    const outcome = OUTCOME[ret?.kind]
+    const outcome = OUTCOME_COLOR[ret?.kind] ? [tr(`outcome.${ret.kind}`), OUTCOME_COLOR[ret.kind]] : null
     if (outcome && outcome.join('|') !== lastOutcome) {
       outcomeLabel.setText(...outcome)
       lastOutcome = outcome.join('|')
@@ -314,8 +316,9 @@ function setup(host, live) {
       trailMat.color.set(lineColor)
       lastColor = lineColor
     }
-    if (sim !== lastSim || plan !== lastPlan || units !== lastUnits) {
-      rebuild(plan, sim, units)
+    if (sim !== lastSim || plan !== lastPlan || units !== lastUnits || tr !== lastTr) {
+      rebuild(plan, sim, units, tr)
+      lastTr = tr
       lastSim = sim
       lastPlan = plan
       lastUnits = units
@@ -346,7 +349,7 @@ function setup(host, live) {
     for (const p of Object.values(rj)) if (typeof p === 'object') p.y += bob
     receiver.update(rj)
     receiver.group.visible = view !== 'receiver'
-    outcomeLabel.visible = !!(ret?.c && OUTCOME[ret.kind] && flown >= ret.c.t)
+    outcomeLabel.visible = !!(ret?.c && OUTCOME_COLOR[ret.kind] && flown >= ret.c.t)
     outcomeLabel.position.set(RECEIVER.x, 2.5, rz)
     ball.position.set(b.x, b.y, b.z)
     // Real spin is far too fast to see; this is a slowed-down hint of its axis and rate.
@@ -384,24 +387,26 @@ function setup(host, live) {
 }
 
 export default function Scene3D({ t, plan, sim, ball, view, onView, lineColor, kept, ret, hand, units }) {
+  // tr (not t, which is the time here) changes identity with the language, so labels redraw on a switch.
+  const { t: tr } = useTranslation()
   const hostRef = useRef(null)
   const live = useRef({})
   useEffect(() => {
-    live.current = { t, plan, sim, ball, view, lineColor, kept, ret, hand, units }
+    live.current = { t, plan, sim, ball, view, lineColor, kept, ret, hand, units, tr }
   })
   useEffect(() => setup(hostRef.current, live), [])
 
   return (
     <div className="scene">
       <div ref={hostRef} className="canvas-host" />
-      <div className="views" role="group" aria-label="camera">
-        {VIEWS.map((v) => (
-          <button key={v.id} className={v.id === view ? 'on' : ''} onClick={() => onView(v.id)}>
-            {v.label}
+      <div className="views" role="group" aria-label={tr('views.label')}>
+        {VIEWS.map((id) => (
+          <button key={id} className={id === view ? 'on' : ''} onClick={() => onView(id)}>
+            {tr(`views.${id}`)}
           </button>
         ))}
       </div>
-      <span className="orbit-hint">drag to look around</span>
+      <span className="orbit-hint">{tr('views.orbit')}</span>
     </div>
   )
 }

@@ -2,6 +2,14 @@
 
 A 3D tennis serve you can tinker with in the browser. Move the toss, add spin and power, and watch whether the ball clears the net, from the server's side, the receiver's side, or right at the net.
 
+It's a free tool I made for me and my friends. If it helps you too, [PayPal donations](https://paypal.me/hyuns89) are always welcome. The About page (`/about/` on the site) explains the math behind it in plain words.
+
+## languages
+
+English, Spanish, French, German, Portuguese, Japanese, Korean and Chinese (Simplified). Each language has its own address (English at `/`, the others at `/es/`, `/fr/`, `/de/`, `/pt/`, `/ja/`, `/ko/`, `/zh/`, and the About page at `about/` under each). The menu in the header switches language. On a first visit to the plain address, a browser that prefers one of these languages is sent to it once; after that the visitor's choice sticks.
+
+All text lives in [src/locales](src/locales), one file per language, with English as the source. `npm run check:locales` makes sure every translation has the same keys and placeholders as English.
+
 ## what you can change
 
 - **units**: metric (cm, m, km/h) or US (inches, feet and inches, mph), switched from the top of the page. Every measurement follows it, including kept serves and the labels in the 3D view. The app starts in US units in a US-English browser and metric elsewhere, and remembers your choice.
@@ -51,14 +59,28 @@ npm run dev
 
 `npm run build` makes a static build in `dist/`, and `npm run lint` runs oxlint.
 
+## search engines
+
+`npm run build` writes a real HTML page for every page in every language (16 in all, via [scripts/build-pages.mjs](scripts/build-pages.mjs)). Each has its own `<html lang>`, title, description, social-sharing tags and structured data (`WebApplication` for the tool, `AboutPage` for the About page), plus the page's text as plain HTML. Search engines can read and index it without running the 3D app, and the app replaces it once it starts. A `robots.txt` is written too. Every page is a plain file, so any static host serves it with no rewrite rules.
+
+Links that need the site's full address (canonical, hreflang between the languages, `og:url` and `sitemap.xml`) are only written when you tell the build where the site lives:
+
+```bash
+SITE_URL=https://your-domain.example npm run build
+```
+
+Then, in Google Search Console: add the domain as a property, verify it, and submit `https://your-domain.example/sitemap.xml`.
+
+
 ## how it works
 
 - [src/serve.js](src/serve.js): the serve model. It turns the toss, server height, stance, jump, swing and contact point into a contact point limited by the server's reach and jump, a toss hang time (which stretches the animation between release and contact), a spin axis and rate, and a launch angle. It also builds the server's 3D joints from the pose: the shoulder coil, pinpoint footwork, jump and the arm reaching for the ball.
 - [src/physics.js](src/physics.js): ball flight stepped at 1 ms with gravity, air drag and Magnus lift, against real court dimensions and net heights, with a simple friction bounce where heavy topspin kicks up higher.
 - [src/outcome.js](src/outcome.js): the returner and risk model. It finds where the ball passes the returner, how long they have and how far they must go, and turns their reaction time, speed, reach and comfort with pace and high or low balls into the chance of an ace, return error, tough return or easy return. The error tolerance flies the serve with each kind of mistake on its own, measures how much each one moves the net clearance, the bounce and the return point, and adds those effects up over 1,024 evenly spread tries. That keeps it smooth and quick.
 - [src/pose.js](src/pose.js): the serve motion as keyframed joint angles blended with Catmull-Rom splines, plus curves for the shoulder turn and the racket's roll about its handle (edge first, then pronation).
+- [src/i18n.js](src/i18n.js), [src/languages.js](src/languages.js) and [src/locales](src/locales): translations, and the address of each page in each language.
 - [src/three](src/three) and [src/components/Scene3D.jsx](src/components/Scene3D.jsx): the three.js scene, with the court, net, windscreen, trees, the two players, cameras and trails. Sight lines from the camera to the players, the ball and points across the court decide which trees and fence panels to hide.
 
 The physics is meant to be believable, not exact. The drag and lift coefficients are typical textbook values. How the toss, jump, brush and contact point change the serve, and what each returner level can handle, are simple models of what coaches describe, not measured data.
 
-Built with Vite, React and three.js.
+Built with Vite, React, three.js and i18next.

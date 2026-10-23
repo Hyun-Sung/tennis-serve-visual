@@ -1,0 +1,348 @@
+{
+  "app": {
+    "tagline": "ajusta el lanzamiento, los pies y el golpe, y mira si la bola pasa la red.",
+    "units": "Unidades",
+    "language": "Idioma"
+  },
+  "units": {
+    "metric": "métrico",
+    "us": "EE. UU."
+  },
+  "transport": {
+    "pause": "pausa",
+    "serveAgain": "sacar otra vez",
+    "serve": "¡saca!",
+    "replay": "repetir",
+    "speed": "velocidad de reproducción"
+  },
+  "views": {
+    "label": "cámara",
+    "server": "sacador",
+    "receiver": "restador",
+    "net": "red",
+    "side": "lateral",
+    "coach": "entrenador",
+    "orbit": "arrastra para mirar alrededor"
+  },
+  "scene": {
+    "clearsBy": "pasa por {{d}}",
+    "intoNet": "a la red"
+  },
+  "outcome": {
+    "ace": "¡ACE!",
+    "winner": "error de resto",
+    "tough": "resto difícil",
+    "easy": "resto fácil",
+    "fault": "falta"
+  },
+  "phase": {
+    "time": "tiempo",
+    "stance": "posición",
+    "toss": "lanzamiento",
+    "trophy": "trofeo",
+    "racket drop": "caída de raqueta",
+    "contact": "impacto",
+    "follow-through": "terminación",
+    "net": "red",
+    "bounce": "bote"
+  },
+  "verdict": {
+    "pending": "bola en el aire",
+    "in": {
+      "title": "¡dentro!",
+      "sub": "justo en el cuadro"
+    },
+    "net": {
+      "title": "falta",
+      "sub": "a la red"
+    },
+    "long": {
+      "title": "falta",
+      "sub": "larga, pasa la línea de saque"
+    },
+    "wide": {
+      "title": "falta",
+      "sub": "fuera del cuadro"
+    },
+    "ace": {
+      "title": "¡ace!",
+      "sub": "el restador no llegó"
+    },
+    "winner": {
+      "title": "error de resto",
+      "sub": "es probable que la toque, pero no pasa la red o se va fuera"
+    },
+    "tough": {
+      "title": "resto difícil",
+      "sub": "la devuelve, pero bajo presión"
+    },
+    "easy": {
+      "title": "resto fácil",
+      "sub": "tuvo tiempo de prepararse y golpear"
+    },
+    "because": "{{sub}}: {{reason}}"
+  },
+  "reason": {
+    "rush": "poco tiempo para golpear",
+    "stretch": "abierto hacia fuera",
+    "heat": "más rápida de lo que está acostumbrado",
+    "pace": "llega muy rápida",
+    "high": "botó muy alta",
+    "low": "se quedó baja",
+    "jam": "contra el cuerpo"
+  },
+  "stats": {
+    "overNet": "sobre la red",
+    "contactHeight": "altura de impacto",
+    "launchAngle": "ángulo de salida",
+    "speedAtNet": "velocidad en la red",
+    "speedAtBounce": "velocidad en el bote",
+    "bounceHeight": "altura del bote",
+    "timeToReturner": "tiempo hasta el restador",
+    "returnerMoves": "el restador debe moverse"
+  },
+  "tips": {
+    "lowToss": "lanza más alto para golpear con el brazo extendido, o salta más.",
+    "net": "lanza un poco más atrás, cepilla hacia arriba para más liftado o golpea más abajo en la bola.",
+    "longAuto": "lanza un poco más adelante o cepilla hacia arriba para más liftado y que baje.",
+    "longManual": "inclina un poco la raqueta hacia abajo o cepilla hacia arriba para más liftado.",
+    "wide": "apunta un poco más dentro del cuadro."
+  },
+  "risk": {
+    "label": "Tolerancia al error",
+    "sub": "entran aunque se golpeen con pequeños errores",
+    "window": "el ángulo de la raqueta puede desviarse <b>{{down}}°</b> antes de dar en la red, o <b>+{{up}}°</b> antes de irse larga.",
+    "misses": "incluso con un golpe perfecto, este saque falla. cambia algo para que entre.",
+    "against": "contra un restador de <b>{{level}}</b>: <b>{{won}}%</b> de puntos ganados directamente, <b>{{fault}}%</b> de faltas.",
+    "method": "a partir de {{tries}} intentos de este saque, cada uno un poco distinto: unos ±{{angle}}° de ángulo de raqueta, ±{{yaw}}° de dirección, ±{{speed}}% de velocidad, ±{{rpm}}% de efecto y ±{{brush}}° en la dirección del cepillado. esto último explica por qué el cortado es más arriesgado: con el efecto inclinado de lado, un cepillado un poco distinto cambia cuánto cae la bola. un error de resto significa que probablemente la toca, pero a la red o fuera. un resto fácil significa que tiene tiempo para prepararse y golpear.",
+    "parts": {
+      "ace": "ace",
+      "winner": "error de resto",
+      "tough": "resto difícil",
+      "easy": "resto fácil",
+      "fault": "falta"
+    }
+  },
+  "target": {
+    "aim": "Dirección",
+    "T": "T",
+    "body": "al cuerpo",
+    "wide": "abierto",
+    "drag": "o arrastra en el mapa de la pista.",
+    "returner": "Restador",
+    "level": "Nivel (NTRP)",
+    "beginner": "principiante: reacciona tarde y le incomoda la velocidad, así que casi todos los saques ganan el punto.",
+    "club": "jugador de club: maneja un saque regular, pero la velocidad, los ángulos o un buen kick le cuestan.",
+    "strong": "jugador de club fuerte: reacciona rápido, así que el saque necesita velocidad y colocación.",
+    "advanced": "jugador avanzado: manos y pies rápidos. necesitas un saque potente y bien colocado, o un kick o cortado que lo saque de la pista."
+  },
+  "toss": {
+    "title": "Lanzamiento",
+    "inFront": "{{d}} por delante",
+    "behind": "{{d}} por detrás",
+    "aboveShoulder": "sobre tu hombro de golpeo",
+    "toLeft": "{{d}} a la izquierda",
+    "toRight": "{{d}} a la derecha",
+    "placement": "{{forward}}, {{side}}",
+    "height": "Altura del lanzamiento",
+    "aboveReach": "{{d}} por encima de tu alcance",
+    "belowReach": "{{d}} por debajo de tu alcance",
+    "atReach": "a tu alcance",
+    "wayAbove": "muy por encima",
+    "peaksBelow": "llega a {{apex}}, por debajo de tu alcance de {{reach}}, así que golpeas más abajo.",
+    "peaks": "llega a {{apex}} del suelo y sube con tu altura y tu salto. en el aire durante {{t}} s.",
+    "reset": "restablecer lanzamiento",
+    "padLabel": "colocación del lanzamiento: las flechas lo mueven adelante, atrás y a los lados",
+    "padValue": "{{forward}} adelante, {{side}} a los lados",
+    "padCourt": "hacia la pista",
+    "padBehind": "detrás de la línea de fondo"
+  },
+  "server": {
+    "title": "Sacador",
+    "hand": "Mano",
+    "right": "diestro",
+    "left": "zurdo",
+    "mirror": "al cambiar se reflejan el lanzamiento, el cepillado y el punto de impacto, así que es el mismo saque con la otra mano.",
+    "height": "Estatura",
+    "shorter": "más bajo",
+    "taller": "más alto",
+    "heightHint": "un sacador más alto llega más arriba: golpeas la bola a {{h}}.",
+    "typeIt": "o escríbela:",
+    "heightCm": "estatura en centímetros",
+    "heightFt": "estatura, pies",
+    "heightIn": "estatura, pulgadas",
+    "stance": "Posición",
+    "platform": "plataforma",
+    "pinpoint": "pies juntos",
+    "platformNote": "los pies se quedan separados todo el tiempo y golpeas la bola justo donde la lanzaste. estable y sencillo.",
+    "pinpointNote": "el pie de atrás se desliza junto al de delante y luego ambos impulsan hacia arriba y hacia la pista: golpeas la bola {{forward}} más adentro y {{lift}} más alto, y caes dentro de la línea de fondo.",
+    "jump": "Altura del salto",
+    "noJump": "sin salto",
+    "bigJump": "salto grande",
+    "offGround": "{{d}} sobre el suelo",
+    "jumpHint": "saltar más alto golpea la bola más arriba, lo que da más margen sobre la red."
+  },
+  "swing": {
+    "title": "Golpe y efecto",
+    "lede": "Con qué fuerza golpeas, cómo cepilla la raqueta la bola y en qué parte de la bola haces contacto.",
+    "speed": "Velocidad del saque",
+    "slower": "más lento",
+    "faster": "más rápido",
+    "speedHint": "una bola más rápida tiene menos tiempo para caer, así que necesita más efecto para entrar.",
+    "up": "Cepillado hacia arriba (liftado)",
+    "straight": "golpe directo",
+    "upBack": "por detrás hacia arriba",
+    "upHint": "cepillar la bola por detrás hacia arriba añade liftado, que la hace bajar al cuadro.",
+    "across": "Cepillado lateral (efecto lateral)",
+    "none": "nada",
+    "pctLeft": "{{p}}% izquierda",
+    "pctRight": "{{p}}% derecha",
+    "endLeft": "← izquierda",
+    "endRight": "derecha →",
+    "endLeftSlice": "← izquierda (cortado)",
+    "endRightSlice": "derecha (cortado) →",
+    "acrossHintRighty": "cepillar hacia la derecha añade cortado, que curva la bola a la izquierda.",
+    "acrossHintLefty": "cepillar hacia la izquierda añade cortado, que curva la bola a la derecha.",
+    "contact": "Contacto en la bola",
+    "contactHintRighty": "abajo en la bola añade liftado y la eleva. el lado derecho (las 3) añade cortado y la empuja a la izquierda. arriba en la bola la aplana y la hace bajar.",
+    "contactHintLefty": "abajo en la bola añade liftado y la eleva. el lado izquierdo (las 9) añade cortado y la empuja a la derecha. arriba en la bola la aplana y la hace bajar.",
+    "result": "Efecto resultante",
+    "topspin": "Liftado",
+    "dipKick": "cae y luego sube",
+    "sidespin": "Efecto lateral",
+    "curvesLeft": "curva a la izquierda",
+    "curvesRight": "curva a la derecha",
+    "total": "Total",
+    "reset": "restablecer golpe",
+    "notes": {
+      "flat": "casi sin efecto: la bola va recta y rápida, con poco margen sobre la red.",
+      "topspin": "la bola cae dentro del cuadro, así que puede pasar más alta sobre la red.",
+      "kick": "mucho liftado: una gran caída y luego un bote alto.",
+      "topspin-slice_right": "cae y curva un poco a la izquierda.",
+      "topspin-slice_left": "cae y curva un poco a la derecha.",
+      "slice_right": "sobre todo efecto lateral: curva a la izquierda y se queda baja tras el bote.",
+      "slice_left": "sobre todo efecto lateral: curva a la derecha y se queda baja tras el bote.",
+      "reverse_right": "efecto lateral al revés: curva a la derecha.",
+      "reverse_left": "efecto lateral al revés: curva a la izquierda."
+    }
+  },
+  "spin": {
+    "flat": "plano",
+    "topspin": "liftado",
+    "kick": "kick",
+    "topspin-slice": "liftado-cortado",
+    "slice": "cortado",
+    "reverse": "invertido"
+  },
+  "racket": {
+    "title": "Ángulo de raqueta",
+    "auto": "auto: el sacador inclina la raqueta para que entre en el cuadro, como si el lanzamiento fuera perfecto",
+    "angle": "Ángulo de raqueta",
+    "hint": "negativo cierra la cara y manda la bola hacia abajo. un lanzamiento adelantado la inclina hacia abajo, uno atrasado hacia arriba. en la animación la raqueta se inclina igual en el impacto."
+  },
+  "ball": {
+    "centre": "el centro de la bola",
+    "low": "las {{clock}}, abajo en la bola",
+    "high": "las {{clock}}, arriba en la bola",
+    "side": "las {{clock}}, el lado de la bola",
+    "caption": "golpeas en {{where}}. la flecha es tu cepillado.",
+    "label": "punto de contacto en la bola: las flechas lo mueven",
+    "valueClock": "las {{clock}}",
+    "valueCentre": "centro de la bola"
+  },
+  "map": {
+    "label": "pista vista desde arriba; arrastra para apuntar",
+    "box": "cuadro de saque",
+    "in": "¡dentro!",
+    "net": "red",
+    "long": "larga",
+    "wide": "fuera"
+  },
+  "compare": {
+    "newLine": "Línea del nuevo saque",
+    "colors": "color de línea del nuevo saque",
+    "custom": "elige cualquier color",
+    "customLabel": "color de línea personalizado",
+    "keep": "guardar este saque para comparar",
+    "serveN": "saque {{n}}",
+    "remove": "quitar saque {{n}}",
+    "clear": "borrar todo",
+    "lefty": "zurdo",
+    "pctIn": "{{p}}% dentro",
+    "aces": "{{p}}% aces vs {{level}}",
+    "result": {
+      "in": "dentro",
+      "net": "red",
+      "long": "larga",
+      "wide": "fuera"
+    }
+  },
+  "nav": {
+    "tool": "Herramienta de saque",
+    "about": "Acerca de y las cuentas"
+  },
+  "footer": {
+    "free": "una herramienta gratuita para mí y mis amigos.",
+    "about": "cómo funciona",
+    "donate": "donar con PayPal"
+  },
+  "seo": {
+    "title": "Serve Visualization Tool: simulador gratuito de saque de tenis en 3D",
+    "description": "Un simulador gratuito de saque de tenis en 3D. Ajusta el lanzamiento, la posición, el salto, el golpe, el efecto y la velocidad, mira si la bola pasa la red y descubre tu tolerancia al error y tus opciones de ace contra restadores de nivel NTRP 2.0 a 5.0.",
+    "aboutTitle": "Cómo funciona Serve Visualization Tool: las cuentas del saque de tenis, explicadas de forma sencilla",
+    "aboutDescription": "Cómo modela un saque de tenis la herramienta gratuita Serve Visualization Tool: el vuelo de la bola, el efecto, el bote, el lanzamiento, la tolerancia al error y el restador, explicados con palabras sencillas y sus fórmulas.",
+    "noscript": "Esta herramienta interactiva en 3D necesita JavaScript activado."
+  },
+  "about": {
+    "title": "Acerca de Serve Visualization Tool",
+    "intro": "Hice esta herramienta gratuita para ayudarnos a mí y a mis amigos a mejorar el saque: ver cómo el lanzamiento, los pies y el golpe cambian adónde va la bola y lo difícil que es devolverla. Si a ti también te ayuda, las donaciones por PayPal siempre son bienvenidas, pero nunca obligatorias.",
+    "donate": "Donar con PayPal",
+    "back": "← volver a la herramienta de saque",
+    "flight": {
+      "title": "1. Cómo vuela la bola",
+      "body": "La bola avanza en pasos diminutos, <b>1.000 veces por segundo</b>. En cada paso actúan tres cosas: la gravedad la tira hacia abajo, la resistencia del aire la frena y el efecto la empuja hacia abajo o hacia un lado. Se suman, se actualiza la velocidad, se actualiza la posición y se repite.",
+      "formula": "aceleración = gravedad + resistencia + empuje del efecto",
+      "note": "la gravedad es 9,81 m/s² hacia abajo. la resistencia crece con el cuadrado de la velocidad, así que un saque a 200 km/h sufre cuatro veces la resistencia de uno a 100 km/h."
+    },
+    "spin": {
+      "title": "2. Por qué el efecto curva la bola",
+      "body": "Una bola que gira arrastra el aire a su alrededor. El <b>liftado</b> lanza aire hacia arriba por detrás de la bola, así que la bola es empujada hacia abajo: cae dentro del cuadro, lo que te deja pasar más alto sobre la red. El <b>efecto lateral</b> empuja la bola hacia un lado, por eso el cortado se curva.",
+      "formula": "sustentación ≈ 1 ÷ (2 + v ÷ (r × ω))",
+      "note": "v es la velocidad de la bola, r su radio y ω lo rápido que gira. más efecto, o una bola más lenta, significa un empuje mayor."
+    },
+    "bounce": {
+      "title": "3. El bote",
+      "body": "Al caer, la bola conserva cerca del <b>75%</b> de su velocidad hacia abajo, ahora hacia arriba. El roce con la pista la frena y hace que su giro tienda a rodar. Mucho liftado agarra la pista y hace saltar la bola más alto: eso es el saque kick.",
+      "formula": "velocidad hacia arriba después = 0,75 × velocidad hacia abajo antes + kick",
+      "note": "el kick es un pequeño empuje extra que crece con el liftado."
+    },
+    "toss": {
+      "title": "4. El lanzamiento y dónde golpeas la bola",
+      "body": "Tu <b>alcance</b> es la altura a la que la raqueta puede encontrar la bola: tu estatura, tu brazo y la raqueta, más tu salto. La altura del lanzamiento se mide por encima de ese alcance, así que los jugadores más altos y los saltos mayores lanzan más alto. Un lanzamiento que no llega a tu alcance obliga a golpear más abajo. Un lanzamiento adelantado inclina la raqueta hacia abajo; uno atrasado, hacia arriba.",
+      "formula": "tiempo en el aire = √(2 × subida ÷ g) + √(2 × bajada ÷ g)",
+      "note": "la subida es lo que sube la bola tras salir de tu mano, la bajada lo que cae hasta donde la golpeas, y g es la gravedad."
+    },
+    "swing": {
+      "title": "5. El efecto de tu golpe",
+      "body": "Cepillar la bola por detrás hacia arriba produce <b>liftado</b>; cepillarla de lado produce <b>efecto lateral</b>. Dónde golpeas la bola se suma al cepillado: abajo en la bola añade liftado, el lado de fuera añade cortado. Las dos partes se combinan como los lados de un triángulo rectángulo.",
+      "formula": "efecto total = √(liftado² + efecto lateral²)",
+      "note": "por ejemplo, 1.800 rpm de liftado y 3.200 rpm de efecto lateral suman unas 3.650 rpm en total."
+    },
+    "tolerance": {
+      "title": "6. Tolerancia al error",
+      "body": "Nadie saca dos veces igual. La herramienta vuelve a lanzar tu saque con cada tipo de pequeño error por separado (ángulo de raqueta, dirección, velocidad, efecto y dirección del cepillado), mide cuánto mueve cada uno la bola y suma esos efectos en <b>1.024</b> intentos repartidos de forma uniforme. La parte que sigue entrando en el cuadro es tu tolerancia al error.",
+      "formula": "tolerancia al error = intentos que entran ÷ todos los intentos",
+      "note": "el cortado es más arriesgado porque un cepillado un poco distinto cambia cuánto liftado queda para hacer bajar la bola."
+    },
+    "returner": {
+      "title": "7. El restador",
+      "body": "La herramienta calcula cuándo llega la bola al restador y cuánto tiene que moverse. Espera su tiempo de reacción, luego corre, y puede llegar un poco más lejos con el brazo y la raqueta. Si no llega, es un <b>ace</b>. Si llega, menos tiempo, una carrera más larga, más velocidad, un kick alto o un cortado bajo hacen el resto más difícil, desde un resto fácil hasta un error de resto.",
+      "formula": "alcance posible = brazo y raqueta + distancia recorrida tras reaccionar",
+      "note": "un restador de 2.0 reacciona en unos 0,42 s y corre a unos 3 m/s; uno de 5.0 reacciona en unos 0,25 s y corre a unos 5 m/s."
+    },
+    "limits": {
+      "title": "8. Conviene saber",
+      "body": "La física pretende ser creíble, no exacta. La resistencia y la sustentación usan valores típicos de libro, y el lanzamiento, el salto, el cepillado y el restador son modelos sencillos de lo que describen los entrenadores, no datos medidos. Úsala para hacerte una idea y luego compruébalo en la pista."
+    }
+  }
+}
