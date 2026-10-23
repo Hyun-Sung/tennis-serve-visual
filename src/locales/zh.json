@@ -22,7 +22,8 @@
     "net": "球网",
     "side": "侧面",
     "coach": "教练",
-    "orbit": "拖动以环顾四周"
+    "orbit": "拖动以环顾四周",
+    "loading": "正在加载 3D 球场…"
   },
   "scene": {
     "clearsBy": "过网高出 {{d}}",

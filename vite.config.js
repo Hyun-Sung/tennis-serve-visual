@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     sourcemap: false,
-    // three.js alone is ~700 kB before gzip, plus the eight translations.
-    chunkSizeWarningLimit: 1400,
+    // The 3D view's chunk is mostly three.js (~600 kB before gzip); it loads after the page.
+    chunkSizeWarningLimit: 700,
   },
 })

@@ -22,7 +22,8 @@
     "net": "rede",
     "side": "lateral",
     "coach": "treinador",
-    "orbit": "arraste para olhar ao redor"
+    "orbit": "arraste para olhar ao redor",
+    "loading": "carregando a quadra em 3D…"
   },
   "scene": {
     "clearsBy": "passa {{d}} acima",

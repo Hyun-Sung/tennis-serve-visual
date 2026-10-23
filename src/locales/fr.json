@@ -22,7 +22,8 @@
     "net": "filet",
     "side": "côté",
     "coach": "entraîneur",
-    "orbit": "faites glisser pour regarder autour"
+    "orbit": "faites glisser pour regarder autour",
+    "loading": "chargement du court en 3D…"
   },
   "scene": {
     "clearsBy": "passe de {{d}}",

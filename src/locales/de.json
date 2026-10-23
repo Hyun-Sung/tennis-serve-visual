@@ -22,7 +22,8 @@
     "net": "Netz",
     "side": "Seite",
     "coach": "Trainer",
-    "orbit": "ziehen, um sich umzusehen"
+    "orbit": "ziehen, um sich umzusehen",
+    "loading": "3D-Platz wird geladen…"
   },
   "scene": {
     "clearsBy": "{{d}} über dem Netz",

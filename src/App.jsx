@@ -1,4 +1,4 @@
-import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
+import { lazy, Suspense, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { nextColor, PALETTE, summarize } from './compare.js'
 import About, { DONATE_URL } from './components/About.jsx'
@@ -6,7 +6,6 @@ import Compare from './components/Compare.jsx'
 import Controls from './components/Controls.jsx'
 import Readout from './components/Readout.jsx'
 import Risk from './components/Risk.jsx'
-import Scene3D from './components/Scene3D.jsx'
 import Target from './components/Target.jsx'
 import { Seg } from './components/Fields.jsx'
 import Timeline from './components/Timeline.jsx'
@@ -26,9 +25,12 @@ import {
   realTime,
   SERVER_Z,
 } from './serve.js'
-import { LANGUAGES, rememberChoice } from './i18n.js'
+import { LANGUAGES, rememberChoice, switchLanguage } from './i18n.js'
 import { parsePath, pathFor } from './languages.js'
 import { savedSystem, saveSystem, UNIT_SYSTEMS, UnitsContext, unitsFor } from './units.js'
+
+// three.js is most of the download, so the 3D view loads in its own file after the rest of the page.
+const Scene3D = lazy(() => import('./components/Scene3D.jsx'))
 
 // Metric unless this browser chose otherwise, or it's set up for the US.
 const firstSystem = () => savedSystem() ?? (navigator.language === 'en-US' ? 'us' : 'metric')
@@ -68,7 +70,7 @@ export default function App() {
   const go = (nextPage, lang = i18n.language) => {
     const href = pathFor(lang, nextPage)
     if (href !== window.location.pathname) window.history.pushState(null, '', href)
-    if (lang !== i18n.language) i18n.changeLanguage(lang)
+    if (lang !== i18n.language) switchLanguage(lang)
     if (nextPage !== page) {
       setPage(nextPage)
       window.scrollTo(0, 0)
@@ -82,7 +84,7 @@ export default function App() {
     const onPop = () => {
       const where = parsePath(window.location.pathname)
       setPage(where.page)
-      i18n.changeLanguage(where.lang ?? 'en')
+      switchLanguage(where.lang ?? 'en')
     }
     window.addEventListener('popstate', onPop)
     return () => window.removeEventListener('popstate', onPop)
@@ -239,8 +241,16 @@ export default function App() {
         ) : (
           <div className="layout">
             <section className="stage">
-              <Scene3D t={t} plan={plan} sim={sim} ball={ball} view={view} onView={setView} lineColor={lineColor} kept={kept} ret={ret}
-                hand={s.hand} units={units} />
+              <Suspense
+                fallback={
+                  <div className="scene">
+                    <div className="canvas-host scene-loading">{tr('views.loading')}</div>
+                  </div>
+                }
+              >
+                <Scene3D t={t} plan={plan} sim={sim} ball={ball} view={view} onView={setView} lineColor={lineColor} kept={kept} ret={ret}
+                  hand={s.hand} units={units} />
+              </Suspense>
               <Timeline t={t} total={total} phases={phases} events={events} onScrub={(v) => (setPlaying(false), setT(v))} />
               <div className="transport">
                 <button className="primary" onClick={serve}>

@@ -4,7 +4,7 @@
 // Each page gets its own <html lang>, title, description, social tags and structured data, and the
 // page's text written out as plain HTML inside #root (the app replaces it once it starts).
 //
-// Pages that point at each other (canonical, hreflang, sitemap, og:url) need the site's full address.
+// Pages that point at each other (canonical, hreflang, sitemap, og:url, og:image) need the site's full address.
 // Set it when building, e.g. SITE_URL=https://example.com npm run build. Without it those parts are
 // left out rather than pointing at a wrong domain.
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
@@ -43,12 +43,20 @@ function head(code, page) {
     `<meta property="og:title" content="${title}" />`,
     `<meta property="og:description" content="${description}" />`,
     `<meta property="og:locale" content="${htmlLang(code).replace('-', '_')}" />`,
-    `<meta name="twitter:card" content="summary" />`,
+    // With the site's address we can point at the preview card (public/og-image.png); it needs a full URL.
+    `<meta name="twitter:card" content="${SITE_URL ? 'summary_large_image' : 'summary'}" />`,
     `<meta name="twitter:title" content="${title}" />`,
     `<meta name="twitter:description" content="${description}" />`,
   ]
   if (SITE_URL) {
     lines.push(`<link rel="canonical" href="${url(code, page)}" />`, `<meta property="og:url" content="${url(code, page)}" />`)
+    lines.push(
+      `<meta property="og:image" content="${SITE_URL}/og-image.png" />`,
+      `<meta property="og:image:width" content="1200" />`,
+      `<meta property="og:image:height" content="630" />`,
+      `<meta property="og:image:alt" content="${title}" />`,
+      `<meta name="twitter:image" content="${SITE_URL}/og-image.png" />`,
+    )
     for (const l of LANGUAGES) lines.push(`<link rel="alternate" hreflang="${l.html}" href="${url(l.code, page)}" />`)
     lines.push(`<link rel="alternate" hreflang="x-default" href="${url(DEFAULT_LANGUAGE, page)}" />`)
   }
@@ -126,4 +134,4 @@ if (SITE_URL) {
 writeFileSync(path.join(dist, 'robots.txt'), robots.join('\n') + '\n')
 
 console.log(`build-pages: wrote ${written.length} pages (${written.join(', ')})`)
-if (!SITE_URL) console.log('build-pages: SITE_URL is not set, so canonical/hreflang links, og:url and sitemap.xml were left out.')
+if (!SITE_URL) console.log('build-pages: SITE_URL is not set, so canonical/hreflang links, og:url, og:image and sitemap.xml were left out.')

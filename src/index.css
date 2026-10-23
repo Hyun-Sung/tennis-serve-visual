@@ -1034,3 +1034,13 @@ header {
 .units-switch .seg button {
   white-space: nowrap;
 }
+
+/* shown while the 3D view's code is still loading */
+.scene-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  font-size: 0.95rem;
+  background: linear-gradient(#bfe3f5 0 45%, #3f7a5a 45% 62%, #3d6fb6 62%);
+}

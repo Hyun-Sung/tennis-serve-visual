@@ -1,17 +1,26 @@
 // Translations. All on-screen text lives in src/locales/<code>.json; English is the source and the
-// fallback for anything a translation is missing.
+// fallback for anything a translation is missing. Only English and the visitor's own language are
+// downloaded up front; any other language is fetched when someone switches to it.
 
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import { DEFAULT_LANGUAGE, htmlLang, isLanguage, parsePath, pathFor } from './languages.js'
-import de from './locales/de.json'
 import en from './locales/en.json'
-import es from './locales/es.json'
-import fr from './locales/fr.json'
-import ja from './locales/ja.json'
-import ko from './locales/ko.json'
-import pt from './locales/pt.json'
-import zh from './locales/zh.json'
+
+const loaders = import.meta.glob(['./locales/*.json', '!./locales/en.json'], { import: 'default' })
+
+/** Fetches a language's strings if we don't have them yet. */
+async function loadLanguage(code) {
+  if (i18n.hasResourceBundle(code, 'translation')) return
+  const load = loaders[`./locales/${code}.json`]
+  if (load) i18n.addResourceBundle(code, 'translation', await load())
+}
+
+/** Switches language once its strings are here, so the page never flashes untranslated. */
+export async function switchLanguage(code) {
+  await loadLanguage(code)
+  if (code !== i18n.language) await i18n.changeLanguage(code)
+}
 
 export { LANGUAGES } from './languages.js'
 
@@ -54,26 +63,20 @@ function firstLanguage() {
   return DEFAULT_LANGUAGE
 }
 
-i18n.use(initReactI18next).init({
-  resources: {
-    en: { translation: en },
-    es: { translation: es },
-    fr: { translation: fr },
-    de: { translation: de },
-    pt: { translation: pt },
-    ja: { translation: ja },
-    ko: { translation: ko },
-    zh: { translation: zh },
-  },
-  lng: firstLanguage(),
-  fallbackLng: DEFAULT_LANGUAGE,
-  interpolation: { escapeValue: false }, // React already escapes
-})
-
 const setHtmlLang = (code) => {
   document.documentElement.lang = htmlLang(code)
 }
-setHtmlLang(i18n.language)
+
+const startLanguage = firstLanguage()
+i18n.use(initReactI18next).init({
+  resources: { en: { translation: en } },
+  lng: DEFAULT_LANGUAGE,
+  fallbackLng: DEFAULT_LANGUAGE,
+  interpolation: { escapeValue: false }, // React already escapes
+})
 i18n.on('languageChanged', setHtmlLang)
+
+/** Resolves once the starting language is loaded; main.jsx waits for it before the first render. */
+export const i18nReady = switchLanguage(startLanguage).then(() => setHtmlLang(i18n.language))
 
 export default i18n

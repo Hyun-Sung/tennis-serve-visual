@@ -22,7 +22,8 @@
     "net": "net cam",
     "side": "side",
     "coach": "coach",
-    "orbit": "drag to look around"
+    "orbit": "drag to look around",
+    "loading": "loading the 3D court…"
   },
   "scene": {
     "clearsBy": "clears by {{d}}",

@@ -63,13 +63,17 @@ npm run dev
 
 `npm run build` writes a real HTML page for every page in every language (16 in all, via [scripts/build-pages.mjs](scripts/build-pages.mjs)). Each has its own `<html lang>`, title, description, social-sharing tags and structured data (`WebApplication` for the tool, `AboutPage` for the About page), plus the page's text as plain HTML. Search engines can read and index it without running the 3D app, and the app replaces it once it starts. A `robots.txt` is written too. Every page is a plain file, so any static host serves it with no rewrite rules.
 
-Links that need the site's full address (canonical, hreflang between the languages, `og:url` and `sitemap.xml`) are only written when you tell the build where the site lives:
+Links that need the site's full address (canonical, hreflang between the languages, `og:url`, the share image and `sitemap.xml`) are only written when you tell the build where the site lives:
 
 ```bash
 SITE_URL=https://your-domain.example npm run build
 ```
 
 Then, in Google Search Console: add the domain as a property, verify it, and submit `https://your-domain.example/sitemap.xml`.
+
+The share image that link previews show is [public/og-image.png](public/og-image.png), a 1200×630 card drawn by [scripts/make-og-image.mjs](scripts/make-og-image.mjs). Run `npm run og-image` to redraw it after changing the design.
+
+To keep the first view quick, the page loads only its own code, the model and the visitor's language up front (about 120 kB compressed). The 3D view (mostly three.js) loads right after behind a placeholder, and any other language is fetched only when someone switches to it.
 
 
 ## how it works
