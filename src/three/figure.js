@@ -8,17 +8,21 @@ const v = (p) => new THREE.Vector3(p.x, p.y, p.z)
 const unitCylinder = new THREE.CylinderGeometry(1, 1, 1, 14)
 const unitSphere = new THREE.SphereGeometry(1, 20, 14)
 
-// A cylinder from a to b, re-aimed every frame.
-function bone(material, radius) {
+const twistQ = new THREE.Quaternion()
+
+// A cylinder from a to b, re-aimed every frame. depth < 1 flattens it front to back,
+// and twist turns that flat side about its own axis.
+function bone(material, radius, depth = 1) {
   const m = mesh(unitCylinder, material)
   return {
     m,
-    set(a, b) {
+    set(a, b, twist = 0) {
       const dir = new THREE.Vector3().subVectors(b, a)
       const len = dir.length()
       m.position.copy(a).addScaledVector(dir, 0.5)
       m.quaternion.setFromUnitVectors(UP, dir.normalize())
-      m.scale.set(radius, len, radius)
+      if (twist) m.quaternion.multiply(twistQ.setFromAxisAngle(UP, twist))
+      m.scale.set(radius * depth, len, radius)
     },
   }
 }
@@ -58,8 +62,9 @@ export function createFigure({ shirt = '#f27b5c', shorts = '#2f3e66', skin = '#f
   const shortsM = toon(shorts)
   const shoeM = toon('#ffffff')
 
-  const torso = bone(shirtM, 0.15)
+  const torso = bone(shirtM, 0.17, 0.62)
   const chest = ball(shirtM, 0.17)
+  chest.scale.set(0.12, 0.15, 0.2)
   const pelvis = ball(shortsM, 0.15)
   const limbs = {
     hUpper: bone(shirtM, 0.055),
@@ -105,8 +110,9 @@ export function createFigure({ shirt = '#f27b5c', shorts = '#2f3e66', skin = '#f
   function update(j) {
     const hip = v(j.hip)
     const neck = v(j.neck)
-    torso.set(hip, neck)
+    torso.set(hip, neck, j.yaw ?? 0)
     chest.position.copy(neck).lerp(hip, 0.18)
+    chest.rotation.y = j.yaw ?? 0
     pelvis.position.copy(hip)
     head.position.copy(v(j.head))
     head.rotation.z = (-(j.lean ?? 0) * 0.5 * Math.PI) / 180
@@ -123,14 +129,15 @@ export function createFigure({ shirt = '#f27b5c', shorts = '#2f3e66', skin = '#f
     shoes[0].position.set(j.fFoot.x + 0.06 * facing, Math.max(j.fFoot.y, 0.045), j.fFoot.z)
     shoes[1].position.set(j.bFoot.x + 0.06 * facing, Math.max(j.bFoot.y, 0.045), j.bFoot.z)
 
-    // Racket: its long axis runs hand → head, its face spans that axis and world z.
+    // Racket: its long axis runs hand → head. At roll 0 the strings face along the swing
+    // (square to the target at contact); at roll 90° the edge leads.
     const hand = v(j.hHand)
     const tip = v(j.racketHead)
     const yAxis = new THREE.Vector3().subVectors(tip, hand).normalize()
     xAxis.copy(WORLD_Z).addScaledVector(yAxis, -yAxis.dot(WORLD_Z)).normalize()
     zAxis.crossVectors(xAxis, yAxis)
     basis.makeBasis(xAxis, yAxis, zAxis)
-    rk.quaternion.setFromRotationMatrix(basis)
+    rk.quaternion.setFromRotationMatrix(basis).multiply(twistQ.setFromAxisAngle(UP, j.roll ?? 0))
     rk.position.copy(tip).addScaledVector(yAxis, -0.44)
   }
 

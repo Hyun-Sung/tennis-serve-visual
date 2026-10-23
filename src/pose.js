@@ -14,11 +14,12 @@ export const BODY = {
 }
 
 // hx/hy: hip position. h*: hitting arm, t*: tossing arm, f*/b*: front/back leg.
+// At the racket drop the elbow points up and the forearm and racket hang down the back.
 const KEYS = [
   { t: 0.0, hx: 0, hy: 0.9, torso: 4, hU: 165, hF: 140, rk: 95, tU: 165, tF: 125, fT: 172, fS: 182, bT: 195, bS: 195 },
   { t: 0.45, hx: -0.06, hy: 0.88, torso: -4, hU: 200, hF: 210, rk: 235, tU: 150, tF: 140, fT: 168, fS: 185, bT: 192, bS: 198 },
   { t: 0.85, hx: -0.04, hy: 0.76, torso: -18, hU: 265, hF: 335, rk: 320, tU: 15, tF: 8, fT: 148, fS: 205, bT: 168, bS: 222 },
-  { t: 1.12, hx: 0.04, hy: 0.82, torso: -10, hU: 315, hF: 375, rk: 195, tU: 40, tF: 70, fT: 160, fS: 196, bT: 180, bS: 212 },
+  { t: 1.12, hx: 0.04, hy: 0.82, torso: -10, hU: 340, hF: 205, rk: 185, tU: 40, tF: 70, fT: 160, fS: 196, bT: 180, bS: 212 },
   { t: 1.3, hx: 0.18, hy: 1.0, torso: 12, hU: 372, hF: 374, rk: 380, tU: 150, tF: 120, fT: 176, fS: 180, bT: 202, bS: 205 },
   { t: 1.6, hx: 0.42, hy: 0.92, torso: 32, hU: 495, hF: 530, rk: 575, tU: 125, tF: 95, fT: 165, fS: 185, bT: 215, bS: 250 },
   { t: 2.1, hx: 0.6, hy: 0.9, torso: 10, hU: 525, hF: 510, rk: 470, tU: 160, tF: 130, fT: 172, fS: 182, bT: 192, bS: 196 },
@@ -56,6 +57,27 @@ export function poseAt(t) {
   for (const c of CHANNELS) out[c] = catmull(k0[c], k1[c], k2[c], k3[c], u)
   return out
 }
+
+/** Catmull-Rom through [t, value] pairs, held flat past either end. */
+function curve(keys, t) {
+  const last = keys.length - 1
+  if (t <= keys[0][0]) return keys[0][1]
+  if (t >= keys[last][0]) return keys[last][1]
+  let i = 0
+  while (keys[i + 1][0] < t) i++
+  const v = (j) => keys[Math.min(Math.max(j, 0), last)][1]
+  return catmull(v(i - 1), v(i), v(i + 1), v(i + 2), (t - keys[i][0]) / (keys[i + 1][0] - keys[i][0]))
+}
+
+// Shoulder turn about the spine, in degrees. Negative coils the toss shoulder toward the net,
+// so the server is side-on at the trophy and uncoils square to the net at contact.
+const YAW = [[0, -25], [0.45, -50], [0.85, -75], [1.12, -45], [CONTACT_T, 0], [1.6, 35], [2.1, 10]]
+export const torsoYaw = (t) => curve(YAW, t)
+
+// Racket roll about its own handle, in degrees. 90 leads with the edge (no "pancake" face to
+// the sky); pronation turns the strings square to the target at contact and on past it.
+const ROLL = [[0, 90], [1.14, 90], [1.22, 70], [CONTACT_T, 0], [1.42, -75], [1.6, -90], [2.1, -90]]
+export const racketRoll = (t) => curve(ROLL, t)
 
 const step = (p, len, deg) => {
   const r = (deg * Math.PI) / 180

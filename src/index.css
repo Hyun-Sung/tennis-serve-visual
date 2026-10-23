@@ -432,3 +432,88 @@ svg.top .mark.in text {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+.lede {
+  margin: -0.2rem 0 0.7rem;
+  color: var(--soft);
+  font-size: 0.88rem;
+}
+.slider .ends {
+  display: flex;
+  justify-content: space-between;
+  margin-top: -0.15rem;
+  font-size: 0.72rem;
+  color: var(--soft);
+}
+.readonly {
+  display: block;
+  padding: 0.5rem 0.7rem;
+  border-radius: 12px;
+  background: #f4f1e8;
+}
+.readonly .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.92rem;
+}
+.readonly .badge {
+  font-size: 0.85rem;
+  padding: 0.05rem 0.6rem;
+}
+.readonly .hint {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--soft);
+  font-size: 0.78rem;
+}
+
+.controls .sub {
+  display: block;
+  margin: 0.3rem 0 0.35rem;
+  font-size: 0.92rem;
+}
+.ball-pick {
+  margin-bottom: 0.4rem;
+}
+.ball-picker {
+  display: block;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
+  cursor: crosshair;
+  touch-action: none;
+}
+.ball-picker:focus-visible {
+  outline: 3px solid var(--coral);
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+.ball-picker .clock {
+  font-size: 0.18px;
+  font-weight: 700;
+  fill: var(--soft);
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+.ball-pick .note {
+  text-align: center;
+}
+.controls > .hint {
+  margin: 0 0 0.6rem;
+  color: var(--soft);
+  font-size: 0.78rem;
+}
+.readonly + button.ghost {
+  margin-top: 0.5rem;
+}
+.badge.kick {
+  background: #ffe08a;
+}
+.badge.topspin-slice,
+.badge.reverse {
+  background: #e6dcff;
+}
+.slider .ends + .hint {
+  margin-top: 0.1rem;
+}

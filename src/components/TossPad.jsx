@@ -6,7 +6,7 @@ import { DEFAULT_TOSS, TOSS_LIMITS } from '../serve.js'
 const clamp = (v, [lo, hi]) => Math.min(Math.max(v, lo), hi)
 const snap = (v) => Math.round(v * 20) / 20
 
-export default function TossPad({ toss, onChange }) {
+export default function TossPad({ toss, stance = 'platform', onChange }) {
   const ref = useRef(null)
   const dragging = useRef(false)
 
@@ -59,7 +59,8 @@ export default function TossPad({ toss, onChange }) {
 
       <g className="pad-player">
         <ellipse cx="-0.32" cy="0.12" rx="0.05" ry="0.11" fill="#fff" />
-        <ellipse cx="-0.08" cy="0.33" rx="0.05" ry="0.11" fill="#fff" />
+        {/* In a pinpoint stance the back foot ends up beside the front one. */}
+        <ellipse cx={stance === 'pinpoint' ? -0.16 : -0.08} cy={stance === 'pinpoint' ? 0.22 : 0.33} rx="0.05" ry="0.11" fill="#fff" />
         <ellipse cx="-0.2" cy="0" rx="0.27" ry="0.1" fill="#f27b5c" />
         <circle cx="-0.2" cy="-0.01" r="0.1" fill="#4a3426" />
         <circle cx="0" cy="0" r="0.045" fill="#f1c7a3" />

@@ -6,7 +6,7 @@ import { LineGeometry } from 'three/addons/lines/LineGeometry.js'
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js'
 import { BALL_R, COURT } from '../physics.js'
 import { RELEASE_T } from '../pose.js'
-import { BASE_X, poseTime, SERVER_Z, serverJoints } from '../serve.js'
+import { BASE_X, NEUTRAL_BODY, poseTime, SERVER_Z, serverJoints } from '../serve.js'
 import { buildWorld } from '../three/court.js'
 import { createFigure, mirrorJoints } from '../three/figure.js'
 import { mesh, toon } from '../three/toon.js'
@@ -16,10 +16,10 @@ const VIEWS = [
   { id: 'receiver', label: 'receiver' },
   { id: 'net', label: 'net cam' },
   { id: 'side', label: 'side' },
+  { id: 'coach', label: 'coach' },
 ]
 
 const RECEIVER = { x: 24.4, z: -2.9 }
-const NO_DELTA = { x: 0, y: 0, z: 0 }
 
 function viewPose(id, sim) {
   if (id === 'receiver') return { pos: [RECEIVER.x + 0.2, 1.62, RECEIVER.z], target: [0.6, 1.5, 0.4], fov: 26 }
@@ -27,6 +27,8 @@ function viewPose(id, sim) {
     const z = sim.net ? sim.net.z : -0.8
     return { pos: [COURT.net - 1.1, 1.15, -9.8], target: [COURT.net, 0.95, z], fov: 26 }
   }
+  // Side-on close-up of the server, the way coaches film a serve.
+  if (id === 'coach') return { pos: [0.3, 1.75, SERVER_Z + 4.4], target: [0.3, 1.7, SERVER_Z], fov: 48 }
   if (id === 'side') return { pos: [11.9, 3.4, 10.2], target: [11.9, 1.1, -0.5], fov: 64 }
   return { pos: [-5.6, 2.8, SERVER_Z + 1.8], target: [12, 0.9, -1.2], fov: 50 }
 }
@@ -76,7 +78,8 @@ function setup(host, live) {
   sun.shadow.mapSize.set(2048, 2048)
   Object.assign(sun.shadow.camera, { left: -22, right: 22, top: 16, bottom: -16, near: 1, far: 60 })
   sun.shadow.bias = -0.0004
-  scene.add(sun, sun.target, buildWorld())
+  const { world, occluders } = buildWorld()
+  scene.add(sun, sun.target, world)
 
   const camera = new THREE.PerspectiveCamera(50, 1, 0.05, 400)
   const controls = new OrbitControls(camera, renderer.domElement)
@@ -210,6 +213,54 @@ function setup(host, live) {
     geo.instanceCount = Math.max(0, Math.min(count, nSeg))
   }
 
+  // Fade out any tree or fence panel between the camera and what you're watching.
+  const ray = new THREE.Raycaster()
+  const toFocus = new THREE.Vector3()
+  // Sight lines run to the players and ball, plus a spread of points over the court,
+  // so anything covering part of the court fades too.
+  const COURT_POINTS = []
+  for (const x of [-0.5, 5.5, COURT.net, 18.3, COURT.length]) {
+    for (const z of [-COURT.halfDoubles, 0, COURT.halfDoubles]) COURT_POINTS.push(new THREE.Vector3(x, 0.8, z))
+  }
+  const NEAR_CAMERA = 5
+  const camDir = new THREE.Vector3()
+  for (const o of occluders) {
+    o.updateWorldMatrix(true, true)
+    o.userData.sphere = new THREE.Box3().setFromObject(o).getBoundingSphere(new THREE.Sphere())
+  }
+  const fadeOccluders = (points) => {
+    const blocked = new Set()
+    // Anything right in front of the lens takes up half the view, even off the sight lines.
+    camera.getWorldDirection(camDir)
+    for (const o of occluders) {
+      const { center, radius } = o.userData.sphere
+      toFocus.subVectors(center, camera.position)
+      if (toFocus.length() - radius < NEAR_CAMERA && toFocus.dot(camDir) > -radius) blocked.add(o)
+    }
+    for (const f of points) {
+      toFocus.subVectors(f, camera.position)
+      const dist = toFocus.length()
+      ray.set(camera.position, toFocus.normalize())
+      ray.far = dist
+      for (const hit of ray.intersectObjects(occluders, true)) {
+        let o = hit.object
+        while (o && !o.userData.occluder) o = o.parent
+        if (o) blocked.add(o)
+      }
+    }
+    for (const o of occluders) {
+      const d = o.userData
+      const goal = blocked.has(o) ? 0.1 : 1
+      if (Math.abs(d.fade - goal) < 0.005) continue
+      d.fade += (goal - d.fade) * 0.18
+      if (Math.abs(d.fade - goal) < 0.01) d.fade = goal
+      for (const m of d.materials) {
+        m.opacity = d.fade
+        m.depthWrite = d.fade === 1
+      }
+    }
+  }
+
   const spinQ = new THREE.Quaternion()
   let raf
   const frame = (now) => {
@@ -235,9 +286,10 @@ function setup(host, live) {
       if (k >= 1) glide = null
     }
 
-    server.update(serverJoints(poseTime(plan, t), plan.delta))
+    const sj = serverJoints(poseTime(plan, t), plan)
+    server.update(sj)
     const bob = 0.025 * (1 + Math.sin(now / 160))
-    const rj = mirrorJoints(serverJoints(0, NO_DELTA), RECEIVER.x, RECEIVER.z, BASE_X, SERVER_Z)
+    const rj = mirrorJoints(serverJoints(0, NEUTRAL_BODY), RECEIVER.x, RECEIVER.z, BASE_X, SERVER_Z)
     for (const p of Object.values(rj)) if (typeof p === 'object') p.y += bob
     receiver.update(rj)
     receiver.group.visible = view !== 'receiver'
@@ -257,6 +309,14 @@ function setup(host, live) {
     clearance.visible = !!sim.net && flown >= sim.net.t
 
     controls.update()
+    fadeOccluders([
+      controls.target,
+      new THREE.Vector3(sj.head.x, sj.head.y, sj.head.z),
+      new THREE.Vector3(sj.hip.x, 0.3, sj.hip.z),
+      ball.position,
+      new THREE.Vector3(RECEIVER.x, 1.2, RECEIVER.z),
+      ...COURT_POINTS,
+    ])
     renderer.render(scene, camera)
   }
   raf = requestAnimationFrame(frame)

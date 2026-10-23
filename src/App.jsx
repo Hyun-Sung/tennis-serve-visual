@@ -6,9 +6,18 @@ import Timeline from './components/Timeline.jsx'
 import TopView from './components/TopView.jsx'
 import { simulateServe } from './physics.js'
 import { PHASES } from './pose.js'
-import { ballPosition, DEFAULT_TOSS, planServe, realTime, SERVER_Z } from './serve.js'
+import { ballPosition, DEFAULT_FOOTWORK, DEFAULT_HIT, DEFAULT_SWING, DEFAULT_TOSS, planServe, realTime, SERVER_Z } from './serve.js'
 
-const START = { toss: DEFAULT_TOSS, speedKmh: 180, rpm: 1800, aimZ: -2.1, autoSwing: true, swingDeg: -4 }
+const START = {
+  toss: DEFAULT_TOSS,
+  ...DEFAULT_FOOTWORK,
+  speedKmh: 180,
+  swing: DEFAULT_SWING,
+  hit: DEFAULT_HIT,
+  aimZ: -2.1,
+  autoSwing: true,
+  swingDeg: -4,
+}
 
 export default function App() {
   const [s, setS] = useState(START)
@@ -83,7 +92,7 @@ export default function App() {
         <h1>
           Serve Visualization <span>Tool</span>
         </h1>
-        <p>move the toss, add spin and power, and watch whether the ball clears the net.</p>
+        <p>set the toss, footwork and swing, and watch whether the ball clears the net.</p>
       </header>
 
       <div className="layout">

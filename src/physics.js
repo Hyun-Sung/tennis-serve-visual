@@ -25,13 +25,14 @@ export const netHeightAt = (z) =>
 
 /**
  * @param {{speedKmh:number, angleDeg:number, aimZ:number, axis:number[], rpm:number}} p
- *   axis is the unit spin axis: -z is topspin, +y curves the ball left (slice), -y right (kick)
+ *   axis is the unit spin axis: -z is topspin, +y curves the ball left (slice), -y right.
+ *   yawOffsetDeg (optional) turns the launch direction; positive is to the right.
  * @param {{x:number, y:number, z:number}} c contact point
  */
 export function simulateServe(p, c) {
   const v0 = p.speedKmh / 3.6
   const a = (p.angleDeg * Math.PI) / 180
-  const yaw = Math.atan2(p.aimZ - c.z, COURT.serviceLine - c.x)
+  const yaw = Math.atan2(p.aimZ - c.z, COURT.serviceLine - c.x) + ((p.yawOffsetDeg ?? 0) * Math.PI) / 180
   let pos = [c.x, c.y, c.z]
   let vel = [v0 * Math.cos(a) * Math.cos(yaw), v0 * Math.sin(a), v0 * Math.cos(a) * Math.sin(yaw)]
   let omega = p.axis.map((u) => (u * p.rpm * 2 * Math.PI) / 60)

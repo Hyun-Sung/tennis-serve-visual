@@ -81,42 +81,52 @@ function netMesh() {
   return g
 }
 
-function fence() {
+// Trees and fence panels can fade out when they block the camera. Each one is a group with its
+// own materials, tagged userData.occluder, so the scene can fade them one at a time.
+function occluder(parts) {
   const g = new THREE.Group()
-  const wall = toon('#3f7a5a', { side: THREE.DoubleSide })
-  const postM = toon('#2f5e45')
-  const { x0, x1, z, h } = FENCE
-  const add = (w, x, zz, rotY) => {
-    const m = mesh(new THREE.PlaneGeometry(w, h), wall, { cast: false, receive: true })
-    m.position.set(x, h / 2, zz)
-    m.rotation.y = rotY
-    g.add(m)
-  }
-  add(2 * z, x0, 0, Math.PI / 2)
-  add(2 * z, x1, 0, Math.PI / 2)
-  add(x1 - x0, (x0 + x1) / 2, -z, 0)
-  add(x1 - x0, (x0 + x1) / 2, z, 0)
-  const postGeo = new THREE.CylinderGeometry(0.05, 0.05, h + 0.15, 8)
-  const post = (x, zz) => {
-    const p = mesh(postGeo, postM, { cast: false })
-    p.position.set(x, (h + 0.15) / 2, zz)
+  const materials = []
+  for (const p of parts) {
+    // Transparent from the start: flipping the flag later would need a shader recompile.
+    p.material = p.material.clone()
+    p.material.transparent = true
+    materials.push(p.material)
     g.add(p)
   }
-  for (let x = x0; x <= x1 + 0.01; x += (x1 - x0) / 10) {
-    post(x, -z)
-    post(x, z)
-  }
-  for (let zz = -z; zz <= z + 0.01; zz += (2 * z) / 6) {
-    post(x0, zz)
-    post(x1, zz)
-  }
+  g.userData = { occluder: true, materials, fade: 1 }
   return g
 }
 
+function fence() {
+  const panels = []
+  const { x0, x1, z, h } = FENCE
+  const postGeo = new THREE.CylinderGeometry(0.05, 0.05, h + 0.15, 8)
+  // One panel per gap between posts, from (ax, az) to (bx, bz), with the post at its start.
+  const wall = (ax, az, bx, bz, n) => {
+    for (let i = 0; i < n; i++) {
+      const sx = ax + ((bx - ax) * i) / n
+      const sz = az + ((bz - az) * i) / n
+      const ex = ax + ((bx - ax) * (i + 1)) / n
+      const ez = az + ((bz - az) * (i + 1)) / n
+      const w = Math.hypot(ex - sx, ez - sz)
+      const panel = mesh(new THREE.PlaneGeometry(w, h), toon('#3f7a5a', { side: THREE.DoubleSide }), { cast: false, receive: true })
+      panel.position.set((sx + ex) / 2, h / 2, (sz + ez) / 2)
+      panel.rotation.y = Math.atan2(-(ez - sz), ex - sx)
+      const post = mesh(postGeo, toon('#2f5e45'), { cast: false })
+      post.position.set(sx, (h + 0.15) / 2, sz)
+      panels.push(occluder([panel, post]))
+    }
+  }
+  wall(x0, -z, x1, -z, 10)
+  wall(x1, -z, x1, z, 6)
+  wall(x1, z, x0, z, 10)
+  wall(x0, z, x0, -z, 6)
+  return panels
+}
+
 function trees() {
-  const g = new THREE.Group()
-  const leaf = [toon('#7fb37f'), toon('#6aa36f'), toon('#8cc08a')]
-  const trunk = toon('#8a6a4a')
+  const out = []
+  const leaf = ['#7fb37f', '#6aa36f', '#8cc08a']
   let seed = 7
   const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647)
   const ring = []
@@ -124,13 +134,13 @@ function trees() {
   for (let z = -FENCE.z; z <= FENCE.z; z += 3.4) ring.push([FENCE.x0 - 3, z], [FENCE.x1 + 3, z])
   for (const [x, z] of ring) {
     const r = 1.4 + rand() * 1.3
-    const t = mesh(new THREE.CylinderGeometry(0.15, 0.2, 2.4, 8), trunk, { cast: false })
+    const t = mesh(new THREE.CylinderGeometry(0.15, 0.2, 2.4, 8), toon('#8a6a4a'), { cast: false })
     t.position.set(x + rand() - 0.5, 1.2, z + rand() - 0.5)
-    const crown = mesh(new THREE.IcosahedronGeometry(r, 1), leaf[Math.floor(rand() * 3)], { cast: false })
+    const crown = mesh(new THREE.IcosahedronGeometry(r, 1), toon(leaf[Math.floor(rand() * 3)]), { cast: false })
     crown.position.set(t.position.x, 2.4 + r * 0.8, t.position.z)
-    g.add(t, crown)
+    out.push(occluder([t, crown]))
   }
-  return g
+  return out
 }
 
 function clouds() {
@@ -148,12 +158,13 @@ function clouds() {
   return g
 }
 
-/** Ground, court, net, windscreen, trees and sky dressing. */
+/** Ground, court, net, windscreen, trees and a few clouds. The fence panels and trees come back as occluders too. */
 export function buildWorld() {
   const g = new THREE.Group()
   g.add(flat(400, 400, '#79b36f', 11.9, 0, -0.01))
   g.add(flat(FENCE.x1 - FENCE.x0, 2 * FENCE.z, '#5f9e6e', (FENCE.x0 + FENCE.x1) / 2, 0, 0))
   g.add(flat(COURT.length, 2 * COURT.halfDoubles, '#3d6fb6', COURT.length / 2, 0, 0.002))
-  g.add(lines(), netMesh(), fence(), trees(), clouds())
-  return g
+  const occluders = [...fence(), ...trees()]
+  g.add(lines(), netMesh(), clouds(), ...occluders)
+  return { world: g, occluders }
 }

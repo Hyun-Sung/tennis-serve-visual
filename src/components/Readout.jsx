@@ -20,12 +20,12 @@ export default function Readout({ sim, plan, flown, autoSwing }) {
     decided && sim.result !== 'in'
       ? sim.result === 'net'
         ? plan.belowReach
-          ? 'toss higher so you can hit it at full reach.'
-          : 'toss a little further back, add topspin, or swing up a touch.'
+          ? 'toss higher so you can hit it at full reach, or jump higher.'
+          : 'toss a little further back, brush up for more topspin, or hit lower on the ball.'
         : sim.result === 'long'
           ? autoSwing
-            ? 'toss a little further in front, or add spin to bring it down.'
-            : 'swing down a touch, or add topspin to bring it down.'
+            ? 'toss a little further in front, or brush up for more topspin to bring it down.'
+            : 'angle the racket down a touch, or brush up for more topspin.'
           : 'aim a bit more inside the box.'
       : null
 
