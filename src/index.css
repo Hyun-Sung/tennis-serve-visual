@@ -845,6 +845,15 @@ header {
   font-size: 0.88rem;
   color: var(--soft);
 }
+.units-switch .globe {
+  width: 1.15em;
+  height: 1.15em;
+  margin-right: -0.2rem;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.6;
+  flex-shrink: 0;
+}
 .units-switch .seg button {
   padding: 0.2rem 0.8rem;
   font-size: 0.85rem;

@@ -271,6 +271,12 @@ export default function App() {
           </div>
           <div className="settings">
             <label className="units-switch">
+              {/* A globe reads as "language" whatever language the label happens to be in. */}
+              <svg className="globe" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9.5" />
+                <ellipse cx="12" cy="12" rx="4" ry="9.5" />
+                <path d="M2.5 12h19M4 7h16M4 17h16" />
+              </svg>
               <span>{tr('app.language')}</span>
               <select value={i18n.language} onChange={(e) => chooseLanguage(e.target.value)}>
                 {LANGUAGES.map((l) => (
