@@ -2,7 +2,7 @@
 
 A 3D tennis serve you can tinker with in the browser. Move the toss, add spin and power, and watch whether the ball clears the net, from the server's side, the receiver's side, or right at the net.
 
-It's a free tool I made for me and my friends. If it helps you too, [PayPal donations](https://paypal.me/hyuns89) are always welcome. The About page (`/about/` on the site) explains the math behind it in plain words.
+It's a free tool I made for me and my friends. Keeping it online costs money every year for the domain name and the cloud hosting, so if you can and like the tool, [chipping in on PayPal](https://paypal.me/hyuns89) helps cover those costs. The About page (`/about/` on the site) explains the math behind it in plain words.
 
 ## simple mode
 

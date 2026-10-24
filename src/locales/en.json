@@ -429,7 +429,7 @@
   },
   "about": {
     "title": "About the Serve Visualization Tool",
-    "intro": "I made this free tool to help me and my friends work on our serves: to see how the toss, footwork and swing change where the ball goes, and how hard it is to return. If it helps you too, <a>PayPal</a> donations are always welcome, but never expected.",
+    "intro": "I made this free tool to help me and my friends work on our serves: to see how the toss, footwork and swing change where the ball goes, and how hard it is to return. It stays free to use, but keeping it online costs money every year for the domain name and the cloud hosting. If you can and like the tool, chipping in on <a>PayPal</a> helps cover those costs and keeps it running.",
     "back": "← back to the serve tool",
     "flight": {
       "title": "1. How the ball flies",

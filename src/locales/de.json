@@ -429,7 +429,7 @@
   },
   "about": {
     "title": "Über das Serve Visualization Tool",
-    "intro": "Ich habe dieses kostenlose Tool gebaut, um mir und meinen Freunden beim Aufschlag zu helfen: zu sehen, wie Ballwurf, Beinarbeit und Schlag verändern, wohin der Ball fliegt, und wie schwer er zurückzuspielen ist. Wenn es dir auch hilft, sind Spenden über <a>PayPal</a> immer willkommen, aber nie erwartet.",
+    "intro": "Ich habe dieses kostenlose Tool gebaut, um mir und meinen Freunden beim Aufschlag zu helfen: zu sehen, wie Ballwurf, Beinarbeit und Schlag verändern, wohin der Ball fliegt, und wie schwer er zurückzuspielen ist. Es bleibt kostenlos, aber der Betrieb kostet jedes Jahr Geld für den Domainnamen und das Cloud-Hosting. Wenn du kannst und dir das Tool gefällt, hilft ein Beitrag über <a>PayPal</a>, diese Kosten zu decken und das Tool am Laufen zu halten.",
     "back": "← zurück zum Aufschlag-Tool",
     "flight": {
       "title": "1. Wie der Ball fliegt",
