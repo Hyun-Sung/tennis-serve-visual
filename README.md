@@ -72,6 +72,22 @@ npm run dev
 
 `npm run build` makes a static build in `dist/`, and `npm run lint` runs oxlint.
 
+## hosting
+
+The site is meant to live at [visualservetool.com](https://visualservetool.com), on Azure Static Web Apps (free plan), with the domain's DNS at Cloudflare.
+
+Every push to `main` runs [.github/workflows/deploy.yml](.github/workflows/deploy.yml). It checks the translations, builds with `SITE_URL=https://visualservetool.com`, and uploads `dist/` to Azure. The upload needs the app's deployment token in the repo secret `AZURE_STATIC_WEB_APPS_API_TOKEN`; without it the workflow still builds and skips the upload. It can also be run by hand from the Actions tab.
+
+[public/staticwebapp.config.json](public/staticwebapp.config.json) sends `/es/about` to `/es/about/` (one address per page, for search engines) and lets browsers keep the hashed files in `assets/` for a year.
+
+The Cloudflare DNS records, all set to "DNS only" (grey cloud) so Azure can issue and renew the HTTPS certificate:
+
+- `TXT` `@`: the code Azure gives when you add `visualservetool.com` under Custom domains.
+- `CNAME` `@`: the app's `….azurestaticapps.net` address. Cloudflare flattens a CNAME on the root domain, which Azure accepts.
+- `CNAME` `www`: the same address.
+
+`visualservetool.com` is set as the default domain in Azure, so `www.visualservetool.com` and the `azurestaticapps.net` address redirect to it.
+
 ## search engines
 
 `npm run build` writes a real HTML page for every page in every language (24 in all, via [scripts/build-pages.mjs](scripts/build-pages.mjs)). Each has its own `<html lang>`, title, description, social-sharing tags and structured data (`WebApplication` for the tool and the simple mode, `AboutPage` for the About page), plus the page's text as plain HTML. Search engines can read and index it without running the 3D app, and the app replaces it once it starts. A `robots.txt` is written too. Every page is a plain file, so any static host serves it with no rewrite rules.
@@ -79,10 +95,10 @@ npm run dev
 Links that need the site's full address (canonical, hreflang between the languages, `og:url`, the share image and `sitemap.xml`) are only written when you tell the build where the site lives:
 
 ```bash
-SITE_URL=https://your-domain.example npm run build
+SITE_URL=https://visualservetool.com npm run build
 ```
 
-Then, in Google Search Console: add the domain as a property, verify it, and submit `https://your-domain.example/sitemap.xml`.
+The deploy workflow does this for you. Then, in Google Search Console: add the domain as a property, verify it, and submit `https://visualservetool.com/sitemap.xml`.
 
 The share image that link previews show is [public/og-image.png](public/og-image.png), a 1200×630 card drawn by [scripts/make-og-image.mjs](scripts/make-og-image.mjs). Run `npm run og-image` to redraw it after changing the design.
 

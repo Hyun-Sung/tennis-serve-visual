@@ -1,0 +1,53 @@
+# Builds the site and uploads it to Azure Static Web Apps on every push to main.
+# Needs the app's deployment token in the repo secret AZURE_STATIC_WEB_APPS_API_TOKEN;
+# without it the build still runs and the upload is skipped.
+name: Deploy to Azure
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run check:locales
+
+      - name: Build
+        run: npm run build
+        env:
+          SITE_URL: https://visualservetool.com
+
+      # Kept out of the steps above so install and build scripts never see the token.
+      - name: Check for the Azure deployment token
+        id: token
+        env:
+          TOKEN: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+        run: |
+          if [ -n "$TOKEN" ]; then echo "present=true" >> "$GITHUB_OUTPUT"; else echo "present=false" >> "$GITHUB_OUTPUT"; echo "::warning::AZURE_STATIC_WEB_APPS_API_TOKEN is not set, so the site was built but not uploaded."; fi
+
+      - name: Upload to Azure Static Web Apps
+        if: steps.token.outputs.present == 'true'
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          action: upload
+          app_location: dist
+          skip_app_build: true
+          skip_api_build: true
