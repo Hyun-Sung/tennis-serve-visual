@@ -218,6 +218,9 @@ header p {
   cursor: grab;
   touch-action: none;
 }
+.toss-pad:active {
+  cursor: grabbing;
+}
 .toss-pad:focus-visible {
   outline: 3px solid var(--coral);
   outline-offset: 2px;
@@ -308,7 +311,10 @@ svg.top {
   aspect-ratio: 29 / 14;
   border-radius: 14px;
   touch-action: none;
-  cursor: crosshair;
+  cursor: grab;
+}
+svg.top:active {
+  cursor: grabbing;
 }
 svg.top .box-label {
   font-size: 0.55px;
@@ -481,8 +487,11 @@ svg.top .mark.in text {
   width: 150px;
   height: 150px;
   margin: 0 auto;
-  cursor: crosshair;
+  cursor: grab;
   touch-action: none;
+}
+.ball-picker:active {
+  cursor: grabbing;
 }
 .ball-picker:focus-visible {
   outline: 3px solid var(--coral);
@@ -1261,7 +1270,10 @@ svg.spot-court {
   aspect-ratio: 12.4 / 14.8;
   border-radius: 14px;
   touch-action: none;
-  cursor: crosshair;
+  cursor: grab;
+}
+svg.spot-court:active {
+  cursor: grabbing;
 }
 svg.spot-court:focus-visible {
   outline: 3px solid var(--coral);

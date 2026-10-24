@@ -102,6 +102,8 @@ function setup(host, live) {
   controls.maxPolarAngle = Math.PI * 0.495
   controls.minDistance = 1
   controls.maxDistance = 60
+  // Open hand over the view, closed hand while dragging it.
+  controls.cursorStyle = 'grab'
 
   const server = createFigure()
   const receiver = createFigure({ shirt: '#5aa9e6', shorts: '#ffffff', hair: '#2b2118', facing: -1 })
