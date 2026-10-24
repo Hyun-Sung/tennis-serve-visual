@@ -419,8 +419,7 @@
   },
   "about": {
     "title": "À propos de Serve Visualization Tool",
-    "intro": "J'ai créé cet outil gratuit pour aider mes amis et moi à travailler notre service : voir comment le lancer, le jeu de jambes et la frappe changent la trajectoire de la balle, et à quel point elle est difficile à retourner. S'il vous aide aussi, les dons via PayPal sont toujours les bienvenus, mais jamais attendus.",
-    "donate": "Faire un don avec PayPal",
+    "intro": "J'ai créé cet outil gratuit pour aider mes amis et moi à travailler notre service : voir comment le lancer, le jeu de jambes et la frappe changent la trajectoire de la balle, et à quel point elle est difficile à retourner. S'il vous aide aussi, les dons via <a>PayPal</a> sont toujours les bienvenus, mais jamais attendus.",
     "back": "← retour à l'outil de service",
     "flight": {
       "title": "1. Comment la balle vole",

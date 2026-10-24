@@ -419,8 +419,7 @@
   },
   "about": {
     "title": "Acerca de Serve Visualization Tool",
-    "intro": "Hice esta herramienta gratuita para ayudarnos a mí y a mis amigos a mejorar el saque: ver cómo el lanzamiento, los pies y el golpe cambian adónde va la bola y lo difícil que es devolverla. Si a ti también te ayuda, las donaciones por PayPal siempre son bienvenidas, pero nunca obligatorias.",
-    "donate": "Donar con PayPal",
+    "intro": "Hice esta herramienta gratuita para ayudarnos a mí y a mis amigos a mejorar el saque: ver cómo el lanzamiento, los pies y el golpe cambian adónde va la bola y lo difícil que es devolverla. Si a ti también te ayuda, las donaciones por <a>PayPal</a> siempre son bienvenidas, pero nunca obligatorias.",
     "back": "← volver a la herramienta de saque",
     "flight": {
       "title": "1. Cómo vuela la bola",

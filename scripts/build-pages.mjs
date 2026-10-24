@@ -104,7 +104,7 @@ function body(code, page) {
         : ''
       return `<section><h2>${escape(get(code, `about.${id}.title`))}</h2><p>${rich(get(code, `about.${id}.body`))}</p>${extra}</section>`
     }).join('')
-    return `<article class="prerender">${nav}<h1>${escape(get(code, 'about.title'))}</h1><p>${escape(get(code, 'about.intro'))}</p><p><a href="https://paypal.me/hyuns89">${escape(get(code, 'about.donate'))}</a></p>${sections}${langs}</article>`
+    return `<article class="prerender">${nav}<h1>${escape(get(code, 'about.title'))}</h1><p>${escape(get(code, 'about.intro')).replace('&lt;a&gt;', '<a href="https://paypal.me/hyuns89">').replace('&lt;/a&gt;', '</a>')}</p>${sections}${langs}</article>`
   }
   if (page === 'simple') {
     return `<main class="prerender">${nav}<h1>${escape(get(code, 'simple.title'))}</h1><p>${escape(get(code, 'simple.lede'))}</p><p>${escape(get(code, 'seo.simpleDescription'))}</p><noscript><p>${escape(get(code, 'seo.noscript'))}</p></noscript>${langs}</main>`

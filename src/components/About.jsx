@@ -12,11 +12,11 @@ export default function About({ onTool, toolHref }) {
   return (
     <article className="about panel">
       <h1>{t('about.title')}</h1>
-      <p className="about-intro">{t('about.intro')}</p>
-      <p>
-        <a className="donate" href={DONATE_URL} target="_blank" rel="noopener noreferrer">
-          {t('about.donate')}
-        </a>
+      <p className="about-intro">
+        <Trans
+          i18nKey="about.intro"
+          components={{ a: <a href={DONATE_URL} target="_blank" rel="noopener noreferrer" /> }}
+        />
       </p>
 
       {SECTIONS.map((id) => (

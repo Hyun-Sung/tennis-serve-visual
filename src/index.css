@@ -1011,19 +1011,6 @@ header {
   color: var(--soft);
   font-size: 0.86rem;
 }
-.donate {
-  display: inline-block;
-  padding: 0.45rem 1.1rem;
-  border-radius: 999px;
-  background: #0070ba;
-  color: #fff;
-  font-weight: 700;
-  text-decoration: none;
-}
-.donate:hover {
-  background: #005ea6;
-}
-
 /* what search engines and no-JS visitors see before the app starts */
 .prerender {
   max-width: 760px;
