@@ -26,7 +26,7 @@
     "loading": "chargement du court en 3D…"
   },
   "scene": {
-    "clearsBy": "passe de {{d}}",
+    "clearsBy": "passe avec {{d}} de marge",
     "intoNet": "dans le filet"
   },
   "outcome": {
@@ -41,7 +41,7 @@
     "stance": "position",
     "toss": "lancer",
     "trophy": "trophée",
-    "racket drop": "armé de raquette",
+    "racket drop": "boucle",
     "contact": "impact",
     "follow-through": "accompagnement",
     "net": "filet",
@@ -322,7 +322,7 @@
     "spotFacts": "{{deep}} à l'intérieur de la ligne de service, {{across}} à l'intérieur de la {{line}}",
     "centreLine": "ligne médiane",
     "sideline": "ligne de côté",
-    "courtHint": "l'ovale ombré montre où rebondissent 9 services choisis sur 10 : plus il déborde d'une ligne, moins il y a de marge. touchez l'autre carré pour servir de l'autre côté.",
+    "courtHint": "l'ovale ombré montre où rebondissent 9 services de ce type sur 10 : plus il déborde d'une ligne, moins il y a de marge. touchez l'autre carré pour servir de l'autre côté.",
     "otherBox": "côté {{side}}",
     "returner": "relanceur",
     "serve": "Service",
@@ -361,7 +361,7 @@
     },
     "score": "Score",
     "scoreSub": "points gagnés sur 100",
-    "clears": "passe le filet de {{d}}",
+    "clears": "passe le filet avec {{d}} de marge",
     "angleUp": "angle de raquette {{deg}}° vers le haut",
     "angleDown": "angle de raquette {{deg}}° vers le bas",
     "angleLevel": "angle de raquette horizontal",
@@ -379,7 +379,7 @@
   "nav": {
     "tool": "Outil de service",
     "simple": "Mode simple",
-    "about": "À propos et les calculs"
+    "about": "À propos et calculs"
   },
   "footer": {
     "free": "un outil gratuit pour moi et mes amis.",

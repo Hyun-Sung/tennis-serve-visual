@@ -41,7 +41,7 @@
     "stance": "Stand",
     "toss": "Ballwurf",
     "trophy": "Trophäe",
-    "racket drop": "Schlägerfall",
+    "racket drop": "Schlaufe",
     "contact": "Treffpunkt",
     "follow-through": "Ausschwung",
     "net": "Netz",
@@ -137,7 +137,7 @@
     "beginner": "ein Anfänger: reagiert langsam und mag kein Tempo, also gewinnen die meisten Aufschläge den Punkt.",
     "club": "ein Clubspieler: kommt mit einem soliden Aufschlag klar, aber Tempo, Winkel oder ein starker Kick machen Probleme.",
     "strong": "ein starker Clubspieler: reagiert schnell, also braucht der Aufschlag Tempo und Platzierung.",
-    "advanced": "ein fortgeschrittener Spieler: schnelle Hände und Beine. du brauchst einen harten, gut platzierten Aufschlag oder einen Kick oder Slice, der ihn aus dem Platz zieht.",
+    "advanced": "ein Turnierspieler: schnelle Hände und Beine. du brauchst einen harten, gut platzierten Aufschlag oder einen Kick oder Slice, der ihn aus dem Platz zieht.",
     "court": "Platzseite",
     "deuce": "Einstand",
     "ad": "Vorteil",
@@ -214,7 +214,7 @@
     "contact": "Treffpunkt am Ball",
     "contactHintRighty": "unten am Ball gibt Topspin und hebt ihn an. die rechte Seite (3 Uhr) gibt Slice und drückt ihn nach links. oben am Ball macht ihn flacher und drückt ihn nach unten.",
     "contactHintLefty": "unten am Ball gibt Topspin und hebt ihn an. die linke Seite (9 Uhr) gibt Slice und drückt ihn nach rechts. oben am Ball macht ihn flacher und drückt ihn nach unten.",
-    "result": "Ergebnis-Spin",
+    "result": "Resultierender Spin",
     "topspin": "Topspin",
     "dipKick": "fällt, dann springt er hoch",
     "sidespin": "Seitenspin",
@@ -331,7 +331,7 @@
       "beginner": "Anfänger",
       "club": "Clubspieler",
       "strong": "starker Clubspieler",
-      "advanced": "fortgeschrittener Spieler"
+      "advanced": "Turnierspieler"
     },
     "spinFirst": "Dein erster Aufschlag",
     "spinSecond": "Dein zweiter Aufschlag",
@@ -374,7 +374,7 @@
     "warnSecond": "dieser Aufschlag kommt hier bei keinem Tempo und Spin 9 von 10 Mal rein, für einen zweiten Aufschlag ist das riskant. versuch einen Punkt weiter weg von den Linien, oder einen anderen Aufschlag.",
     "watch": "In 3D ansehen",
     "working": "Aufschläge werden berechnet…",
-    "method": "das Tool probiert den gewählten Aufschlag mit weniger und mehr Spin bei mehreren Geschwindigkeiten bis zur schnellsten, die damit möglich ist, sucht für jeden den Schlägerwinkel und die Richtung, die den Ball auf deinen Punkt bringen, und fliegt jeden mit denselben kleinen Fehlern wie das volle Tool. die Punktzahl sind die Punkte, die du von 100 solchen Aufschlägen gewinnen würdest: Asse und Returnfehler gewinnen, und nach einem Return gewinnst du {{tough}} % der Ballwechsel nach einem schwierigen und {{easy}} % nach einem leichten. empfohlen wird der mit der besten Punktzahl unter denen, die oft genug reinkommen (beim ersten Aufschlag mindestens jedes zweite Mal, beim zweiten 9 von 10 Mal); schafft das keiner, der, der am häufigsten reinkommt. beim ersten Aufschlag führt ein Fehler zum zweiten Aufschlag (dein {{second}} auf denselben Punkt, der etwa {{secondWins}} % gewinnt), deshalb darf er mehr riskieren."
+    "method": "das Tool probiert den gewählten Aufschlag mit weniger und mehr Spin bei mehreren Geschwindigkeiten bis zur schnellsten, die damit möglich ist, sucht für jeden den Schlägerwinkel und die Richtung, die den Ball auf deinen Punkt bringen, und simuliert jeden mit denselben kleinen Fehlern wie das volle Tool. die Punktzahl sind die Punkte, die du von 100 solchen Aufschlägen gewinnen würdest: Asse und Returnfehler gewinnen, und nach einem Return gewinnst du {{tough}} % der Ballwechsel nach einem schwierigen und {{easy}} % nach einem leichten. empfohlen wird der mit der besten Punktzahl unter denen, die oft genug reinkommen (beim ersten Aufschlag mindestens jedes zweite Mal, beim zweiten 9 von 10 Mal); schafft das keiner, der, der am häufigsten reinkommt. beim ersten Aufschlag führt ein Fehler zum zweiten Aufschlag (dein {{second}} auf denselben Punkt, der etwa {{secondWins}} % gewinnt), deshalb darf er mehr riskieren."
   },
   "nav": {
     "tool": "Aufschlag-Tool",
@@ -431,19 +431,19 @@
     },
     "tolerance": {
       "title": "6. Fehlertoleranz",
-      "body": "Niemand schlägt zweimal genau gleich auf. Das Tool fliegt deinen Aufschlag mit jeder Art kleinen Fehlers einzeln erneut (Schlägerwinkel, Richtung, Tempo, Spin und Bürstrichtung), misst, wie weit jeder den Ball verschiebt, und zählt diese Effekte über <b>1.024</b> gleichmäßig verteilte Versuche zusammen. Der Anteil, der trotzdem im Aufschlagfeld landet, ist deine Fehlertoleranz.",
+      "body": "Niemand schlägt zweimal genau gleich auf. Das Tool simuliert deinen Aufschlag mit jeder Art kleinen Fehlers einzeln noch einmal (Schlägerwinkel, Richtung, Tempo, Spin und Bürstrichtung), misst, wie weit jeder den Ball verschiebt, und zählt diese Effekte über <b>1.024</b> gleichmäßig verteilte Versuche zusammen. Der Anteil, der trotzdem im Aufschlagfeld landet, ist deine Fehlertoleranz.",
       "formula": "Fehlertoleranz = Versuche im Feld ÷ alle Versuche",
       "note": "Slice ist riskanter, weil eine leicht andere Bürstbewegung verändert, wie viel Topspin übrig bleibt, um den Ball herunterzuholen."
     },
     "returner": {
       "title": "7. Der Rückschläger",
-      "body": "Der Rückschläger wartet knapp hinter der Grundlinie, etwa einen Meter innerhalb der Einzel-Seitenlinie. Das Tool berechnet, wann der Ball bei ihm ankommt und wie weit er laufen muss. Er wartet seine Reaktionszeit ab, läuft dann los und erreicht mit Ausfallschritt, Arm und Schläger noch mehr. Einen Ball, der auf ihn zukommt, nimmt er an seiner üblichen Stelle; einen, der von ihm wegdreht, schneidet er ab: Er läuft schräg nach vorn und trifft ihn früher auf seiner Bahn, an der nächsten Stelle, die er noch rechtzeitig erreicht. Gibt es keine solche Stelle, ist es ein <b>Ass</b>. Sonst machen weniger Zeit, ein längerer Weg oder ein Ausfallschritt, mehr Tempo, ein hoher Kick oder ein flacher Slice den Return schwerer, vom leichten Return bis zum Returnfehler. Ein hoher Kick ist vor allem auf der Rückhand unangenehm (der Rückschläger ist Rechtshänder), und nur, wenn er zu schnell kommt, um zurückzuweichen oder vorzurücken. All das hängt von seinem Niveau ab: wie schnell er reagiert und läuft, wie weit sein Ausfallschritt reicht, wie weit er sich nach vorn traut, um einen breiten Ball abzuschneiden, welches Aufschlagtempo er gewohnt ist und wie oft er selbst einen leichten Ball verschlägt.",
+      "body": "Der Rückschläger wartet knapp hinter der Grundlinie, etwa einen Meter innerhalb der Einzel-Seitenlinie. Das Tool berechnet, wann der Ball bei ihm ankommt und wie weit er laufen muss. Er wartet seine Reaktionszeit ab, läuft dann los und erreicht mit Ausfallschritt, Arm und Schläger noch mehr. Einen Ball, der auf ihn zukommt, nimmt er an seiner üblichen Stelle; einen, der von ihm wegdreht, schneidet er ab: Er läuft schräg nach vorn und trifft ihn früher auf seiner Bahn, an der nächsten Stelle, die er noch rechtzeitig erreicht. Gibt es keine solche Stelle, ist es ein <b>Ass</b>. Sonst machen weniger Zeit, ein längerer Weg oder ein Ausfallschritt, mehr Tempo, ein hoher Kick oder ein flacher Slice den Return schwerer, vom leichten Return bis zum Returnfehler. Ein hoher Kick ist vor allem auf der Rückhand unangenehm (der Rückschläger ist Rechtshänder), und nur, wenn er zu schnell kommt, um zurückzuweichen oder vorzurücken. All das hängt von seinem Niveau ab: wie schnell er reagiert und läuft, wie weit sein Ausfallschritt reicht, wie weit er sich nach vorn traut, um einen Ball nach außen abzuschneiden, welches Aufschlagtempo er gewohnt ist und wie oft er selbst einen leichten Ball verschlägt.",
       "formula": "Reichweite = Ausfallschritt, Arm und Schläger + Laufweg nach der Reaktion",
       "note": "ein 2.0-Rückschläger reagiert in etwa 0,42 s, läuft etwa 3 m/s, reicht etwa 1,35 m weit, ist Aufschläge bis etwa 85 km/h gewohnt und verschlägt etwa einen von 7 leichten Returns; ein 5.0-Rückschläger reagiert in etwa 0,25 s, läuft etwa 5 m/s, reicht etwa 1,8 m weit, ist Aufschläge bis etwa 175 km/h gewohnt und verschlägt etwa einen von 50."
     },
     "direction": {
       "title": "8. Platzseite und Schlagarm",
-      "body": "Die Vorteilsseite ist nicht einfach die gespiegelte Einstandsseite. Dein Arm schwingt nach oben und quer vor den Körper, also geht ein Aufschlag in diese Richtung (der Slice eines Rechtshänders nach außen auf der Einstandsseite) mit dem Schwung. Ein Aufschlag zur Seite deines Schlagarms (bei einem Rechtshänder auf der Vorteilsseite) wird <b>inside-out</b> geschlagen: du hältst die Schulterdrehung zurück und lenkst mit dem Arm, also streuen Richtung, Schlägerwinkel und Tempo stärker. Ein Kick hängt weniger an der Drehung und zahlt weniger dafür. Bei Linkshändern ist alles umgekehrt, deshalb ist ihr Slice nach außen auf der Vorteilsseite so gefährlich.",
+      "body": "Die Vorteilsseite ist nicht einfach die gespiegelte Einstandsseite. Dein Arm schwingt nach oben und quer vor den Körper, also geht ein Aufschlag in diese Richtung (der Slice eines Rechtshänders nach außen auf der Einstandsseite) mit dem Schwung. Ein Aufschlag zur Seite deines Schlagarms (bei einem Rechtshänder auf der Vorteilsseite) wird <b>inside-out</b> geschlagen: du hältst die Schulterdrehung zurück und lenkst mit dem Arm, also streuen Richtung, Schlägerwinkel und Tempo stärker. Ein Kick hängt weniger an der Drehung und leidet weniger darunter. Bei Linkshändern ist alles umgekehrt, deshalb ist ihr Slice nach außen auf der Vorteilsseite so gefährlich.",
       "formula": "zusätzliche Streuung = 4 % pro Grad inside-out + 0,8 % pro Grad quer, weniger bei einem Schwung, der nach oben bürstet",
       "note": "die Richtung streut um den vollen Betrag, der Schlägerwinkel um die Hälfte und das Tempo um etwa ein Drittel."
     },

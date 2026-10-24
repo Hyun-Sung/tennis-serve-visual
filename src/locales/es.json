@@ -26,7 +26,7 @@
     "loading": "cargando la pista en 3D…"
   },
   "scene": {
-    "clearsBy": "pasa por {{d}}",
+    "clearsBy": "pasa con {{d}} de margen",
     "intoNet": "a la red"
   },
   "outcome": {
@@ -361,7 +361,7 @@
     },
     "score": "Puntuación",
     "scoreSub": "puntos ganados de 100",
-    "clears": "pasa la red por {{d}}",
+    "clears": "pasa la red con {{d}} de margen",
     "angleUp": "ángulo de raqueta {{deg}}° hacia arriba",
     "angleDown": "ángulo de raqueta {{deg}}° hacia abajo",
     "angleLevel": "ángulo de raqueta horizontal",
@@ -379,7 +379,7 @@
   "nav": {
     "tool": "Herramienta de saque",
     "simple": "Modo sencillo",
-    "about": "Acerca de y las cuentas"
+    "about": "Cómo funciona"
   },
   "footer": {
     "free": "una herramienta gratuita para mí y mis amigos.",
@@ -391,7 +391,7 @@
     "description": "Un simulador gratuito de saque de tenis en 3D. Ajusta el lanzamiento, la posición, el salto, el golpe, el efecto y la velocidad, mira si la bola pasa la red y descubre tu tolerancia al error y tus opciones de ace contra restadores de nivel NTRP 2.0 a 5.0.",
     "simpleTitle": "Modo sencillo: toca un punto, elige un saque y descubre la mejor velocidad y efecto | Serve Visualization Tool",
     "simpleDescription": "Toca dónde quieres que bote tu saque de tenis, elige plano, cortado, liftado-cortado o kick, y descubre la velocidad y el efecto que mejor lo llevan ahí, con su margen de error, lo difícil que es restarlo para un restador de nivel NTRP 2.0 a 5.0 y una puntuación.",
-    "aboutTitle": "Cómo funciona Serve Visualization Tool: las cuentas del saque de tenis, explicadas de forma sencilla",
+    "aboutTitle": "Cómo funciona Serve Visualization Tool: las matemáticas del saque de tenis, explicadas de forma sencilla",
     "aboutDescription": "Cómo modela un saque de tenis la herramienta gratuita Serve Visualization Tool: el vuelo de la bola, el efecto, el bote, el lanzamiento, la tolerancia al error y el restador, explicados con palabras sencillas y sus fórmulas.",
     "noscript": "Esta herramienta interactiva en 3D necesita JavaScript activado."
   },
@@ -437,13 +437,13 @@
     },
     "returner": {
       "title": "7. El restador",
-      "body": "El restador espera justo detrás de la línea de fondo, a un metro más o menos por dentro de la línea lateral de individuales. La herramienta calcula cuándo le llega la bola y cuánto tiene que moverse. Espera su tiempo de reacción, luego corre, y llega aún más lejos con una zancada, el brazo y la raqueta. Una bola que viene hacia él la toma en su sitio de siempre; una que se le abre la corta, avanzando en diagonal para encontrarla antes en su trayectoria, en el punto más cercano al que todavía llega a tiempo. Si no hay ninguno, es un <b>ace</b>. Si llega, menos tiempo, una carrera más larga o una zancada, más velocidad, un kick alto o un cortado bajo hacen el resto más difícil, desde un resto fácil hasta un error de resto. Un kick alto molesta sobre todo de revés (el restador es diestro), y solo si llega demasiado rápido para retroceder o adelantarse. Su nivel lo decide todo: lo rápido que reacciona y corre, hasta dónde llega su zancada, cuánto se atreve a adelantarse para cortar una bola abierta, a qué velocidad de saque está acostumbrado y cada cuánto falla incluso un resto fácil.",
+      "body": "El restador espera justo detrás de la línea de fondo, a un metro más o menos por dentro de la línea lateral de individuales. La herramienta calcula cuándo le llega la bola y cuánto tiene que moverse. Espera su tiempo de reacción, luego corre, y llega aún más lejos con una zancada, el brazo y la raqueta. Una bola que viene hacia él la toma en su sitio de siempre; una que se le abre la intercepta, avanzando en diagonal para encontrarla antes en su trayectoria, en el punto más cercano al que todavía llega a tiempo. Si no hay ninguno, es un <b>ace</b>. Si llega, menos tiempo, una carrera más larga o una zancada, más velocidad, un kick alto o un cortado bajo hacen el resto más difícil, desde un resto fácil hasta un error de resto. Un kick alto molesta sobre todo de revés (el restador es diestro), y solo si llega demasiado rápido para retroceder o adelantarse. Su nivel lo decide todo: lo rápido que reacciona y corre, hasta dónde llega su zancada, cuánto se atreve a adelantarse para interceptar una bola abierta, a qué velocidad de saque está acostumbrado y cada cuánto falla incluso un resto fácil.",
       "formula": "alcance posible = zancada, brazo y raqueta + distancia recorrida tras reaccionar",
       "note": "un restador de 2.0 reacciona en unos 0,42 s, corre a unos 3 m/s, alcanza unos 1,35 m, está acostumbrado a saques de hasta unos 85 km/h y falla más o menos 1 de cada 7 restos fáciles; uno de 5.0 reacciona en unos 0,25 s, corre a unos 5 m/s, alcanza unos 1,8 m, está acostumbrado a saques de hasta unos 175 km/h y falla más o menos 1 de cada 50."
     },
     "direction": {
       "title": "8. El lado de la pista y tu brazo",
-      "body": "El lado de ventaja no es solo el de iguales dado la vuelta. Tu brazo sube y cruza por delante del cuerpo, así que un saque en esa dirección (el cortado abierto de un diestro en el lado de iguales) va con el swing. Un saque hacia el lado de tu brazo de golpeo (el de un diestro en el lado de ventaja) se golpea <b>de dentro hacia fuera</b>: frenas el giro de hombros y diriges con el brazo, así que la dirección, el ángulo de la raqueta y la velocidad varían más. Un kick depende menos del giro y paga menos. Para un zurdo todo es al revés, por eso su cortado abierto en el lado de ventaja es tan peligroso.",
+      "body": "El lado de ventaja no es solo el de iguales dado la vuelta. Tu brazo sube y cruza por delante del cuerpo, así que un saque en esa dirección (el cortado abierto de un diestro en el lado de iguales) va con el swing. Un saque hacia el lado de tu brazo de golpeo (el de un diestro en el lado de ventaja) se golpea <b>de dentro hacia fuera</b>: frenas el giro de hombros y diriges con el brazo, así que la dirección, el ángulo de la raqueta y la velocidad varían más. Un kick depende menos del giro y se resiente menos. Para un zurdo todo es al revés, por eso su cortado abierto en el lado de ventaja es tan peligroso.",
       "formula": "error extra = 4% por grado de dentro hacia fuera + 0,8% por grado cruzado, menos si el swing cepilla hacia arriba",
       "note": "la dirección varía en la cantidad completa, el ángulo de la raqueta en la mitad y la velocidad en cerca de un tercio."
     },
