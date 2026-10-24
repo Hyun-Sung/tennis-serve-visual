@@ -30,7 +30,8 @@ function viewPose(id, sim, hand, side) {
   const serverZ = serverZFor(side)
   if (id === 'receiver') {
     const r = returnerReady(side)
-    return { pos: [r.x + 0.2, 1.62, r.z], target: [0.6, 1.5, 0.4 * cs], fov: 26 }
+    // A couple of metres behind the returner's eyes, so the bounce and the ball coming at them stay in frame.
+    return { pos: [r.x + 2.2, 1.85, r.z], target: [0.6, 1.4, 0.4 * cs], fov: 28 }
   }
   if (id === 'net') {
     const z = sim.net ? sim.net.z : -0.8 * cs
