@@ -459,9 +459,9 @@
     },
     "returner": {
       "title": "7. Le relanceur",
-      "body": "Le relanceur attend juste derrière la ligne de fond, à environ un mètre à l'intérieur de la ligne de côté du simple. L'outil calcule quand la balle l'atteint et la distance qu'il doit parcourir. Il attend son temps de réaction, puis court, et va encore plus loin grâce à une fente, son bras et sa raquette. Une balle qui vient vers lui, il la prend à sa place habituelle ; une balle qui s'éloigne de lui, il lui coupe la trajectoire en avançant en diagonale pour la prendre plus tôt, au point le plus proche qu'il peut encore atteindre à temps. S'il n'y en a aucun, c'est un <b>ace</b>. Sinon, moins de temps, une course plus longue, plus de vitesse, un kick haut ou un slice bas rendent le retour plus dur, du retour facile à la faute en retour.",
+      "body": "Le relanceur attend juste derrière la ligne de fond, à environ un mètre à l'intérieur de la ligne de côté du simple. L'outil calcule quand la balle l'atteint et la distance qu'il doit parcourir. Il attend son temps de réaction, puis court, et va encore plus loin grâce à une fente, son bras et sa raquette. Une balle qui vient vers lui, il la prend à sa place habituelle ; une balle qui s'éloigne de lui, il lui coupe la trajectoire en avançant en diagonale pour la prendre plus tôt, au point le plus proche qu'il peut encore atteindre à temps. S'il n'y en a aucun, c'est un <b>ace</b>. Sinon, moins de temps, une course plus longue ou une fente, plus de vitesse, un kick haut ou un slice bas rendent le retour plus dur, du retour facile à la faute en retour.",
       "formula": "portée = fente, bras et raquette + distance courue après la réaction",
-      "note": "un relanceur 2.0 réagit en environ 0,42 s, court à environ 3 m/s et atteint environ 1,65 m ; un relanceur 5.0 réagit en environ 0,25 s, court à environ 5 m/s et atteint environ 1,9 m."
+      "note": "un relanceur 2.0 réagit en environ 0,42 s, court à environ 3 m/s et atteint environ 1,45 m ; un relanceur 5.0 réagit en environ 0,25 s, court à environ 5 m/s et atteint environ 1,7 m."
     },
     "direction": {
       "title": "8. Le côté du court et votre bras",

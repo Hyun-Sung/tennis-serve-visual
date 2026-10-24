@@ -6,7 +6,7 @@ import { boxZ, COURT, sideSign, simulateServe } from './physics.js'
 
 // The returner waits just behind the baseline, about a metre inside the singles sideline of the box
 // being served to, which splits the difference between a serve down the T and one swinging out wide.
-export const RETURNER_READY = { x: 24.2, z: -3.05 }
+export const RETURNER_READY = { x: 24.2, z: -2.9 }
 export const returnerReady = (side) => ({ x: RETURNER_READY.x, z: RETURNER_READY.z * sideSign(side) })
 // Where they usually meet the ball: a little in front of their body.
 export const RETURN_X = 23.7
@@ -21,11 +21,13 @@ export const DEFAULT_LEVEL = 3.5
 
 // Typical abilities at NTRP 2.0 and 5.0; levels in between blend the two.
 // reaction: seconds before they move. accel, vmax: how fast they get across (m/s², m/s).
-// reach: arm, racket and a lunge (m). pace: ball speed they handle comfortably at contact (km/h).
+// reach: arm and racket, what they hit comfortably (m). lunge: how much further they can stretch with a
+// lunge (m); a ball they need it for is still reached, but it's a stretch.
+// pace: ball speed they handle comfortably at contact (km/h).
 // high: the highest bounce they're comfortable with (m). prep: time they like for the backswing (s).
 // speed: the fastest serve they're used to (km/h).
-const LOW = { reaction: 0.42, accel: 5, vmax: 3, reach: 1.65, pace: 70, high: 1.25, prep: 0.75, speed: 110 }
-const HIGH = { reaction: 0.25, accel: 8, vmax: 5, reach: 1.9, pace: 125, high: 1.7, prep: 0.55, speed: 175 }
+const LOW = { reaction: 0.42, accel: 5, vmax: 3, reach: 1.2, lunge: 0.25, pace: 70, high: 1.25, prep: 0.75, speed: 110 }
+const HIGH = { reaction: 0.25, accel: 8, vmax: 5, reach: 1.45, lunge: 0.25, pace: 125, high: 1.7, prep: 0.55, speed: 175 }
 
 export function levelParams(level) {
   const f = (level - LEVEL_LIMITS[0]) / (LEVEL_LIMITS[1] - LEVEL_LIMITS[0])
@@ -50,10 +52,10 @@ const EASY_BELOW = 0.35
 const sigmoid = (x) => 1 / (1 + Math.exp(-x))
 
 // How far the ball at q is from where the returner usually meets it (RETURN_X, level with where they wait),
-// how far they'd have to run to get it within reach, and how far they can run by then.
+// how far beyond a comfortable reach it is, and how much of that they can cover by then: running, then lunging.
 function reachFor(q, ready, L) {
   const D = Math.hypot(RETURN_X - q.x, q.z - ready.z)
-  return { c: q, D, need: Math.max(0, D - L.reach), move: movable(q.t, L) }
+  return { c: q, D, need: Math.max(0, D - L.reach), move: movable(q.t, L) + L.lunge }
 }
 
 /**
@@ -94,7 +96,8 @@ export function evaluateReturn(sim, level, serveKmh, courtSide) {
   if (!reached) return { ...base, kind: 'ace', d: Infinity, p: { winner: 0, tough: 0, easy: 0 } }
 
   // Each part is 0 when comfortable and grows as it gets harder.
-  const stretch = move > 0 ? need / move : 0
+  // stretch is how much of the run and lunge they need: 1 is a full-length dive for it.
+  const stretch = need / move
   const pace = c.speedKmh / L.pace
   // A high bounce is only trouble when it's also quick: with time to spare they back up or step in
   // and take it at a comfortable height.
