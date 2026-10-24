@@ -1221,10 +1221,26 @@ header {
 }
 .simple-info {
   grid-area: info;
+}
+.simple-results {
   transition: opacity 0.15s;
 }
-.simple-info.stale {
+.simple-results.stale {
   opacity: 0.6;
+}
+/* which kind of serve: picked first, then the card shows how best to hit it */
+.spin-pick {
+  margin-bottom: 0.8rem;
+}
+.simple-info .spin-pick h2 {
+  margin-top: 0;
+}
+.spin-pick .seg {
+  flex-wrap: wrap;
+}
+.spin-pick .seg button {
+  padding: 0.35rem 0.6rem;
+  white-space: nowrap;
 }
 .simple-game {
   grid-area: game;

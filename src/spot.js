@@ -1,14 +1,19 @@
-// The simple mode: pick a spot in the service box and see how each kind of serve would get the ball
-// there. For every spin it finds the racket angle and aim that land the ball on the spot at a few
-// speeds, flies each through the same error model and returner as the full tool, and scores them.
+// The simple mode: pick a spot in the service box and a kind of serve, and see the best way to hit
+// that serve there. It tries the serve with more and less spin at a few speeds, finds the racket angle
+// and aim that land each one on the spot, flies each through the same error model and returner as the
+// full tool, and scores them.
 
 import { assessServe, evaluateReturn, misHit, RETURN_FLIGHT } from './outcome.js'
-import { boxZ, COURT, sideSign, simulateServe } from './physics.js'
-import { SECOND_IN_FLOOR, serveFor, SLOWEST_SERVE, speedCap, STYLES, WIN_AFTER } from './recommend.js'
+import { boxZ, COURT, simulateServe } from './physics.js'
+import { SECOND_IN_FLOOR, serveFor, SLOWEST_SERVE, speedCap, WIN_AFTER } from './recommend.js'
 import { planServe } from './serve.js'
 
-// Speeds tried for each spin, as shares of the fastest it can be hit. A spot short in the box needs
-// a slower ball to come down in time, so when none of these land in often, slower ones are tried too.
+// How much spin to try for each kind of serve, as shares of its usual brush (STYLES). More spin makes
+// the ball dip into the box and kick up more, but takes pace off. A flat serve has next to none to vary.
+// (A kick needs about 2,600 rpm to still be a kick, which is where its lightest brush sits.)
+export const BRUSH = { flat: [1], slice: [0.7, 1, 1.3], 'topspin-slice': [0.7, 1, 1.3], kick: [0.85, 1, 1.25] }
+// Speeds tried for each, as shares of the fastest it can be hit. A spot short in the box needs a
+// slower ball to come down in time, so when none of these land in often, slower ones are tried too.
 const PACE = [1, 0.9, 0.8, 0.7]
 const SLOW_PACE = [0.6, 0.5]
 const TRY_SLOWER_BELOW = 0.6
@@ -17,6 +22,8 @@ const TRY_SLOWER_BELOW = 0.6
 const INSET = 0.05
 const MIN_DEPTH = 1.5
 export const DEFAULT_SPOT = { x: COURT.serviceLine - 1, z: -0.6 }
+// The kind of serve to start with for the first and second serve: the usual club choice.
+export const DEFAULT_SPINS = { 1: 'flat', 2: 'kick' }
 
 /** The box a spot is in: the one on the server's left (negative z) is served to from the deuce side. */
 export const sideOfSpot = (spot) => (spot.z > 0 ? 'ad' : 'deuce')
@@ -75,17 +82,18 @@ function solveFor(flight, contact, spot) {
 const winsOf = (share) => Object.keys(WIN_AFTER).reduce((sum, k) => sum + share[k] * WIN_AFTER[k], 0)
 
 /**
- * Every spin at every speed that lands on the spot, with its odds against a returner of this level.
- * who: { height, hand, side, stance, jump }, maxKmh: their fastest flat serve, spot: { x, z } on the
- * court in metres (z is negative in the deuce box). Spins that can't reach the spot get an empty list.
+ * Every way to hit this kind of serve onto the spot (each amount of spin at each speed), with its odds
+ * against a returner of this level. who: { height, hand, side, stance, jump }, maxKmh: their fastest
+ * flat serve, spot: { x, z } on the court in metres (z is negative in the deuce box). An empty list
+ * means this serve can't land there.
  */
-export function serveOptions(who, maxKmh, level, spot) {
-  const out = {}
-  for (const style of Object.keys(STYLES)) {
-    const probe = planServe(serveFor(who, style, maxKmh, spot.z))
+export function serveOptions(who, maxKmh, level, spot, style) {
+  const tries = []
+  for (const brush of BRUSH[style]) {
+    const probe = planServe(serveFor(who, style, maxKmh, spot.z, brush))
     const cap = speedCap(maxKmh, probe.spin, probe.direction.strain)
     let start = { angleDeg: probe.autoSwing, aimZ: spot.z }
-    const tries = []
+    const found = []
     const tryPace = (pace) => {
       const speedKmh = Math.round(cap * pace)
       if (speedKmh < SLOWEST_SERVE) return
@@ -94,14 +102,17 @@ export function serveOptions(who, maxKmh, level, spot) {
       if (!hit) return
       // The next speed starts from this answer, which is close.
       start = hit
-      const serve = { ...serveFor(who, style, speedKmh, hit.aimZ), autoSwing: false, swingDeg: hit.angleDeg }
+      const serve = { ...serveFor(who, style, speedKmh, hit.aimZ, brush), autoSwing: false, swingDeg: hit.angleDeg }
       const plan = planServe(serve)
       const risk = assessServe(plan, level, { window: false })
-      tries.push({
+      found.push({
+        id: `${brush}/${speedKmh}`,
         style,
+        brush,
         pace,
         speedKmh,
         rpm: plan.spin.rpm,
+        angleDeg: hit.angleDeg,
         serve,
         flight: plan.flight,
         contact: plan.contact,
@@ -115,10 +126,10 @@ export function serveOptions(who, maxKmh, level, spot) {
       })
     }
     PACE.forEach(tryPace)
-    if (!tries.some((c) => c.inRate >= TRY_SLOWER_BELOW)) SLOW_PACE.forEach(tryPace)
-    out[style] = tries
+    if (!found.some((c) => c.inRate >= TRY_SLOWER_BELOW)) SLOW_PACE.forEach(tryPace)
+    tries.push(...found)
   }
-  return out
+  return tries
 }
 
 /**
@@ -133,35 +144,38 @@ export const scoreOf = (c, serveNo, secondWins = 0) => (serveNo === 1 ? c.wins +
 // ball there. Coaches want a second serve in nine times in ten.
 export const IN_FLOOR = { 1: 0.5, 2: SECOND_IN_FLOOR }
 
-/** The best of these: the highest score among those that go in often enough, else the safest. */
-function best(list, serveNo, secondWins) {
-  if (!list.length) return null
-  const pool = list.filter((c) => c.inRate >= IN_FLOOR[serveNo])
-  if (!pool.length) return list.reduce((b, c) => (c.inRate > b.inRate ? c : b))
-  return pool.reduce((b, c) => (scoreOf(c, serveNo, secondWins) > scoreOf(b, serveNo, secondWins) ? c : b))
-}
-
-// A safe second serve: deep in the middle of the box, with room for error on every side.
-const SAFE_SPOT = { x: COURT.serviceLine - 1.5, z: -COURT.halfSingles / 2 }
-const fallbacks = new Map()
 /**
- * The second serve a missed first serve falls back on: the best one into the middle of the box.
- * It doesn't depend on the spot, so it's worked out once for each server and returner.
+ * These from best to worst: first the ones that go in often enough, highest score first, then the
+ * rest, the ones that go in most first (when nothing is safe enough, landing in comes first).
  */
-export function fallbackSecond(who, maxKmh, level) {
-  const key = JSON.stringify([who, maxKmh, level])
-  if (!fallbacks.has(key)) {
-    const spot = { x: SAFE_SPOT.x, z: SAFE_SPOT.z * sideSign(who.side) }
-    const c = best(Object.values(serveOptions(who, maxKmh, level, spot)).flat(), 2)
-    if (fallbacks.size > 32) fallbacks.clear()
-    fallbacks.set(key, c ? { style: c.style, speedKmh: c.speedKmh, inRate: c.inRate, wins: c.wins } : null)
-  }
-  return fallbacks.get(key)
+function ordered(list, serveNo, secondWins) {
+  const floor = IN_FLOOR[serveNo]
+  const score = (c) => scoreOf(c, serveNo, secondWins)
+  const safe = list.filter((c) => c.inRate >= floor).sort((a, b) => score(b) - score(a))
+  const rest = list.filter((c) => c.inRate < floor).sort((a, b) => b.inRate - a.inRate)
+  return [...safe, ...rest]
 }
 
-/** Everything the simple mode shows for a spot: each spin's options, and the fallback second serve. */
-export function spotReport(who, maxKmh, level, spot) {
-  return { options: serveOptions(who, maxKmh, level, spot), second: fallbackSecond(who, maxKmh, level) }
+// Working out one serve for a spot takes a tenth of a second or so, and switching back and forth
+// between serves (or first and second serve) asks for the same ones again, so the last few are kept.
+const options = new Map()
+function optionsFor(who, maxKmh, level, spot, style) {
+  const key = JSON.stringify([who, maxKmh, level, spot, style])
+  if (!options.has(key)) {
+    if (options.size > 64) options.clear()
+    options.set(key, serveOptions(who, maxKmh, level, spot, style))
+  }
+  return options.get(key)
+}
+
+/**
+ * Everything the simple mode shows for a spot: every way to hit the serves chosen for the first and
+ * second serve (spins: { 1: style, 2: style }), and which serves those are.
+ */
+export function spotReport(who, maxKmh, level, spot, spins) {
+  const out = { spins, options: {} }
+  for (const style of new Set([spins[1], spins[2]])) out.options[style] = optionsFor(who, maxKmh, level, spot, style)
+  return out
 }
 
 /**
@@ -175,26 +189,25 @@ export function returnDifficulty(c) {
 export const difficultyWord = (d) => (d >= 0.65 ? 'veryHard' : d >= 0.45 ? 'hard' : d >= 0.25 ? 'medium' : 'easy')
 
 /**
- * The best speed for each spin on this serve (first or second), and which spin is recommended.
- * report is what spotReport returned. A spin that can't reach the spot comes back as just { style }.
+ * Every way to hit the chosen serve on this serve (first or second), best first: rows[0] is the
+ * recommended speed and spin. report is what spotReport returned. A first serve that misses goes to
+ * the second serve's best option to the same spot, so second is that option (null if it can't get there).
  */
-export function rankOptions(report, serveNo) {
-  const secondWins = report.second?.wins ?? 0
-  const rows = Object.keys(STYLES).map((style) => {
-    const c = best(report.options[style] ?? [], serveNo, secondWins)
-    return c ? { ...c, score: scoreOf(c, serveNo, secondWins), difficulty: returnDifficulty(c) } : { style }
-  })
-  const ok = rows.filter((r) => r.score != null)
-  const pick = best(ok, serveNo, secondWins)
-  // What makes the pick stand out from the other spins, for the one-line reason.
+export function rankSettings(report, serveNo) {
+  const withScore = (list, n, secondWins) =>
+    ordered(list, n, secondWins).map((c) => ({ ...c, score: scoreOf(c, n, secondWins), difficulty: returnDifficulty(c) }))
+  const second = withScore(report.options[report.spins[2]] ?? [], 2)[0] ?? null
+  const rows = serveNo === 2 ? withScore(report.options[report.spins[2]] ?? [], 2) : withScore(report.options[report.spins[1]] ?? [], 1, second?.wins ?? 0)
+  const pick = rows[0] ?? null
+  // What makes the pick stand out from the other ways to hit it, for the one-line reason.
   let why = 'balance'
-  if (pick && ok.length > 1) {
-    const others = ok.filter((r) => r !== pick)
+  if (pick && rows.length > 1) {
+    const others = rows.slice(1)
     const safest = others.every((r) => pick.inRate >= r.inRate)
     const hardest = others.every((r) => pick.difficulty >= r.difficulty)
     why = safest && hardest ? 'both' : safest ? 'safest' : hardest ? 'hardest' : 'balance'
   }
-  return { rows, pick: pick?.style ?? null, why }
+  return { rows, pick, why, second }
 }
 
 // A standard normal draw (Box-Muller).

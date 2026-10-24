@@ -17,7 +17,7 @@ import { assessServe, DEFAULT_LEVEL, evaluateReturn, RETURN_FLIGHT } from './out
 import { simulateServe } from './physics.js'
 import { PHASES } from './pose.js'
 import { DEFAULT_MAX_SPEED } from './recommend.js'
-import { DEFAULT_SPOT } from './spot.js'
+import { DEFAULT_SPINS, DEFAULT_SPOT } from './spot.js'
 import {
   ballPosition,
   DEFAULT_FOOTWORK,
@@ -75,6 +75,8 @@ export default function App() {
   const [maxKmh, setMaxKmh] = useState(DEFAULT_MAX_SPEED)
   // The simple mode's landing spot and practice game, kept here so they survive a trip to the full tool.
   const [spot, setSpot] = useState(DEFAULT_SPOT)
+  // The kind of serve chosen there for the first and second serve.
+  const [spins, setSpins] = useState(DEFAULT_SPINS)
   const [game, setGame] = useState(NEW_GAME)
   const [system, setSystem] = useState(firstSystem)
   const units = useMemo(() => unitsFor(system), [system])
@@ -303,6 +305,8 @@ export default function App() {
             onSide={setSide}
             spot={spot}
             onSpot={setSpot}
+            spins={spins}
+            onSpins={setSpins}
             game={game}
             onGame={setGame}
             onWatch={watchServe}

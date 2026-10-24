@@ -44,7 +44,8 @@ const reducedMotion = () => typeof window !== 'undefined' && window.matchMedia?.
 /**
  * Pick where the serve should land. spot is { x, z } in metres; onPlace(spot, fresh) is called with
  * where the pointer is, fresh on the first touch of a drag (a fresh touch in the other box switches
- * sides). paths are the serves to draw, the chosen one with its scatter. played is the last serve hit
+ * sides). paths are the serves to draw ({ id, style, spread, points }); the one whose id is chosen is
+ * drawn with its scatter. played is the last serve hit
  * in the practice game ({ id, sim, ret }); onLanded(id) fires once it has landed. stale dims the paths while
  * the ones for a new spot are worked out.
  */
@@ -105,7 +106,7 @@ export default function SpotCourt({ side, spot, onPlace, paths, stale, chosen, p
   // The returner sets off once they've read the played serve, sideways or diagonally forward to cut it off.
   const returner = played?.ret && flyT != null ? returnerAt(played.ret, flyT) : ready
 
-  const chosenPath = paths.find((p) => p.style === chosen)
+  const chosenPath = paths.find((p) => p.id === chosen)
   const c = chosenPath?.spread ? cloud(chosenPath.spread) : null
 
   return (
@@ -166,13 +167,13 @@ export default function SpotCourt({ side, spot, onPlace, paths, stale, chosen, p
           <ellipse className="cloud" cx={spot.z} cy={-spot.x} rx={c.rx} ry={c.ry} transform={`rotate(${c.deg} ${spot.z} ${-spot.x})`} />
         )}
         {paths
-          .filter((p) => p.style !== chosen)
+          .filter((p) => p.id !== chosen)
           .map((p) => (
-            <polyline key={p.style} points={pts(p.points)} fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="0.06"
+            <polyline key={p.id} points={pts(p.points)} fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="0.06"
               strokeDasharray="0.22 0.16" />
           ))}
         {chosenPath && (
-          <polyline points={pts(chosenPath.points)} fill="none" stroke={STYLE_COLORS[chosen]} strokeWidth="0.12" strokeLinecap="round"
+          <polyline points={pts(chosenPath.points)} fill="none" stroke={STYLE_COLORS[chosenPath.style]} strokeWidth="0.12" strokeLinecap="round"
             strokeLinejoin="round" />
         )}
       </g>

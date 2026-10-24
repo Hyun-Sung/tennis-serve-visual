@@ -316,7 +316,7 @@
   },
   "simple": {
     "title": "Simple mode",
-    "lede": "Tap where you want your serve to land. You'll see which serve gets it there best, how much room for error it has, how hard it is to return, and how it scores.",
+    "lede": "Tap where you want your serve to land and pick a serve: flat, slice, topspin-slice or kick. You'll see the speed and spin that get it there best, how much room for error it has, how hard it is to return, and how it scores.",
     "court": "Where should it land?",
     "courtLabel": "the service box seen from behind you: tap or drag to place the ball, arrow keys move it",
     "spotFacts": "{{deep}} inside the service line, {{across}} inside the {{line}}",
@@ -333,15 +333,22 @@
       "strong": "a strong club player",
       "advanced": "an advanced player"
     },
+    "spinFirst": "Your first serve",
+    "spinSecond": "Your second serve",
     "recommended": "Recommended",
     "yourChoice": "Your choice",
-    "backToPick": "back to the recommended serve",
+    "backToPick": "back to the recommended speed and spin",
     "rpm": "{{rpm}} rpm",
+    "brush": {
+      "less": "light brush",
+      "usual": "usual brush",
+      "more": "heavy brush"
+    },
     "why": {
-      "safest": "the safest way to get the ball there.",
-      "hardest": "of the serves that get there, the hardest to return.",
-      "both": "the safest way to get the ball there, and the hardest to return.",
-      "balance": "the best mix of safety and pressure on the returner."
+      "safest": "of the ways to hit this serve there, the one that lands in most.",
+      "hardest": "of the ways to hit this serve there that land in often enough, the hardest to return.",
+      "both": "of the ways to hit this serve there, the one that lands in most, and the hardest to return.",
+      "balance": "the best mix of landing in and pressure on the returner."
     },
     "margin": "Margin",
     "marginSub": "land in",
@@ -355,19 +362,22 @@
     "score": "Score",
     "scoreSub": "points won of 100",
     "clears": "clears the net by {{d}}",
+    "angleUp": "racket angle {{deg}}° up",
+    "angleDown": "racket angle {{deg}}° down",
+    "angleLevel": "racket angle level",
     "aimRight": "aim about {{d}} right of the spot: the spin bends it back",
     "aimLeft": "aim about {{d}} left of the spot: the spin bends it back",
-    "allSpins": "Every serve to this spot",
-    "cant": "can't land there",
-    "nothing": "none of the serves can land there. try another spot.",
-    "warnFirst": "this spot is hard to hit: even the best serve lands in only {{p}}% of the time. try a spot deeper in the box or further from the lines.",
-    "warnSecond": "nothing lands here 9 times in 10, so it's risky for a second serve. try a spot further from the lines.",
+    "options": "Best ways to hit this {{spin}} serve",
+    "setting": "Speed and spin",
+    "cantSpin": "a {{spin}} serve can't land there. try another spot or another serve.",
+    "warnFirst": "this spot is hard to hit with this serve: even the best speed and spin land in only {{p}}% of the time. try a spot deeper in the box or further from the lines, or another serve.",
+    "warnSecond": "this serve doesn't land here 9 times in 10 at any speed or spin, so it's risky for a second serve. try a spot further from the lines, or another serve.",
     "watch": "Watch it in 3D",
     "working": "working out the serves…",
-    "method": "for each spin, the tool finds the racket angle and aim that land the ball on your spot at several speeds up to your fastest serve, flies each one with the same small mistakes as the full tool, and keeps the speed that scores best. the score is the points you'd win out of 100 serves like it: aces and return errors win, and after a return you win {{tough}}% of rallies after a tough one and {{easy}}% after an easy one. on a first serve a miss goes to your second serve (a safe {{second}} into the middle of the box, which wins about {{secondWins}}%), so it can take more risk. a first serve has to land in at least half the time to be picked, a second serve 9 times in 10.",
+    "method": "the tool tries the serve you picked with a lighter and a heavier brush, at several speeds up to the fastest it can be hit, finds the racket angle and aim that land each one on your spot, and flies each with the same small mistakes as the full tool. the score is the points you'd win out of 100 serves like it: aces and return errors win, and after a return you win {{tough}}% of rallies after a tough one and {{easy}}% after an easy one. the recommended one scores best of those that land in often enough (at least half the time for a first serve, 9 times in 10 for a second); if none do, it's the one that lands in most. on a first serve a miss goes to your second serve (your {{second}} to the same spot, which wins about {{secondWins}}%), so it can take more risk.",
     "game": {
       "title": "Play a game",
-      "note": "you serve every point to your spot, against the returner set above. a fault gives you a second serve, and the recommendation switches to suit it.",
+      "note": "you serve every point to your spot with the serves you picked, against the returner set above. a fault gives you a second serve.",
       "you": "You",
       "them": "Them",
       "games": "Games",
@@ -411,8 +421,8 @@
   "seo": {
     "title": "Serve Visualization Tool: free 3D tennis serve simulator",
     "description": "A free 3D tennis serve simulator. Adjust your toss, stance, jump, swing, spin and speed, watch whether the ball clears the net, and see your error tolerance and your chances of an ace against returners from NTRP 2.0 to 5.0.",
-    "simpleTitle": "Simple mode: tap a spot, get the best serve | Serve Visualization Tool",
-    "simpleDescription": "Tap where you want your tennis serve to land and see which serve gets it there best: flat, slice, topspin-slice or kick, with each one's margin for error, how hard it is to return and a score. Then play a practice game against a returner from NTRP 2.0 to 5.0.",
+    "simpleTitle": "Simple mode: tap a spot, pick a serve, get the best speed and spin | Serve Visualization Tool",
+    "simpleDescription": "Tap where you want your tennis serve to land, pick flat, slice, topspin-slice or kick, and see the speed and spin that get it there best, with its margin for error, how hard it is to return and a score. Then play a practice game against a returner from NTRP 2.0 to 5.0.",
     "aboutTitle": "How the Serve Visualization Tool works: the tennis serve math, explained simply",
     "aboutDescription": "How the free Serve Visualization Tool models a tennis serve: ball flight, spin, the bounce, the toss, error tolerance and the returner, explained in plain words with the formulas behind them.",
     "noscript": "This interactive 3D tool needs JavaScript turned on."
@@ -435,7 +445,7 @@
     },
     "bounce": {
       "title": "3. The bounce",
-      "body": "When the ball lands it keeps about <b>75%</b> of its downward speed, now going up. Friction with the court slows it and pulls its spin toward rolling. Heavy topspin grips the court and kicks the ball up higher: that is the kick serve.",
+      "body": "When the ball lands it keeps about <b>75%</b> of its downward speed, now going up. Friction with the court slows it and pulls its spin toward rolling. A ball that comes in low and fast skids through instead, so a flat serve keeps more of its pace. Heavy topspin grips the court and kicks the ball up higher: that is the kick serve.",
       "formula": "speed up after = 0.75 × speed down before + kick",
       "note": "the kick is a small extra push that grows with topspin."
     },
@@ -459,9 +469,9 @@
     },
     "returner": {
       "title": "7. The returner",
-      "body": "The returner waits just behind the baseline, about a metre inside the singles sideline. The tool works out when the ball reaches them and how far they have to move. They wait out their reaction time, then run, and can reach further still with a lunge, their arm and the racket. A ball coming toward them they meet at their usual spot; one curving away from them they cut off, moving diagonally forward to meet it earlier on its path, at the nearest point they can still reach in time. If there is no such point, it is an <b>ace</b>. Otherwise less time, a longer run or a lunge, more pace, a high kick or a low slice all make the return harder, from an easy return to a return error.",
+      "body": "The returner waits just behind the baseline, about a metre inside the singles sideline. The tool works out when the ball reaches them and how far they have to move. They wait out their reaction time, then run, and can reach further still with a lunge, their arm and the racket. A ball coming toward them they meet at their usual spot; one curving away from them they cut off, moving diagonally forward to meet it earlier on its path, at the nearest point they can still reach in time. If there is no such point, it is an <b>ace</b>. Otherwise less time, a longer run or a lunge, more pace, a high kick or a low slice all make the return harder, from an easy return to a return error. A high kick is mostly trouble on the backhand (the returner is right-handed), and only when it comes too quickly for them to step back or move in. Their level sets all of it: how quickly they react and run, how far they lunge, how far forward they dare to cut off a wide ball, how fast a serve they're used to, and how often they miss even an easy one.",
       "formula": "can reach = lunge, arm and racket + distance run after reacting",
-      "note": "a 2.0 returner reacts in about 0.42 s, runs about 3 m/s and reaches about 1.45 m; a 5.0 returner reacts in about 0.25 s, runs about 5 m/s and reaches about 1.7 m."
+      "note": "a 2.0 returner reacts in about 0.42 s, runs about 3 m/s, reaches about 1.35 m, is used to serves up to about 85 km/h and misses about 1 easy return in 7; a 5.0 returner reacts in about 0.25 s, runs about 5 m/s, reaches about 1.8 m, is used to serves up to about 175 km/h and misses about 1 in 50."
     },
     "direction": {
       "title": "8. Court side and your hitting arm",

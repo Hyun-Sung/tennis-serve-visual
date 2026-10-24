@@ -2,6 +2,6 @@
 import { spotReport } from './spot.js'
 
 self.onmessage = (e) => {
-  const { key, who, maxKmh, level, spot } = e.data
-  self.postMessage({ key, result: spotReport(who, maxKmh, level, spot) })
+  const { key, who, maxKmh, level, spot, spins } = e.data
+  self.postMessage({ key, result: spotReport(who, maxKmh, level, spot, spins) })
 }

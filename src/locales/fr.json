@@ -316,7 +316,7 @@
   },
   "simple": {
     "title": "Mode simple",
-    "lede": "Touchez l'endroit où vous voulez que votre service rebondisse. Vous verrez quel service y arrive le mieux, sa marge d'erreur, la difficulté du retour et son score.",
+    "lede": "Touchez l'endroit où vous voulez que votre service rebondisse et choisissez un service : à plat, slice, lift-slice ou kick. Vous verrez la vitesse et l'effet qui l'y envoient le mieux, sa marge d'erreur, la difficulté du retour et son score.",
     "court": "Où doit-il rebondir ?",
     "courtLabel": "le carré de service vu de derrière vous : touchez ou faites glisser pour placer la balle ; les flèches la déplacent",
     "spotFacts": "{{deep}} à l'intérieur de la ligne de service, {{across}} à l'intérieur de la {{line}}",
@@ -333,15 +333,22 @@
       "strong": "bon joueur de club",
       "advanced": "joueur avancé"
     },
+    "spinFirst": "Votre première balle",
+    "spinSecond": "Votre deuxième balle",
     "recommended": "Recommandé",
     "yourChoice": "Votre choix",
-    "backToPick": "revenir au service recommandé",
+    "backToPick": "revenir à la vitesse et à l'effet recommandés",
     "rpm": "{{rpm}} tr/min",
+    "brush": {
+      "less": "moins d'effet que d'habitude",
+      "usual": "effet habituel",
+      "more": "plus d'effet que d'habitude"
+    },
     "why": {
-      "safest": "la façon la plus sûre d'envoyer la balle là.",
-      "hardest": "parmi les services qui y arrivent, le plus difficile à retourner.",
-      "both": "la façon la plus sûre d'envoyer la balle là, et la plus difficile à retourner.",
-      "balance": "le meilleur équilibre entre sécurité et pression sur le relanceur."
+      "safest": "parmi les façons de jouer ce service là, celle qui rentre le plus.",
+      "hardest": "parmi les façons de jouer ce service là qui rentrent assez souvent, la plus difficile à retourner.",
+      "both": "parmi les façons de jouer ce service là, celle qui rentre le plus, et la plus difficile à retourner.",
+      "balance": "le meilleur équilibre entre rentrer et mettre la pression sur le relanceur."
     },
     "margin": "Marge",
     "marginSub": "rentrent",
@@ -355,19 +362,22 @@
     "score": "Score",
     "scoreSub": "points gagnés sur 100",
     "clears": "passe le filet de {{d}}",
+    "angleUp": "angle de raquette {{deg}}° vers le haut",
+    "angleDown": "angle de raquette {{deg}}° vers le bas",
+    "angleLevel": "angle de raquette horizontal",
     "aimRight": "visez environ {{d}} à droite du point : l'effet la ramène",
     "aimLeft": "visez environ {{d}} à gauche du point : l'effet la ramène",
-    "allSpins": "Tous les services vers ce point",
-    "cant": "n'y arrive pas",
-    "nothing": "aucun service ne peut rebondir là. essayez un autre point.",
-    "warnFirst": "ce point est difficile à atteindre : même le meilleur service ne rentre que {{p}} % du temps. essayez un point plus profond dans le carré ou plus loin des lignes.",
-    "warnSecond": "rien ne rentre ici 9 fois sur 10, c'est donc risqué pour une deuxième balle. essayez un point plus loin des lignes.",
+    "options": "Les meilleures façons de jouer ce service ({{spin}})",
+    "setting": "Vitesse et effet",
+    "cantSpin": "ce service ({{spin}}) ne peut pas rebondir là. essayez un autre point ou un autre service.",
+    "warnFirst": "ce point est difficile à atteindre avec ce service : même avec la meilleure vitesse et le meilleur effet, il ne rentre que {{p}} % du temps. essayez un point plus profond dans le carré ou plus loin des lignes, ou un autre service.",
+    "warnSecond": "ce service ne rentre ici 9 fois sur 10 à aucune vitesse ni aucun effet, c'est donc risqué pour une deuxième balle. essayez un point plus loin des lignes, ou un autre service.",
     "watch": "Voir en 3D",
     "working": "calcul des services…",
-    "method": "pour chaque effet, l'outil cherche l'angle de raquette et la direction qui envoient la balle sur votre point, à plusieurs vitesses jusqu'à votre service le plus rapide, fait voler chacun avec les mêmes petites erreurs que l'outil complet et garde la vitesse qui marque le plus. le score correspond aux points que vous gagneriez sur 100 services de ce type : les aces et les fautes en retour gagnent, et après un retour vous gagnez {{tough}} % des échanges s'il était difficile, {{easy}} % s'il était facile. en première balle, une faute mène à votre deuxième balle (un {{second}} sûr au milieu du carré, qui gagne environ {{secondWins}} %), elle peut donc prendre plus de risques. pour être choisie, une première balle doit rentrer au moins une fois sur deux, une deuxième balle 9 fois sur 10.",
+    "method": "l'outil essaie le service choisi avec moins et plus d'effet, à plusieurs vitesses jusqu'à la plus rapide possible, cherche pour chacun l'angle de raquette et la direction qui envoient la balle sur votre point, et fait voler chacun avec les mêmes petites erreurs que l'outil complet. le score correspond aux points que vous gagneriez sur 100 services de ce type : les aces et les fautes en retour gagnent, et après un retour vous gagnez {{tough}} % des échanges s'il était difficile, {{easy}} % s'il était facile. le service recommandé est celui qui marque le plus parmi ceux qui rentrent assez souvent (au moins une fois sur deux en première balle, 9 fois sur 10 en deuxième) ; si aucun n'y arrive, celui qui rentre le plus. en première balle, une faute mène à votre deuxième balle (votre {{second}} vers le même point, qui gagne environ {{secondWins}} %), elle peut donc prendre plus de risques.",
     "game": {
       "title": "Jouez un jeu",
-      "note": "vous servez chaque point vers votre point, contre le relanceur choisi plus haut. une faute vous donne une deuxième balle, et la recommandation s'adapte.",
+      "note": "vous servez chaque point vers votre point avec les services choisis, contre le relanceur choisi plus haut. une faute vous donne une deuxième balle.",
       "you": "Vous",
       "them": "Adversaire",
       "games": "Jeux",
@@ -411,8 +421,8 @@
   "seo": {
     "title": "Serve Visualization Tool : simulateur gratuit de service au tennis en 3D",
     "description": "Un simulateur gratuit de service au tennis en 3D. Réglez le lancer, la position, le saut, la frappe, l'effet et la vitesse, regardez si la balle passe le filet, et voyez votre tolérance d'erreur et vos chances de faire un ace contre des relanceurs de niveau NTRP 2.0 à 5.0.",
-    "simpleTitle": "Mode simple : touchez un point, trouvez le meilleur service | Serve Visualization Tool",
-    "simpleDescription": "Touchez l'endroit où vous voulez que votre service rebondisse et voyez quel service y arrive le mieux : à plat, slice, lift-slice ou kick, avec la marge d'erreur de chacun, la difficulté du retour et un score. Puis jouez un jeu d'entraînement contre un relanceur de niveau NTRP 2.0 à 5.0.",
+    "simpleTitle": "Mode simple : touchez un point, choisissez un service, trouvez la meilleure vitesse et le meilleur effet | Serve Visualization Tool",
+    "simpleDescription": "Touchez l'endroit où vous voulez que votre service rebondisse, choisissez à plat, slice, lift-slice ou kick, et voyez la vitesse et l'effet qui l'y envoient le mieux, avec sa marge d'erreur, la difficulté du retour et un score. Puis jouez un jeu d'entraînement contre un relanceur de niveau NTRP 2.0 à 5.0.",
     "aboutTitle": "Comment fonctionne Serve Visualization Tool : les calculs du service au tennis, expliqués simplement",
     "aboutDescription": "Comment l'outil gratuit Serve Visualization Tool modélise un service au tennis : le vol de la balle, l'effet, le rebond, le lancer, la tolérance d'erreur et le relanceur, expliqués simplement avec les formules derrière.",
     "noscript": "Cet outil interactif en 3D a besoin que JavaScript soit activé."
@@ -435,7 +445,7 @@
     },
     "bounce": {
       "title": "3. Le rebond",
-      "body": "Quand la balle touche le sol, elle garde environ <b>75 %</b> de sa vitesse vers le bas, maintenant vers le haut. Le frottement avec le court la ralentit et pousse sa rotation vers un roulement. Beaucoup de lift accroche le court et fait rebondir la balle plus haut : c'est le service kické.",
+      "body": "Quand la balle touche le sol, elle garde environ <b>75 %</b> de sa vitesse vers le bas, maintenant vers le haut. Le frottement avec le court la ralentit et pousse sa rotation vers un roulement. Une balle qui arrive basse et vite glisse au contraire, si bien qu'un service à plat garde plus de vitesse. Beaucoup de lift accroche le court et fait rebondir la balle plus haut : c'est le service kické.",
       "formula": "vitesse vers le haut après = 0,75 × vitesse vers le bas avant + kick",
       "note": "le kick est une petite poussée en plus qui grandit avec le lift."
     },
@@ -459,9 +469,9 @@
     },
     "returner": {
       "title": "7. Le relanceur",
-      "body": "Le relanceur attend juste derrière la ligne de fond, à environ un mètre à l'intérieur de la ligne de côté du simple. L'outil calcule quand la balle l'atteint et la distance qu'il doit parcourir. Il attend son temps de réaction, puis court, et va encore plus loin grâce à une fente, son bras et sa raquette. Une balle qui vient vers lui, il la prend à sa place habituelle ; une balle qui s'éloigne de lui, il lui coupe la trajectoire en avançant en diagonale pour la prendre plus tôt, au point le plus proche qu'il peut encore atteindre à temps. S'il n'y en a aucun, c'est un <b>ace</b>. Sinon, moins de temps, une course plus longue ou une fente, plus de vitesse, un kick haut ou un slice bas rendent le retour plus dur, du retour facile à la faute en retour.",
+      "body": "Le relanceur attend juste derrière la ligne de fond, à environ un mètre à l'intérieur de la ligne de côté du simple. L'outil calcule quand la balle l'atteint et la distance qu'il doit parcourir. Il attend son temps de réaction, puis court, et va encore plus loin grâce à une fente, son bras et sa raquette. Une balle qui vient vers lui, il la prend à sa place habituelle ; une balle qui s'éloigne de lui, il lui coupe la trajectoire en avançant en diagonale pour la prendre plus tôt, au point le plus proche qu'il peut encore atteindre à temps. S'il n'y en a aucun, c'est un <b>ace</b>. Sinon, moins de temps, une course plus longue ou une fente, plus de vitesse, un kick haut ou un slice bas rendent le retour plus dur, du retour facile à la faute en retour. Un kick haut gêne surtout en revers (le relanceur est droitier), et seulement s'il arrive trop vite pour reculer ou avancer. Son niveau décide de tout : la vitesse à laquelle il réagit et court, la longueur de sa fente, jusqu'où il ose avancer pour couper une balle qui s'écarte, la vitesse de service dont il a l'habitude, et la fréquence à laquelle il rate même un retour facile.",
       "formula": "portée = fente, bras et raquette + distance courue après la réaction",
-      "note": "un relanceur 2.0 réagit en environ 0,42 s, court à environ 3 m/s et atteint environ 1,45 m ; un relanceur 5.0 réagit en environ 0,25 s, court à environ 5 m/s et atteint environ 1,7 m."
+      "note": "un relanceur 2.0 réagit en environ 0,42 s, court à environ 3 m/s, atteint environ 1,35 m, a l'habitude des services jusqu'à environ 85 km/h et rate environ 1 retour facile sur 7 ; un relanceur 5.0 réagit en environ 0,25 s, court à environ 5 m/s, atteint environ 1,8 m, a l'habitude des services jusqu'à environ 175 km/h et en rate environ 1 sur 50."
     },
     "direction": {
       "title": "8. Le côté du court et votre bras",

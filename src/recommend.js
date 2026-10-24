@@ -52,9 +52,9 @@ const zoneOf = (bz) => (Math.abs(bz) < COURT.halfSingles / 3 ? 'T' : Math.abs(bz
 
 /**
  * The serve settings for one candidate, ready to hand to planServe (and to the tool's controls).
- * who: { height, hand, side, stance, jump }.
+ * who: { height, hand, side, stance, jump }. brush scales how much spin the style puts on (1 is its usual).
  */
-export function serveFor(who, style, speedKmh, aimZ) {
+export function serveFor(who, style, speedKmh, aimZ, brush = 1) {
   const sw = STYLES[style]
   return {
     toss: DEFAULT_TOSS,
@@ -64,7 +64,7 @@ export function serveFor(who, style, speedKmh, aimZ) {
     stance: who.stance,
     jump: who.jump,
     speedKmh: Math.round(speedKmh),
-    swing: { up: sw.up, side: sw.side * handSign(who.hand) },
+    swing: { up: sw.up * brush, side: sw.side * brush * handSign(who.hand) },
     hit: DEFAULT_HIT,
     aimZ,
     autoSwing: true,

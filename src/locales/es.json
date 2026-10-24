@@ -316,7 +316,7 @@
   },
   "simple": {
     "title": "Modo sencillo",
-    "lede": "Toca dónde quieres que bote tu saque. Verás qué saque llega mejor ahí, cuánto margen de error tiene, lo difícil que es restarlo y qué puntuación saca.",
+    "lede": "Toca dónde quieres que bote tu saque y elige un saque: plano, cortado, liftado-cortado o kick. Verás la velocidad y el efecto que mejor lo llevan ahí, cuánto margen de error tiene, lo difícil que es restarlo y qué puntuación saca.",
     "court": "¿Dónde quieres que bote?",
     "courtLabel": "el cuadro de saque visto desde detrás de ti: toca o arrastra para colocar la bola; las flechas la mueven",
     "spotFacts": "{{deep}} dentro de la línea de saque, {{across}} dentro de la {{line}}",
@@ -333,15 +333,22 @@
       "strong": "jugador de club fuerte",
       "advanced": "jugador avanzado"
     },
+    "spinFirst": "Tu primer saque",
+    "spinSecond": "Tu segundo saque",
     "recommended": "Recomendado",
     "yourChoice": "Tu elección",
-    "backToPick": "volver al saque recomendado",
+    "backToPick": "volver a la velocidad y el efecto recomendados",
     "rpm": "{{rpm}} rpm",
+    "brush": {
+      "less": "menos efecto de lo habitual",
+      "usual": "efecto habitual",
+      "more": "más efecto de lo habitual"
+    },
     "why": {
-      "safest": "la forma más segura de llevar la bola ahí.",
-      "hardest": "de los saques que llegan ahí, el más difícil de restar.",
-      "both": "la forma más segura de llevar la bola ahí, y la más difícil de restar.",
-      "balance": "la mejor mezcla de seguridad y presión sobre el restador."
+      "safest": "de las formas de pegar este saque ahí, la que más entra.",
+      "hardest": "de las formas de pegar este saque ahí que entran lo bastante, la más difícil de restar.",
+      "both": "de las formas de pegar este saque ahí, la que más entra y la más difícil de restar.",
+      "balance": "la mejor mezcla de entrar y presionar al restador."
     },
     "margin": "Margen",
     "marginSub": "entran",
@@ -355,19 +362,22 @@
     "score": "Puntuación",
     "scoreSub": "puntos ganados de 100",
     "clears": "pasa la red por {{d}}",
+    "angleUp": "ángulo de raqueta {{deg}}° hacia arriba",
+    "angleDown": "ángulo de raqueta {{deg}}° hacia abajo",
+    "angleLevel": "ángulo de raqueta horizontal",
     "aimRight": "apunta unos {{d}} a la derecha del punto: el efecto la trae de vuelta",
     "aimLeft": "apunta unos {{d}} a la izquierda del punto: el efecto la trae de vuelta",
-    "allSpins": "Todos los saques a este punto",
-    "cant": "no llega ahí",
-    "nothing": "ningún saque puede botar ahí. prueba otro punto.",
-    "warnFirst": "este punto es difícil: incluso el mejor saque entra solo el {{p}}% de las veces. prueba un punto más profundo en el cuadro o más lejos de las líneas.",
-    "warnSecond": "nada entra aquí 9 de cada 10 veces, así que es arriesgado para un segundo saque. prueba un punto más lejos de las líneas.",
+    "options": "Las mejores formas de pegar este saque ({{spin}})",
+    "setting": "Velocidad y efecto",
+    "cantSpin": "este saque ({{spin}}) no puede botar ahí. prueba otro punto u otro saque.",
+    "warnFirst": "este punto es difícil con este saque: incluso con la mejor velocidad y efecto entra solo el {{p}}% de las veces. prueba un punto más profundo en el cuadro o más lejos de las líneas, u otro saque.",
+    "warnSecond": "este saque no entra aquí 9 de cada 10 veces con ninguna velocidad ni efecto, así que es arriesgado para un segundo saque. prueba un punto más lejos de las líneas, u otro saque.",
     "watch": "Verlo en 3D",
     "working": "calculando los saques…",
-    "method": "para cada efecto, la herramienta busca el ángulo de raqueta y la dirección que llevan la bola a tu punto, a varias velocidades hasta tu saque más rápido, lanza cada uno con los mismos pequeños errores que la herramienta completa y se queda con la velocidad que mejor puntúa. la puntuación son los puntos que ganarías de 100 saques así: los aces y los errores de resto ganan, y tras un resto ganas el {{tough}}% de los peloteos si fue difícil y el {{easy}}% si fue fácil. en un primer saque, un fallo pasa a tu segundo saque (un {{second}} seguro al centro del cuadro, que gana alrededor del {{secondWins}}%), así que puede arriesgar más. para ser elegido, un primer saque tiene que entrar al menos la mitad de las veces, y un segundo saque 9 de cada 10.",
+    "method": "la herramienta prueba el saque que elegiste con menos y más efecto, a varias velocidades hasta la más rápida posible, busca el ángulo de raqueta y la dirección que llevan cada uno a tu punto y lanza cada uno con los mismos pequeños errores que la herramienta completa. la puntuación son los puntos que ganarías de 100 saques así: los aces y los errores de resto ganan, y tras un resto ganas el {{tough}}% de los peloteos si fue difícil y el {{easy}}% si fue fácil. se recomienda el que mejor puntúa de los que entran lo bastante (al menos la mitad de las veces en un primer saque, 9 de cada 10 en un segundo); si ninguno lo logra, el que más entra. en un primer saque, un fallo pasa a tu segundo saque (tu {{second}} al mismo punto, que gana alrededor del {{secondWins}}%), así que puede arriesgar más.",
     "game": {
       "title": "Juega un juego",
-      "note": "sacas todos los puntos a tu punto, contra el restador elegido arriba. una falta te da un segundo saque, y la recomendación cambia para adaptarse.",
+      "note": "sacas todos los puntos a tu punto con los saques que elegiste, contra el restador elegido arriba. una falta te da un segundo saque.",
       "you": "Tú",
       "them": "Rival",
       "games": "Juegos",
@@ -411,8 +421,8 @@
   "seo": {
     "title": "Serve Visualization Tool: simulador gratuito de saque de tenis en 3D",
     "description": "Un simulador gratuito de saque de tenis en 3D. Ajusta el lanzamiento, la posición, el salto, el golpe, el efecto y la velocidad, mira si la bola pasa la red y descubre tu tolerancia al error y tus opciones de ace contra restadores de nivel NTRP 2.0 a 5.0.",
-    "simpleTitle": "Modo sencillo: toca un punto y descubre el mejor saque | Serve Visualization Tool",
-    "simpleDescription": "Toca dónde quieres que bote tu saque de tenis y descubre qué saque llega mejor ahí: plano, cortado, liftado-cortado o kick, con el margen de error de cada uno, lo difícil que es restarlo y una puntuación. Luego juega un juego de práctica contra un restador de nivel NTRP 2.0 a 5.0.",
+    "simpleTitle": "Modo sencillo: toca un punto, elige un saque y descubre la mejor velocidad y efecto | Serve Visualization Tool",
+    "simpleDescription": "Toca dónde quieres que bote tu saque de tenis, elige plano, cortado, liftado-cortado o kick, y descubre la velocidad y el efecto que mejor lo llevan ahí, con su margen de error, lo difícil que es restarlo y una puntuación. Luego juega un juego de práctica contra un restador de nivel NTRP 2.0 a 5.0.",
     "aboutTitle": "Cómo funciona Serve Visualization Tool: las cuentas del saque de tenis, explicadas de forma sencilla",
     "aboutDescription": "Cómo modela un saque de tenis la herramienta gratuita Serve Visualization Tool: el vuelo de la bola, el efecto, el bote, el lanzamiento, la tolerancia al error y el restador, explicados con palabras sencillas y sus fórmulas.",
     "noscript": "Esta herramienta interactiva en 3D necesita JavaScript activado."
@@ -435,7 +445,7 @@
     },
     "bounce": {
       "title": "3. El bote",
-      "body": "Al caer, la bola conserva cerca del <b>75%</b> de su velocidad hacia abajo, ahora hacia arriba. El roce con la pista la frena y hace que su giro tienda a rodar. Mucho liftado agarra la pista y hace saltar la bola más alto: eso es el saque kick.",
+      "body": "Al caer, la bola conserva cerca del <b>75%</b> de su velocidad hacia abajo, ahora hacia arriba. El roce con la pista la frena y hace que su giro tienda a rodar. Una bola que llega baja y rápida, en cambio, patina, así que un saque plano conserva más velocidad. Mucho liftado agarra la pista y hace saltar la bola más alto: eso es el saque kick.",
       "formula": "velocidad hacia arriba después = 0,75 × velocidad hacia abajo antes + kick",
       "note": "el kick es un pequeño empuje extra que crece con el liftado."
     },
@@ -459,9 +469,9 @@
     },
     "returner": {
       "title": "7. El restador",
-      "body": "El restador espera justo detrás de la línea de fondo, a un metro más o menos por dentro de la línea lateral de individuales. La herramienta calcula cuándo le llega la bola y cuánto tiene que moverse. Espera su tiempo de reacción, luego corre, y llega aún más lejos con una zancada, el brazo y la raqueta. Una bola que viene hacia él la toma en su sitio de siempre; una que se le abre la corta, avanzando en diagonal para encontrarla antes en su trayectoria, en el punto más cercano al que todavía llega a tiempo. Si no hay ninguno, es un <b>ace</b>. Si llega, menos tiempo, una carrera más larga o una zancada, más velocidad, un kick alto o un cortado bajo hacen el resto más difícil, desde un resto fácil hasta un error de resto.",
+      "body": "El restador espera justo detrás de la línea de fondo, a un metro más o menos por dentro de la línea lateral de individuales. La herramienta calcula cuándo le llega la bola y cuánto tiene que moverse. Espera su tiempo de reacción, luego corre, y llega aún más lejos con una zancada, el brazo y la raqueta. Una bola que viene hacia él la toma en su sitio de siempre; una que se le abre la corta, avanzando en diagonal para encontrarla antes en su trayectoria, en el punto más cercano al que todavía llega a tiempo. Si no hay ninguno, es un <b>ace</b>. Si llega, menos tiempo, una carrera más larga o una zancada, más velocidad, un kick alto o un cortado bajo hacen el resto más difícil, desde un resto fácil hasta un error de resto. Un kick alto molesta sobre todo de revés (el restador es diestro), y solo si llega demasiado rápido para retroceder o adelantarse. Su nivel lo decide todo: lo rápido que reacciona y corre, hasta dónde llega su zancada, cuánto se atreve a adelantarse para cortar una bola abierta, a qué velocidad de saque está acostumbrado y cada cuánto falla incluso un resto fácil.",
       "formula": "alcance posible = zancada, brazo y raqueta + distancia recorrida tras reaccionar",
-      "note": "un restador de 2.0 reacciona en unos 0,42 s, corre a unos 3 m/s y alcanza unos 1,45 m; uno de 5.0 reacciona en unos 0,25 s, corre a unos 5 m/s y alcanza unos 1,7 m."
+      "note": "un restador de 2.0 reacciona en unos 0,42 s, corre a unos 3 m/s, alcanza unos 1,35 m, está acostumbrado a saques de hasta unos 85 km/h y falla más o menos 1 de cada 7 restos fáciles; uno de 5.0 reacciona en unos 0,25 s, corre a unos 5 m/s, alcanza unos 1,8 m, está acostumbrado a saques de hasta unos 175 km/h y falla más o menos 1 de cada 50."
     },
     "direction": {
       "title": "8. El lado de la pista y tu brazo",

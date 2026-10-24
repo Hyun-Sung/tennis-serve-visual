@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { afterServe, callScore, NEW_GAME } from '../game.js'
 import { LEVEL_LIMITS, RETURN_FLIGHT } from '../outcome.js'
 import { COURT, simulateServe } from '../physics.js'
-import { MAX_SPEED_LIMITS, WIN_AFTER } from '../recommend.js'
-import { clampSpot, difficultyWord, IN_FLOOR, playServe, rankOptions, sideOfSpot, spotReport } from '../spot.js'
+import { MAX_SPEED_LIMITS, STYLES, WIN_AFTER } from '../recommend.js'
+import { clampSpot, difficultyWord, IN_FLOOR, playServe, rankSettings, sideOfSpot, spotReport } from '../spot.js'
 import { OUTCOME_PARTS as PARTS } from '../palette.js'
 import { useUnits } from '../units.js'
 import { Seg, Slider } from './Fields.jsx'
@@ -15,6 +15,15 @@ const pct = (x) => Math.round(x * 100)
 const SETTLE_MS = 120
 const levelNote = (level) => (level < 2.75 ? 'beginner' : level < 3.75 ? 'club' : level < 4.75 ? 'strong' : 'advanced')
 const METER = { easy: 1, medium: 2, hard: 3, veryHard: 4 }
+// How many ways to hit the chosen serve the list shows, best first.
+const SHOW_OPTIONS = 6
+/** How much brush a setting uses compared with the usual for its kind of serve (a flat serve has just the one). */
+const brushWord = (r) => (r.style === 'flat' ? null : r.brush < 1 ? 'less' : r.brush > 1 ? 'more' : 'usual')
+/** The racket angle a setting is hit with, in words: up, down or level. */
+function angleNote(deg, t) {
+  const d = Math.round(Math.abs(deg))
+  return d === 0 ? t('simple.angleLevel') : t(deg > 0 ? 'simple.angleUp' : 'simple.angleDown', { deg: d })
+}
 
 // One worker for the page, started the first time it's needed.
 let worker = null
@@ -26,11 +35,12 @@ function getWorker() {
 }
 
 /**
- * The serves for this spot, worked out in the background. busy is true until the answer for these
- * exact inputs is in (the last answer stays on show meanwhile). key names the inputs it's for.
+ * The ways to hit the chosen serves (spins: { 1: style, 2: style }) to this spot, worked out in the
+ * background. busy is true until the answer for these exact inputs is in (the last answer stays on
+ * show meanwhile). key names the inputs it's for.
  */
-function useSpotReport(who, maxKmh, level, spot) {
-  const key = JSON.stringify({ who, maxKmh, level, spot })
+function useSpotReport(who, maxKmh, level, spot, spins) {
+  const key = JSON.stringify({ who, maxKmh, level, spot, spins })
   const [done, setDone] = useState(null)
   // One job at a time: while one runs, only the newest waiting job is kept, so dragging doesn't pile up work.
   const queue = useRef({ busy: false, next: null })
@@ -57,12 +67,12 @@ function useSpotReport(who, maxKmh, level, spot) {
     }
   }, [])
   useEffect(() => {
-    const job = { key, who, maxKmh, level, spot }
+    const job = { key, who, maxKmh, level, spot, spins }
     const timer = setTimeout(() => {
       const w = getWorker()
       if (!w) {
         // No workers here: do it on the page instead.
-        setDone({ key, result: spotReport(who, maxKmh, level, spot) })
+        setDone({ key, result: spotReport(who, maxKmh, level, spot, spins) })
         return
       }
       const q = queue.current
@@ -73,7 +83,7 @@ function useSpotReport(who, maxKmh, level, spot) {
       }
     }, SETTLE_MS)
     return () => clearTimeout(timer)
-  }, [key, who, maxKmh, level, spot])
+  }, [key, who, maxKmh, level, spot, spins])
   return { report: done?.result ?? null, busy: done?.key !== key, key: done?.key ?? null }
 }
 
@@ -121,33 +131,38 @@ function resultText(p, t) {
 }
 
 /**
- * The simple mode: tap where the serve should land, and see which serve gets it there best, how much
- * room for error each spin has there, how hard it is to return and how it scores. Then play a game.
- * The server (height, hand, stance, jump, court side), returner level and fastest serve are shared
- * with the full tool, so both pages describe the same player.
+ * The simple mode: tap where the serve should land and pick a kind of serve (flat, slice, topspin-slice
+ * or kick) for the first and second serve. It recommends the speed and amount of spin that get that
+ * serve there best, with its room for error, how hard it is to return and how it scores. Then play a
+ * game. The server (height, hand, stance, jump, court side), returner level and fastest serve are
+ * shared with the full tool, so both pages describe the same player.
  */
-export default function Simple({ who, level, onLevel, maxKmh, onMaxKmh, onHand, onSide, spot, onSpot, game, onGame, onWatch }) {
+export default function Simple({ who, level, onLevel, maxKmh, onMaxKmh, onHand, onSide, spot, onSpot, spins, onSpins, game, onGame, onWatch }) {
   const { t, i18n } = useTranslation()
   const units = useUnits()
   const side = who.side
   // The spot in the box being served to (the full tool may have switched sides since it was placed).
   const here = useMemo(() => clampSpot(sideOfSpot(spot) === side ? spot : { x: spot.x, z: -spot.z }, side), [spot, side])
-  const { report, busy, key } = useSpotReport(who, maxKmh, level, here)
-  const ranked = useMemo(() => (report ? rankOptions(report, game.serveNo) : null), [report, game.serveNo])
+  const { report, busy, key } = useSpotReport(who, maxKmh, level, here, spins)
+  const ranked = useMemo(() => (report ? rankSettings(report, game.serveNo) : null), [report, game.serveNo])
+  // The serve chosen for this serve, and the one the answer on show is for (they differ while it's worked out).
+  const spin = spins[game.serveNo]
+  const shownSpin = report?.spins[game.serveNo] ?? spin
 
-  // A spin picked from the list, for this answer and serve only: a new spot goes back to the recommendation.
-  const [choice, setChoice] = useState({ key: null, serveNo: 0, style: null })
-  const picked = choice.key === key && choice.serveNo === game.serveNo ? ranked?.rows.find((r) => r.style === choice.style && r.score != null) : null
-  const row = picked ?? ranked?.rows.find((r) => r.style === ranked.pick) ?? null
-  const pickRow = ranked?.rows.find((r) => r.style === ranked.pick) ?? null
+  // A setting picked from the list, for this answer and serve only: a new spot goes back to the recommendation.
+  const [choice, setChoice] = useState({ key: null, serveNo: 0, id: null })
+  const picked = choice.key === key && choice.serveNo === game.serveNo ? ranked?.rows.find((r) => r.id === choice.id) : null
+  const pickRow = ranked?.pick ?? null
+  const row = picked ?? pickRow
+  // The best ways to hit it, plus the one picked if it's further down.
+  const listed = ranked ? ranked.rows.filter((r, i) => i < SHOW_OPTIONS || r === row) : []
+  // The chosen setting's path, and the recommended one's too when something else is chosen.
   const paths = useMemo(
     () =>
-      ranked
-        ? ranked.rows
-            .filter((r) => r.flight)
-            .map((r) => ({ style: r.style, spread: r.spread, points: simulateServe(r.flight, r.contact, RETURN_FLIGHT).points }))
-        : [],
-    [ranked],
+      [pickRow, row]
+        .filter((r, i, all) => r && all.indexOf(r) === i)
+        .map((r) => ({ id: r.id, style: r.style, spread: r.spread, points: simulateServe(r.flight, r.contact, RETURN_FLIGHT).points })),
+    [pickRow, row],
   )
 
   // The practice game: the last serve hit, and whether it has landed yet (the score waits for it).
@@ -249,115 +264,122 @@ export default function Simple({ who, level, onLevel, maxKmh, onMaxKmh, onHand, 
       <div className="simple-grid">
         <div className="simple-court">
           <h2>{t('simple.court')}</h2>
-          <SpotCourt side={side} spot={here} onPlace={place} paths={paths} stale={busy} chosen={row?.style} played={played}
+          <SpotCourt side={side} spot={here} onPlace={place} paths={paths} stale={busy} chosen={row?.id} played={played}
             onLanded={onLanded} label={t('simple.courtLabel')} valueText={facts} />
           <p className="spot-facts">{facts}</p>
           <p className="note">{t('simple.courtHint')}</p>
         </div>
 
-        <div className={`simple-info ${busy ? 'stale' : ''}`} aria-busy={busy} aria-live="polite">
-          {ranked && row ? (
-            <>
-              <div className="pick-card">
-                <div className="pick-top">
-                  <span className="rec-kind">{t(picked && picked !== pickRow ? 'simple.yourChoice' : 'simple.recommended')}</span>
-                  {picked && picked !== pickRow && (
-                    <button className="ghost" onClick={() => setChoice({ key: null, serveNo: 0, style: null })}>
-                      {t('simple.backToPick')}
-                    </button>
-                  )}
-                </div>
-                <div className="rec-serve">
-                  <span className={`badge ${row.style}`}>{t(`spin.${row.style}`)}</span>
-                  <b>{units.speed(row.speedKmh)}</b>
-                  <span className="rpm">{t('simple.rpm', { rpm: row.rpm.toLocaleString(i18n.language) })}</span>
-                </div>
-                {row === pickRow && <p className="pick-why">{t(`simple.why.${ranked.why}`)}</p>}
-                <dl className="pick-stats">
-                  <div>
-                    <dt>{t('simple.margin')}</dt>
-                    <dd className={row.inRate < floor ? 'low' : ''}>{pct(row.inRate)}%</dd>
-                    <dd className="sub">{t('simple.marginSub')}</dd>
+        <div className="simple-info">
+          <div className="spin-pick">
+            <h2>{t(game.serveNo === 1 ? 'simple.spinFirst' : 'simple.spinSecond')}</h2>
+            <Seg label={t(game.serveNo === 1 ? 'simple.spinFirst' : 'simple.spinSecond')}
+              options={Object.keys(STYLES).map((v) => ({ value: v, label: t(`spin.${v}`) }))} value={spin}
+              onChange={(v) => onSpins({ ...spins, [game.serveNo]: v })} />
+          </div>
+          <div className={`simple-results ${busy ? 'stale' : ''}`} aria-busy={busy} aria-live="polite">
+            {ranked && row ? (
+              <>
+                <div className="pick-card">
+                  <div className="pick-top">
+                    <span className="rec-kind">{t(picked && picked !== pickRow ? 'simple.yourChoice' : 'simple.recommended')}</span>
+                    {picked && picked !== pickRow && (
+                      <button className="ghost" onClick={() => setChoice({ key: null, serveNo: 0, id: null })}>
+                        {t('simple.backToPick')}
+                      </button>
+                    )}
                   </div>
-                  <div>
-                    <dt>{t('simple.return')}</dt>
-                    <dd>{t(`simple.difficulty.${difficultyWord(row.difficulty)}`)}</dd>
-                    <dd className="sub">
-                      <Meter d={row.difficulty} />
-                    </dd>
+                  <div className="rec-serve">
+                    <span className={`badge ${row.style}`}>{t(`spin.${row.style}`)}</span>
+                    <b>{units.speed(row.speedKmh)}</b>
+                    <span className="rpm">
+                      {[t('simple.rpm', { rpm: row.rpm.toLocaleString(i18n.language) }), brushWord(row) && t(`simple.brush.${brushWord(row)}`)]
+                        .filter(Boolean)
+                        .join(' · ')}
+                    </span>
                   </div>
-                  <div>
-                    <dt>{t('simple.score')}</dt>
-                    <dd>{pct(row.score)}</dd>
-                    <dd className="sub">{t('simple.scoreSub')}</dd>
-                  </div>
-                </dl>
-                <Outcomes share={row.share} t={t} />
-                <p className="pick-note">
-                  {[t('simple.clears', { d: dist(row.clearance) }), aimNote].filter(Boolean).join(' · ')}
-                </p>
-                <button className="rec-try" onClick={() => onWatch(row.serve)}>
-                  {t('simple.watch')}
-                </button>
-              </div>
-
-              {pickRow.inRate < floor && <p className="tip">{t(game.serveNo === 1 ? 'simple.warnFirst' : 'simple.warnSecond', { p: pct(pickRow.inRate) })}</p>}
-
-              <h2>{t('simple.allSpins')}</h2>
-              <div className="spin-list" role="group" aria-label={t('simple.allSpins')}>
-                <div className="spin-head" aria-hidden="true">
-                  <span>{t('simple.serve')}</span>
-                  <span>{t('simple.margin')}</span>
-                  <span>{t('simple.return')}</span>
-                  <span>{t('simple.score')}</span>
-                </div>
-                {ranked.rows.map((r) =>
-                  r.score == null ? (
-                    <div key={r.style} className="spin-row none">
-                      <span className="spin-name">
-                        <span className={`badge ${r.style}`}>{t(`spin.${r.style}`)}</span>
-                      </span>
-                      <span className="spin-cant">{t('simple.cant')}</span>
+                  {row === pickRow && ranked.rows.length > 1 && <p className="pick-why">{t(`simple.why.${ranked.why}`)}</p>}
+                  <dl className="pick-stats">
+                    <div>
+                      <dt>{t('simple.margin')}</dt>
+                      <dd className={row.inRate < floor ? 'low' : ''}>{pct(row.inRate)}%</dd>
+                      <dd className="sub">{t('simple.marginSub')}</dd>
                     </div>
-                  ) : (
-                    <button key={r.style} className={`spin-row ${r === row ? 'on' : ''}`} aria-pressed={r === row}
-                      onClick={() => setChoice({ key, serveNo: game.serveNo, style: r.style })}>
-                      <span className="spin-name">
-                        <span className={`badge ${r.style}`}>{t(`spin.${r.style}`)}</span>
-                        {r === pickRow && (
-                          <span className="pick-star" title={t('simple.recommended')}>
-                            ★
+                    <div>
+                      <dt>{t('simple.return')}</dt>
+                      <dd>{t(`simple.difficulty.${difficultyWord(row.difficulty)}`)}</dd>
+                      <dd className="sub">
+                        <Meter d={row.difficulty} />
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>{t('simple.score')}</dt>
+                      <dd>{pct(row.score)}</dd>
+                      <dd className="sub">{t('simple.scoreSub')}</dd>
+                    </div>
+                  </dl>
+                  <Outcomes share={row.share} t={t} />
+                  <p className="pick-note">
+                    {[angleNote(row.angleDeg, t), t('simple.clears', { d: dist(row.clearance) }), aimNote].filter(Boolean).join(' · ')}
+                  </p>
+                  <button className="rec-try" onClick={() => onWatch(row.serve)}>
+                    {t('simple.watch')}
+                  </button>
+                </div>
+  
+                {pickRow.inRate < floor && <p className="tip">{t(game.serveNo === 1 ? 'simple.warnFirst' : 'simple.warnSecond', { p: pct(pickRow.inRate) })}</p>}
+  
+                {ranked.rows.length > 1 && (
+                  <>
+                    <h2>{t('simple.options', { spin: t(`spin.${shownSpin}`) })}</h2>
+                    <div className="spin-list" role="group" aria-label={t('simple.options', { spin: t(`spin.${shownSpin}`) })}>
+                      <div className="spin-head" aria-hidden="true">
+                        <span>{t('simple.setting')}</span>
+                        <span>{t('simple.margin')}</span>
+                        <span>{t('simple.return')}</span>
+                        <span>{t('simple.score')}</span>
+                      </div>
+                      {listed.map((r) => (
+                        <button key={r.id} className={`spin-row ${r === row ? 'on' : ''}`} aria-pressed={r === row}
+                          onClick={() => setChoice({ key, serveNo: game.serveNo, id: r.id })}>
+                          <span className="spin-name">
+                            <b>{units.speed(r.speedKmh)}</b>
+                            {r === pickRow && (
+                              <span className="pick-star" title={t('simple.recommended')}>
+                                ★
+                              </span>
+                            )}
+                            <small>{t('simple.rpm', { rpm: r.rpm.toLocaleString(i18n.language) })}</small>
                           </span>
-                        )}
-                        <small>{units.speed(r.speedKmh)}</small>
-                      </span>
-                      <span className="spin-margin">
-                        <b className={r.inRate < floor ? 'low' : ''}>{pct(r.inRate)}%</b>
-                        <span className="mini-bar">
-                          <span style={{ width: `${r.inRate * 100}%` }} />
-                        </span>
-                      </span>
-                      <span className="spin-return">
-                        <Meter d={r.difficulty} />
-                        <small>{t(`simple.difficulty.${difficultyWord(r.difficulty)}`)}</small>
-                      </span>
-                      <span className="spin-score">{pct(r.score)}</span>
-                    </button>
-                  ),
+                          <span className="spin-margin">
+                            <b className={r.inRate < floor ? 'low' : ''}>{pct(r.inRate)}%</b>
+                            <span className="mini-bar">
+                              <span style={{ width: `${r.inRate * 100}%` }} />
+                            </span>
+                          </span>
+                          <span className="spin-return">
+                            <Meter d={r.difficulty} />
+                            <small>{t(`simple.difficulty.${difficultyWord(r.difficulty)}`)}</small>
+                          </span>
+                          <span className="spin-score">{pct(r.score)}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </>
                 )}
-              </div>
-              <p className="hint">
-                {t('simple.method', {
-                  tough: pct(WIN_AFTER.tough),
-                  easy: pct(WIN_AFTER.easy),
-                  second: report.second ? t(`spin.${report.second.style}`) : '–',
-                  secondWins: report.second ? pct(report.second.wins) : 0,
-                })}
-              </p>
-            </>
-          ) : (
-            <p className="note">{t(ranked ? 'simple.nothing' : 'simple.working')}</p>
-          )}
+                <p className="hint">
+                  {t('simple.method', {
+                    tough: pct(WIN_AFTER.tough),
+                    easy: pct(WIN_AFTER.easy),
+                    second: ranked.second ? `${t(`spin.${ranked.second.style}`)} ${units.speed(ranked.second.speedKmh)}` : '–',
+                    secondWins: ranked.second ? pct(ranked.second.wins) : 0,
+                  })}
+                </p>
+              </>
+            ) : (
+              <p className="note">{ranked ? t('simple.cantSpin', { spin: t(`spin.${shownSpin}`) }) : t('simple.working')}</p>
+            )}
+          </div>
         </div>
 
         <div className="simple-game">
@@ -407,7 +429,7 @@ export default function Simple({ who, level, onLevel, maxKmh, onMaxKmh, onHand, 
             </div>
           </div>
           <button className="serve-it" onClick={serveIt} disabled={!row || busy || flying}>
-            {t('simple.game.serve', { serve: row ? t(`spin.${row.style}`) : '' })}
+            {t('simple.game.serve', { serve: row ? `${t(`spin.${row.style}`)} ${units.speed(row.speedKmh)}` : '' })}
           </button>
           {played && landedId === played.id && (
             <p key={played.id} className={`played ${played.outcome.kind} ${played.outcome.won === false || (played.outcome.kind === 'fault' && played.serveNo === 2) ? 'lost' : ''}`}>

@@ -9,6 +9,14 @@ const CD = 0.55
 const K = (0.5 * RHO * Math.PI * BALL_R * BALL_R) / MASS
 // Extra upward bounce per m/s of topspin at the ball's rim.
 const KICK = 0.12
+// The share of its downward speed the ball keeps, going back up.
+const REBOUND = 0.75
+// Friction between ball and court (a medium-paced hard court).
+const MU = 0.6
+// The share of the contact patch's slip that friction takes off when the ball grips and rolls out of
+// the bounce (for a hollow ball). A ball that comes in low and fast can't grip: it skids, and friction
+// only takes off MU times how hard it hits the court, so a flat serve keeps more of its pace.
+const GRIP = 0.4
 
 export const COURT = {
   length: 23.77,
@@ -104,11 +112,16 @@ export function simulateServe(p, c, opts = {}) {
       // A ball that dies before reaching the returner: they just step in and take it.
       if (bounces === 2 && !ev.cross && !hitNet) ev.cross = { t, x: pos[0], y: BALL_R, z: pos[2], speedKmh: s * 3.6, short: true }
       if (fast && bounces === 1 && (untilBounce || (!ghost && !inBox(pos[0], pos[2])))) break
-      // Tangential friction pulls the contact patch toward rolling, and heavy topspin grips the
-      // court and kicks the ball up a little higher than it came in.
+      // Friction pulls the contact patch toward rolling, as far as it can before the ball leaves
+      // (a skid, for a low fast ball), and heavy topspin grips the court and kicks the ball up a
+      // little higher than it came in.
       const rim = cross(omega, [0, -BALL_R, 0])
+      const slipX = vel[0] + rim[0]
+      const slipZ = vel[2] + rim[2]
+      const slip = Math.hypot(slipX, slipZ)
+      const grip = slip > 0 ? Math.min(GRIP, (MU * (1 + REBOUND) * -vel[1]) / slip) : 0
       const kick = KICK * BALL_R * Math.max(0, -omega[2])
-      vel = [vel[0] - 0.4 * (vel[0] + rim[0]), -0.75 * vel[1] + kick, vel[2] - 0.4 * (vel[2] + rim[2])]
+      vel = [vel[0] - grip * slipX, -REBOUND * vel[1] + kick, vel[2] - grip * slipZ]
       omega = omega.map((o) => o * 0.5)
     }
     if (bounces === 1 && !hitNet) ev.peakAfterBounce = Math.max(ev.peakAfterBounce, pos[1])

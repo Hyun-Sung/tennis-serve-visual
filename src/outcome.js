@@ -10,7 +10,8 @@ export const RETURNER_READY = { x: 24.2, z: -2.9 }
 export const returnerReady = (side) => ({ x: RETURNER_READY.x, z: RETURNER_READY.z * sideSign(side) })
 // Where they usually meet the ball: a little in front of their body.
 export const RETURN_X = 23.7
-// A ball curving away from them can be cut off earlier on its path, up to CUT_OFF in front of that.
+// A ball curving away from them can be cut off earlier on its path: a strong returner up to CUT_OFF in
+// front of that, a weaker one less (cutOff below).
 const CUT_OFF = 3
 const MEET_STEP = 0.25
 export const MEET_XS = Array.from({ length: CUT_OFF / MEET_STEP + 1 }, (_, i) => RETURN_X - (CUT_OFF - i * MEET_STEP))
@@ -23,16 +24,22 @@ export const DEFAULT_LEVEL = 3.5
 // reaction: seconds before they move. accel, vmax: how fast they get across (m/s², m/s).
 // reach: arm and racket, what they hit comfortably (m). lunge: how much further they can stretch with a
 // lunge (m); a ball they need it for is still reached, but it's a stretch.
+// cutOff: how far forward they step to cut off a ball curving away (m); reading the serve that early
+// takes experience.
 // pace: ball speed they handle comfortably at contact (km/h).
 // high: the highest bounce they're comfortable with (m). prep: time they like for the backswing (s).
-// speed: the fastest serve they're used to (km/h).
-const LOW = { reaction: 0.42, accel: 5, vmax: 3, reach: 1.2, lunge: 0.25, pace: 70, high: 1.25, prep: 0.75, speed: 110 }
-const HIGH = { reaction: 0.25, accel: 8, vmax: 5, reach: 1.45, lunge: 0.25, pace: 125, high: 1.7, prep: 0.55, speed: 175 }
+// speed: the fastest serve they're used to (km/h): about 85 (53 mph) for a beginner, 175 (109 mph) at 5.0.
+// miss: the chance they miss even a comfortable return.
+const LOW = { reaction: 0.42, accel: 5, vmax: 3, reach: 1.2, lunge: 0.15, cutOff: 0.5, pace: 70, high: 1.25, prep: 0.75, speed: 85, miss: 0.15 }
+const HIGH = { reaction: 0.25, accel: 8, vmax: 5, reach: 1.45, lunge: 0.35, cutOff: CUT_OFF, pace: 125, high: 1.7, prep: 0.55, speed: 175, miss: 0.02 }
 
 export function levelParams(level) {
   const f = (level - LEVEL_LIMITS[0]) / (LEVEL_LIMITS[1] - LEVEL_LIMITS[0])
   const out = {}
   for (const k of Object.keys(LOW)) out[k] = LOW[k] + (HIGH[k] - LOW[k]) * f
+  // Consistency comes quickest early on, so misses shrink by the same share at each step up
+  // (about 15%, 10%, 7%, 5%, 3.5%, 2.5%, 2% from 2.0 to 5.0).
+  out.miss = LOW.miss * (HIGH.miss / LOW.miss) ** f
   return out
 }
 
@@ -51,6 +58,19 @@ const WINNER_AT = 0.8
 const EASY_BELOW = 0.35
 const sigmoid = (x) => 1 / (1 + Math.exp(-x))
 
+// A high ball is mostly a backhand problem: on the forehand they can still swing up through it, but a
+// high backhand is hard to get on top of. The returner is right-handed, so their backhand is on their
+// left: toward the centre line in the deuce court, toward the sideline in the ad court. FOREHAND_HIGH is
+// how much of the trouble is left on the forehand. A ball within BODY_SPAN of them either side can go
+// either way, so it counts as part of each.
+const FOREHAND_HIGH = 0.3
+const BODY_SPAN = 0.6
+// Seeing the ball kick up, they step back or move in to take it at a comfortable height. That can start
+// once they've had ADJUST_FROM of their backswing time (prep) after reacting, and with ADJUST_SPAN of it
+// more the high bounce is no trouble at all.
+const ADJUST_FROM = 0.5
+const ADJUST_SPAN = 1
+
 // How far the ball at q is from where the returner usually meets it (RETURN_X, level with where they wait),
 // how far beyond a comfortable reach it is, and how much of that they can cover by then: running, then lunging.
 function reachFor(q, ready, L) {
@@ -61,8 +81,9 @@ function reachFor(q, ready, L) {
 /**
  * Where the returner meets the ball. They take the shortest way to its path: for a ball coming toward
  * them that's their usual spot, but one curving away from them they cut off by moving diagonally
- * forward, meeting it earlier on its path. That is the nearest point they can still reach in time. If
- * there's none, it's an ace, and they run for the point they came closest to reaching.
+ * forward (no further than their cutOff), meeting it earlier on its path. That is the nearest point
+ * they can still reach in time. If there's none, it's an ace, and they run for the point they came
+ * closest to reaching.
  */
 function meetingPoint(sim, ready, L) {
   const c = sim.cross
@@ -70,6 +91,7 @@ function meetingPoint(sim, ready, L) {
   let best = null
   let closest = null
   for (const q of path) {
+    if (RETURN_X - q.x > L.cutOff + 1e-6) continue
     const r = reachFor(q, ready, L)
     if (r.need <= r.move) {
       if (!best || r.D <= best.D) best = r
@@ -99,10 +121,13 @@ export function evaluateReturn(sim, level, serveKmh, courtSide) {
   // stretch is how much of the run and lunge they need: 1 is a full-length dive for it.
   const stretch = need / move
   const pace = c.speedKmh / L.pace
-  // A high bounce is only trouble when it's also quick: with time to spare they back up or step in
-  // and take it at a comfortable height.
-  const spare = clamp01((c.t - L.reaction - L.prep) / 0.5)
-  const high = (Math.max(0, c.y - L.high) / 0.5) * (1 - spare)
+  // A high bounce is only trouble when it's also quick (with time to spare they back up or step in and
+  // take it at a comfortable height), and mostly on the backhand. The ball is on their left when its z
+  // is bigger than theirs (they face back up the court).
+  const spare = clamp01((c.t - L.reaction - ADJUST_FROM * L.prep) / (ADJUST_SPAN * L.prep))
+  const backhand = clamp01(0.5 + (c.z - ready.z) / (2 * BODY_SPAN))
+  const awkward = FOREHAND_HIGH + (1 - FOREHAND_HIGH) * backhand
+  const high = (Math.max(0, c.y - L.high) / 0.5) * (1 - spare) * awkward
   const low = Math.max(0, 0.4 - c.y) / 0.25
   const jam = D < 0.35 ? ((0.35 - D) / 0.35) * Math.min(1, pace) : 0
   const rush = clamp01((L.prep - (c.t - L.reaction)) / L.prep)
@@ -115,8 +140,9 @@ export function evaluateReturn(sim, level, serveKmh, courtSide) {
     0.5 * high +
     0.3 * low +
     0.35 * jam
-  const winner = c.short ? 0 : sigmoid((d - WINNER_AT) / 0.12)
-  const easy = c.short ? 1 : sigmoid((EASY_BELOW - d) / 0.1) * (1 - winner)
+  // On top of how hard the ball is, they miss now and then anyway (L.miss).
+  const winner = L.miss + (1 - L.miss) * (c.short ? 0 : sigmoid((d - WINNER_AT) / 0.12))
+  const easy = (c.short ? 1 : sigmoid((EASY_BELOW - d) / 0.1)) * (1 - winner)
   const p = { winner, easy, tough: Math.max(0, 1 - winner - easy) }
   const kind = c.short ? 'easy' : d > WINNER_AT ? 'winner' : d > EASY_BELOW ? 'tough' : 'easy'
   return { ...base, kind, d, p, parts: { rush, stretch, pace, heat, high, low, jam } }

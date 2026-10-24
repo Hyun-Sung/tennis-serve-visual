@@ -316,7 +316,7 @@
   },
   "simple": {
     "title": "Einfacher Modus",
-    "lede": "Tippe an, wo dein Aufschlag aufspringen soll. Du siehst, welcher Aufschlag dort am besten hinkommt, wie viel Spielraum für Fehler er hat, wie schwer er zu returnieren ist und wie er abschneidet.",
+    "lede": "Tippe an, wo dein Aufschlag aufspringen soll, und wähle einen Aufschlag: flach, Slice, Topspin-Slice oder Kick. Du siehst, mit welchem Tempo und Spin er dort am besten hinkommt, wie viel Spielraum für Fehler er hat, wie schwer er zu returnieren ist und wie er abschneidet.",
     "court": "Wo soll er aufspringen?",
     "courtLabel": "das Aufschlagfeld von hinter dir gesehen: tippen oder ziehen, um den Ball zu setzen; Pfeiltasten verschieben ihn",
     "spotFacts": "{{deep}} vor der Aufschlaglinie, {{across}} innerhalb der {{line}}",
@@ -333,15 +333,22 @@
       "strong": "starker Clubspieler",
       "advanced": "fortgeschrittener Spieler"
     },
+    "spinFirst": "Dein erster Aufschlag",
+    "spinSecond": "Dein zweiter Aufschlag",
     "recommended": "Empfohlen",
     "yourChoice": "Deine Wahl",
-    "backToPick": "zurück zum empfohlenen Aufschlag",
+    "backToPick": "zurück zu empfohlenem Tempo und Spin",
     "rpm": "{{rpm}} U/min",
+    "brush": {
+      "less": "weniger Spin als üblich",
+      "usual": "üblicher Spin",
+      "more": "mehr Spin als üblich"
+    },
     "why": {
-      "safest": "der sicherste Weg, den Ball dorthin zu bringen.",
-      "hardest": "von den Aufschlägen, die dort ankommen, der am schwersten zu returnierende.",
-      "both": "der sicherste Weg, den Ball dorthin zu bringen, und am schwersten zu returnieren.",
-      "balance": "die beste Mischung aus Sicherheit und Druck auf den Returnspieler."
+      "safest": "von den Wegen, diesen Aufschlag dorthin zu schlagen, der, der am häufigsten reinkommt.",
+      "hardest": "von den Wegen, diesen Aufschlag dorthin zu schlagen, die oft genug reinkommen, der am schwersten zu returnierende.",
+      "both": "von den Wegen, diesen Aufschlag dorthin zu schlagen, der, der am häufigsten reinkommt, und am schwersten zu returnieren.",
+      "balance": "die beste Mischung aus Reinkommen und Druck auf den Returnspieler."
     },
     "margin": "Spielraum",
     "marginSub": "kommen rein",
@@ -355,19 +362,22 @@
     "score": "Punktzahl",
     "scoreSub": "Punkte von 100",
     "clears": "geht {{d}} über das Netz",
+    "angleUp": "Schlägerwinkel {{deg}}° nach oben",
+    "angleDown": "Schlägerwinkel {{deg}}° nach unten",
+    "angleLevel": "Schlägerwinkel waagerecht",
     "aimRight": "ziele etwa {{d}} rechts vom Punkt: der Spin bringt ihn zurück",
     "aimLeft": "ziele etwa {{d}} links vom Punkt: der Spin bringt ihn zurück",
-    "allSpins": "Alle Aufschläge auf diesen Punkt",
-    "cant": "kommt nicht dorthin",
-    "nothing": "kein Aufschlag kann dort aufspringen. versuch einen anderen Punkt.",
-    "warnFirst": "dieser Punkt ist schwer zu treffen: selbst der beste Aufschlag kommt nur in {{p}} % der Fälle rein. versuch einen Punkt tiefer im Feld oder weiter weg von den Linien.",
-    "warnSecond": "hier kommt nichts 9 von 10 Mal rein, für einen zweiten Aufschlag ist das riskant. versuch einen Punkt weiter weg von den Linien.",
+    "options": "Die besten Wege für diesen Aufschlag ({{spin}})",
+    "setting": "Tempo und Spin",
+    "cantSpin": "dieser Aufschlag ({{spin}}) kommt dort nicht hin. versuch einen anderen Punkt oder einen anderen Aufschlag.",
+    "warnFirst": "dieser Punkt ist mit diesem Aufschlag schwer zu treffen: selbst mit dem besten Tempo und Spin kommt er nur in {{p}} % der Fälle rein. versuch einen Punkt tiefer im Feld oder weiter weg von den Linien, oder einen anderen Aufschlag.",
+    "warnSecond": "dieser Aufschlag kommt hier bei keinem Tempo und Spin 9 von 10 Mal rein, für einen zweiten Aufschlag ist das riskant. versuch einen Punkt weiter weg von den Linien, oder einen anderen Aufschlag.",
     "watch": "In 3D ansehen",
     "working": "Aufschläge werden berechnet…",
-    "method": "für jeden Spin sucht das Tool den Schlägerwinkel und die Richtung, die den Ball auf deinen Punkt bringen, bei mehreren Geschwindigkeiten bis zu deinem schnellsten Aufschlag, fliegt jeden mit denselben kleinen Fehlern wie das volle Tool und behält die Geschwindigkeit mit der besten Punktzahl. die Punktzahl sind die Punkte, die du von 100 solchen Aufschlägen gewinnen würdest: Asse und Returnfehler gewinnen, und nach einem Return gewinnst du {{tough}} % der Ballwechsel nach einem schwierigen und {{easy}} % nach einem leichten. beim ersten Aufschlag führt ein Fehler zum zweiten Aufschlag (ein sicherer {{second}} in die Mitte des Felds, der etwa {{secondWins}} % gewinnt), deshalb darf er mehr riskieren. ein erster Aufschlag muss mindestens jedes zweite Mal reinkommen, um gewählt zu werden, ein zweiter 9 von 10 Mal.",
+    "method": "das Tool probiert den gewählten Aufschlag mit weniger und mehr Spin bei mehreren Geschwindigkeiten bis zur schnellsten, die damit möglich ist, sucht für jeden den Schlägerwinkel und die Richtung, die den Ball auf deinen Punkt bringen, und fliegt jeden mit denselben kleinen Fehlern wie das volle Tool. die Punktzahl sind die Punkte, die du von 100 solchen Aufschlägen gewinnen würdest: Asse und Returnfehler gewinnen, und nach einem Return gewinnst du {{tough}} % der Ballwechsel nach einem schwierigen und {{easy}} % nach einem leichten. empfohlen wird der mit der besten Punktzahl unter denen, die oft genug reinkommen (beim ersten Aufschlag mindestens jedes zweite Mal, beim zweiten 9 von 10 Mal); schafft das keiner, der, der am häufigsten reinkommt. beim ersten Aufschlag führt ein Fehler zum zweiten Aufschlag (dein {{second}} auf denselben Punkt, der etwa {{secondWins}} % gewinnt), deshalb darf er mehr riskieren.",
     "game": {
       "title": "Spiel ein Spiel",
-      "note": "du schlägst jeden Punkt auf deinen Punkt auf, gegen den oben gewählten Returnspieler. ein Fehler gibt dir einen zweiten Aufschlag, und die Empfehlung passt sich an.",
+      "note": "du schlägst jeden Punkt mit den gewählten Aufschlägen auf deinen Punkt auf, gegen den oben gewählten Returnspieler. ein Fehler gibt dir einen zweiten Aufschlag.",
       "you": "Du",
       "them": "Gegner",
       "games": "Spiele",
@@ -411,8 +421,8 @@
   "seo": {
     "title": "Serve Visualization Tool: kostenloser 3D-Tennisaufschlag-Simulator",
     "description": "Ein kostenloser 3D-Simulator für den Tennisaufschlag. Stell Ballwurf, Stand, Sprung, Schlag, Spin und Tempo ein, sieh, ob der Ball über das Netz geht, und erfahre deine Fehlertoleranz und deine Chancen auf ein Ass gegen Rückschläger von NTRP 2.0 bis 5.0.",
-    "simpleTitle": "Einfacher Modus: Punkt antippen, besten Aufschlag finden | Serve Visualization Tool",
-    "simpleDescription": "Tippe an, wo dein Tennisaufschlag aufspringen soll, und sieh, welcher Aufschlag dort am besten hinkommt: flach, Slice, Topspin-Slice oder Kick, mit der Fehlertoleranz von jedem, wie schwer er zu returnieren ist, und einer Punktzahl. Dann spiel ein Übungsspiel gegen einen Returnspieler von NTRP 2.0 bis 5.0.",
+    "simpleTitle": "Einfacher Modus: Punkt antippen, Aufschlag wählen, bestes Tempo und Spin finden | Serve Visualization Tool",
+    "simpleDescription": "Tippe an, wo dein Tennisaufschlag aufspringen soll, wähle flach, Slice, Topspin-Slice oder Kick und sieh, mit welchem Tempo und Spin er dort am besten hinkommt, mit seiner Fehlertoleranz, wie schwer er zu returnieren ist, und einer Punktzahl. Dann spiel ein Übungsspiel gegen einen Returnspieler von NTRP 2.0 bis 5.0.",
     "aboutTitle": "So funktioniert das Serve Visualization Tool: die Mathematik des Tennisaufschlags einfach erklärt",
     "aboutDescription": "Wie das kostenlose Serve Visualization Tool einen Tennisaufschlag nachbildet: Ballflug, Spin, Absprung, Ballwurf, Fehlertoleranz und Rückschläger, einfach erklärt mit den Formeln dahinter.",
     "noscript": "Dieses interaktive 3D-Tool braucht aktiviertes JavaScript."
@@ -435,7 +445,7 @@
     },
     "bounce": {
       "title": "3. Der Absprung",
-      "body": "Beim Aufprall behält der Ball etwa <b>75 %</b> seiner Geschwindigkeit nach unten, jetzt nach oben. Die Reibung mit dem Platz bremst ihn und bringt seine Drehung Richtung Rollen. Viel Topspin greift auf dem Platz und lässt den Ball höher abspringen: das ist der Kick-Aufschlag.",
+      "body": "Beim Aufprall behält der Ball etwa <b>75 %</b> seiner Geschwindigkeit nach unten, jetzt nach oben. Die Reibung mit dem Platz bremst ihn und bringt seine Drehung Richtung Rollen. Ein Ball, der flach und schnell ankommt, rutscht dagegen durch, deshalb behält ein flacher Aufschlag mehr von seinem Tempo. Viel Topspin greift auf dem Platz und lässt den Ball höher abspringen: das ist der Kick-Aufschlag.",
       "formula": "Geschwindigkeit nach oben danach = 0,75 × Geschwindigkeit nach unten davor + Kick",
       "note": "der Kick ist ein kleiner zusätzlicher Schub, der mit dem Topspin wächst."
     },
@@ -459,9 +469,9 @@
     },
     "returner": {
       "title": "7. Der Rückschläger",
-      "body": "Der Rückschläger wartet knapp hinter der Grundlinie, etwa einen Meter innerhalb der Einzel-Seitenlinie. Das Tool berechnet, wann der Ball bei ihm ankommt und wie weit er laufen muss. Er wartet seine Reaktionszeit ab, läuft dann los und erreicht mit Ausfallschritt, Arm und Schläger noch mehr. Einen Ball, der auf ihn zukommt, nimmt er an seiner üblichen Stelle; einen, der von ihm wegdreht, schneidet er ab: Er läuft schräg nach vorn und trifft ihn früher auf seiner Bahn, an der nächsten Stelle, die er noch rechtzeitig erreicht. Gibt es keine solche Stelle, ist es ein <b>Ass</b>. Sonst machen weniger Zeit, ein längerer Weg oder ein Ausfallschritt, mehr Tempo, ein hoher Kick oder ein flacher Slice den Return schwerer, vom leichten Return bis zum Returnfehler.",
+      "body": "Der Rückschläger wartet knapp hinter der Grundlinie, etwa einen Meter innerhalb der Einzel-Seitenlinie. Das Tool berechnet, wann der Ball bei ihm ankommt und wie weit er laufen muss. Er wartet seine Reaktionszeit ab, läuft dann los und erreicht mit Ausfallschritt, Arm und Schläger noch mehr. Einen Ball, der auf ihn zukommt, nimmt er an seiner üblichen Stelle; einen, der von ihm wegdreht, schneidet er ab: Er läuft schräg nach vorn und trifft ihn früher auf seiner Bahn, an der nächsten Stelle, die er noch rechtzeitig erreicht. Gibt es keine solche Stelle, ist es ein <b>Ass</b>. Sonst machen weniger Zeit, ein längerer Weg oder ein Ausfallschritt, mehr Tempo, ein hoher Kick oder ein flacher Slice den Return schwerer, vom leichten Return bis zum Returnfehler. Ein hoher Kick ist vor allem auf der Rückhand unangenehm (der Rückschläger ist Rechtshänder), und nur, wenn er zu schnell kommt, um zurückzuweichen oder vorzurücken. All das hängt von seinem Niveau ab: wie schnell er reagiert und läuft, wie weit sein Ausfallschritt reicht, wie weit er sich nach vorn traut, um einen breiten Ball abzuschneiden, welches Aufschlagtempo er gewohnt ist und wie oft er selbst einen leichten Ball verschlägt.",
       "formula": "Reichweite = Ausfallschritt, Arm und Schläger + Laufweg nach der Reaktion",
-      "note": "ein 2.0-Rückschläger reagiert in etwa 0,42 s, läuft etwa 3 m/s und reicht etwa 1,45 m weit; ein 5.0-Rückschläger reagiert in etwa 0,25 s, läuft etwa 5 m/s und reicht etwa 1,7 m weit."
+      "note": "ein 2.0-Rückschläger reagiert in etwa 0,42 s, läuft etwa 3 m/s, reicht etwa 1,35 m weit, ist Aufschläge bis etwa 85 km/h gewohnt und verschlägt etwa einen von 7 leichten Returns; ein 5.0-Rückschläger reagiert in etwa 0,25 s, läuft etwa 5 m/s, reicht etwa 1,8 m weit, ist Aufschläge bis etwa 175 km/h gewohnt und verschlägt etwa einen von 50."
     },
     "direction": {
       "title": "8. Platzseite und Schlagarm",
