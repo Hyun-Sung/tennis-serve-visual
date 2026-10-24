@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { afterServe, callScore, NEW_GAME } from '../game.js'
 import { LEVEL_LIMITS, RETURN_FLIGHT } from '../outcome.js'
 import { COURT, simulateServe } from '../physics.js'
 import { MAX_SPEED_LIMITS, STYLES, WIN_AFTER } from '../recommend.js'
-import { clampSpot, difficultyWord, IN_FLOOR, playServe, rankSettings, sideOfSpot, spotReport } from '../spot.js'
+import { clampSpot, difficultyWord, IN_FLOOR, rankSettings, sideOfSpot, spotReport } from '../spot.js'
 import { OUTCOME_PARTS as PARTS } from '../palette.js'
 import { useUnits } from '../units.js'
 import { Seg, Slider } from './Fields.jsx'
@@ -119,39 +118,28 @@ function Outcomes({ share, t }) {
   )
 }
 
-/** What happened on a played serve, in a sentence. */
-function resultText(p, t) {
-  const o = p.outcome
-  let text
-  if (o.kind === 'fault') text = t(p.serveNo === 1 ? 'simple.result.fault' : 'simple.result.double', { why: t(`simple.miss.${o.why}`) })
-  else if (o.kind === 'ace' || o.kind === 'winner') text = t(`simple.result.${o.kind}`)
-  else text = t(`simple.result.${o.kind}${o.won ? 'Won' : 'Lost'}`)
-  if (p.next.gameTo) text += ` ${t(p.next.gameTo === 'you' ? 'simple.result.gameYou' : 'simple.result.gameThem')}`
-  return text
-}
-
 /**
  * The simple mode: tap where the serve should land and pick a kind of serve (flat, slice, topspin-slice
  * or kick) for the first and second serve. It recommends the speed and amount of spin that get that
- * serve there best, with its room for error, how hard it is to return and how it scores. Then play a
- * game. The server (height, hand, stance, jump, court side), returner level and fastest serve are
- * shared with the full tool, so both pages describe the same player.
+ * serve there best, with its room for error, how hard it is to return and how it scores. The server
+ * (height, hand, stance, jump, court side), returner level and fastest serve are shared with the full
+ * tool, so both pages describe the same player.
  */
-export default function Simple({ who, level, onLevel, maxKmh, onMaxKmh, onHand, onSide, spot, onSpot, spins, onSpins, game, onGame, onWatch }) {
+export default function Simple({ who, level, onLevel, maxKmh, onMaxKmh, onHand, onSide, spot, onSpot, spins, onSpins, serveNo, onServeNo, onWatch }) {
   const { t, i18n } = useTranslation()
   const units = useUnits()
   const side = who.side
   // The spot in the box being served to (the full tool may have switched sides since it was placed).
   const here = useMemo(() => clampSpot(sideOfSpot(spot) === side ? spot : { x: spot.x, z: -spot.z }, side), [spot, side])
   const { report, busy, key } = useSpotReport(who, maxKmh, level, here, spins)
-  const ranked = useMemo(() => (report ? rankSettings(report, game.serveNo) : null), [report, game.serveNo])
+  const ranked = useMemo(() => (report ? rankSettings(report, serveNo) : null), [report, serveNo])
   // The serve chosen for this serve, and the one the answer on show is for (they differ while it's worked out).
-  const spin = spins[game.serveNo]
-  const shownSpin = report?.spins[game.serveNo] ?? spin
+  const spin = spins[serveNo]
+  const shownSpin = report?.spins[serveNo] ?? spin
 
   // A setting picked from the list, for this answer and serve only: a new spot goes back to the recommendation.
   const [choice, setChoice] = useState({ key: null, serveNo: 0, id: null })
-  const picked = choice.key === key && choice.serveNo === game.serveNo ? ranked?.rows.find((r) => r.id === choice.id) : null
+  const picked = choice.key === key && choice.serveNo === serveNo ? ranked?.rows.find((r) => r.id === choice.id) : null
   const pickRow = ranked?.pick ?? null
   const row = picked ?? pickRow
   // The best ways to hit it, plus the one picked if it's further down.
@@ -165,36 +153,6 @@ export default function Simple({ who, level, onLevel, maxKmh, onMaxKmh, onHand, 
     [pickRow, row],
   )
 
-  // The practice game: the last serve hit, and whether it has landed yet (the score waits for it).
-  const [played, setPlayed] = useState(null)
-  const [landedId, setLandedId] = useState(null)
-  const flying = played != null && landedId !== played.id
-  const serveIt = () => {
-    if (!row || busy || flying) return
-    const outcome = playServe(row, level, side)
-    setPlayed({ id: Date.now(), sim: outcome.sim, ret: outcome.ret, outcome, serveNo: game.serveNo, next: afterServe(game, outcome) })
-  }
-  const onLanded = (id) => {
-    if (!played || id !== played.id) return
-    setLandedId(id)
-    onGame(played.next)
-  }
-  // Space serves, like it plays the serve on the full tool.
-  const serveRef = useRef(serveIt)
-  useEffect(() => {
-    serveRef.current = serveIt
-  })
-  useEffect(() => {
-    const onKey = (e) => {
-      if (e.code === 'Space' && !['INPUT', 'BUTTON', 'SELECT', 'A'].includes(e.target.tagName) && e.target.getAttribute?.('role') !== 'slider') {
-        e.preventDefault()
-        serveRef.current()
-      }
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [])
-
   // A fresh touch in the other box serves from the other side; a drag stays in its box.
   const place = (p, fresh) => {
     let to = side
@@ -203,13 +161,11 @@ export default function Simple({ who, level, onLevel, maxKmh, onMaxKmh, onHand, 
       onSide(to)
     }
     onSpot(clampSpot(p, to))
-    if (!flying) setPlayed(null)
   }
   const changeSide = (to) => {
     if (to === side) return
     onSide(to)
     onSpot(clampSpot({ x: here.x, z: -here.z }, to))
-    if (!flying) setPlayed(null)
   }
 
   const dist = (m) => (m < 1 ? units.short(m) : units.long(m))
@@ -228,9 +184,7 @@ export default function Simple({ who, level, onLevel, maxKmh, onMaxKmh, onHand, 
     const straight = c.z + ((row.flight.aimZ - c.z) * (here.x - c.x)) / (COURT.serviceLine - c.x) - here.z
     if (Math.abs(straight) >= 0.3) aimNote = t(straight > 0 ? 'simple.aimRight' : 'simple.aimLeft', { d: dist(Math.abs(straight)) })
   }
-  const floor = IN_FLOOR[game.serveNo]
-  const score = callScore(game)
-  const s = game.stats
+  const floor = IN_FLOOR[serveNo]
 
   return (
     <section className="simple panel">
@@ -248,7 +202,7 @@ export default function Simple({ who, level, onLevel, maxKmh, onMaxKmh, onHand, 
         <div className="field">
           <span className="field-label">{t('simple.serve')}</span>
           <Seg label={t('simple.serve')} options={[1, 2].map((n) => ({ value: n, label: t(n === 1 ? 'compare.first' : 'compare.second') }))}
-            value={game.serveNo} onChange={(serveNo) => onGame({ ...game, serveNo })} />
+            value={serveNo} onChange={onServeNo} />
         </div>
         <div className="field">
           <span className="field-label">{t('server.hand')}</span>
@@ -264,18 +218,18 @@ export default function Simple({ who, level, onLevel, maxKmh, onMaxKmh, onHand, 
       <div className="simple-grid">
         <div className="simple-court">
           <h2>{t('simple.court')}</h2>
-          <SpotCourt side={side} spot={here} onPlace={place} paths={paths} stale={busy} chosen={row?.id} played={played}
-            onLanded={onLanded} label={t('simple.courtLabel')} valueText={facts} />
+          <SpotCourt side={side} spot={here} onPlace={place} paths={paths} stale={busy} chosen={row?.id} label={t('simple.courtLabel')}
+            valueText={facts} />
           <p className="spot-facts">{facts}</p>
           <p className="note">{t('simple.courtHint')}</p>
         </div>
 
         <div className="simple-info">
           <div className="spin-pick">
-            <h2>{t(game.serveNo === 1 ? 'simple.spinFirst' : 'simple.spinSecond')}</h2>
-            <Seg label={t(game.serveNo === 1 ? 'simple.spinFirst' : 'simple.spinSecond')}
+            <h2>{t(serveNo === 1 ? 'simple.spinFirst' : 'simple.spinSecond')}</h2>
+            <Seg label={t(serveNo === 1 ? 'simple.spinFirst' : 'simple.spinSecond')}
               options={Object.keys(STYLES).map((v) => ({ value: v, label: t(`spin.${v}`) }))} value={spin}
-              onChange={(v) => onSpins({ ...spins, [game.serveNo]: v })} />
+              onChange={(v) => onSpins({ ...spins, [serveNo]: v })} />
           </div>
           <div className={`simple-results ${busy ? 'stale' : ''}`} aria-busy={busy} aria-live="polite">
             {ranked && row ? (
@@ -327,7 +281,7 @@ export default function Simple({ who, level, onLevel, maxKmh, onMaxKmh, onHand, 
                   </button>
                 </div>
   
-                {pickRow.inRate < floor && <p className="tip">{t(game.serveNo === 1 ? 'simple.warnFirst' : 'simple.warnSecond', { p: pct(pickRow.inRate) })}</p>}
+                {pickRow.inRate < floor && <p className="tip">{t(serveNo === 1 ? 'simple.warnFirst' : 'simple.warnSecond', { p: pct(pickRow.inRate) })}</p>}
   
                 {ranked.rows.length > 1 && (
                   <>
@@ -341,7 +295,7 @@ export default function Simple({ who, level, onLevel, maxKmh, onMaxKmh, onHand, 
                       </div>
                       {listed.map((r) => (
                         <button key={r.id} className={`spin-row ${r === row ? 'on' : ''}`} aria-pressed={r === row}
-                          onClick={() => setChoice({ key, serveNo: game.serveNo, id: r.id })}>
+                          onClick={() => setChoice({ key, serveNo, id: r.id })}>
                           <span className="spin-name">
                             <b>{units.speed(r.speedKmh)}</b>
                             {r === pickRow && (
@@ -380,67 +334,6 @@ export default function Simple({ who, level, onLevel, maxKmh, onMaxKmh, onHand, 
               <p className="note">{ranked ? t('simple.cantSpin', { spin: t(`spin.${shownSpin}`) }) : t('simple.working')}</p>
             )}
           </div>
-        </div>
-
-        <div className="simple-game">
-          <div className="game-head">
-            <h2>{t('simple.game.title')}</h2>
-            <button
-              className="ghost"
-              onClick={() => {
-                onGame(NEW_GAME)
-                setPlayed(null)
-              }}
-            >
-              {t('simple.game.newGame')}
-            </button>
-          </div>
-          <p className="note">{t('simple.game.note')}</p>
-          <div className="score-row">
-            <table className="scoreboard">
-              <thead>
-                <tr>
-                  <td />
-                  <th scope="col">{t('simple.game.games')}</th>
-                  <th scope="col">{t('simple.game.points')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">
-                    <span className="serving" title={t('simple.game.serving')} aria-label={t('simple.game.serving')}>
-                      ●
-                    </span>
-                    {t('simple.game.you')}
-                  </th>
-                  <td>{game.games[0]}</td>
-                  <td className="pts">{score.you}</td>
-                </tr>
-                <tr>
-                  <th scope="row">{t('simple.game.them')}</th>
-                  <td>{game.games[1]}</td>
-                  <td className="pts">{score.them}</td>
-                </tr>
-              </tbody>
-            </table>
-            <div className="score-side">
-              {score.call && <span className="call">{t(`simple.game.${score.call}`)}</span>}
-              <span className="next">{t(game.serveNo === 1 ? 'compare.first' : 'compare.second')}</span>
-            </div>
-          </div>
-          <button className="serve-it" onClick={serveIt} disabled={!row || busy || flying}>
-            {t('simple.game.serve', { serve: row ? `${t(`spin.${row.style}`)} ${units.speed(row.speedKmh)}` : '' })}
-          </button>
-          {played && landedId === played.id && (
-            <p key={played.id} className={`played ${played.outcome.kind} ${played.outcome.won === false || (played.outcome.kind === 'fault' && played.serveNo === 2) ? 'lost' : ''}`}>
-              {resultText(played, t)}
-            </p>
-          )}
-          {s.firsts > 0 && (
-            <p className="hint">
-              {t('simple.game.stats', { won: s.won, points: s.points, aces: s.aces, doubles: s.doubles, first: pct(s.firstsIn / s.firsts) })}
-            </p>
-          )}
         </div>
       </div>
     </section>

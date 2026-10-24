@@ -3,7 +3,7 @@
 // and aim that land each one on the spot, flies each through the same error model and returner as the
 // full tool, and scores them.
 
-import { assessServe, evaluateReturn, misHit, RETURN_FLIGHT } from './outcome.js'
+import { assessServe } from './outcome.js'
 import { boxZ, COURT, simulateServe } from './physics.js'
 import { SECOND_IN_FLOOR, serveFor, SLOWEST_SERVE, speedCap, WIN_AFTER } from './recommend.js'
 import { planServe } from './serve.js'
@@ -208,27 +208,4 @@ export function rankSettings(report, serveNo) {
     why = safest && hardest ? 'both' : safest ? 'safest' : hardest ? 'hardest' : 'balance'
   }
   return { rows, pick, why, second }
-}
-
-// A standard normal draw (Box-Muller).
-function gauss(rand) {
-  const u = 1 - rand()
-  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rand())
-}
-
-/**
- * One serve played for real: hit with a random set of the usual small mistakes, then returned (or not)
- * by a returner of this level. won is null after a fault (the point goes on), else whether the server
- * won the point. sim is the flight, for drawing where it landed, and ret how the returner went for it.
- */
-export function playServe(c, level, side, rand = Math.random) {
-  const flight = misHit(c.flight, c.noise, Array.from({ length: 5 }, () => gauss(rand)))
-  const sim = simulateServe(flight, c.contact, RETURN_FLIGHT)
-  if (sim.result !== 'in') return { kind: 'fault', why: sim.result, sim, won: null }
-  const ret = evaluateReturn(sim, level, flight.speedKmh, side)
-  if (ret.kind === 'ace') return { kind: 'ace', sim, ret, won: true }
-  const r = rand()
-  if (r < ret.p.winner) return { kind: 'winner', sim, ret, won: true }
-  const kind = r < ret.p.winner + ret.p.tough ? 'tough' : 'easy'
-  return { kind, sim, ret, won: rand() < WIN_AFTER[kind] }
 }

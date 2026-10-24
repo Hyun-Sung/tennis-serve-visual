@@ -1163,7 +1163,7 @@ header {
   }
 }
 
-/* simple mode: tap a spot, see the best serve, play a game */
+/* simple mode: tap a spot, see the best serve */
 .simple {
   padding: 1rem 1.1rem 1.2rem;
 }
@@ -1227,9 +1227,7 @@ header {
 .simple-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-  grid-template-areas:
-    'court info'
-    'game info';
+  grid-template-areas: 'court info';
   gap: 1rem 1.2rem;
   align-items: start;
   margin-top: 1rem;
@@ -1260,13 +1258,10 @@ header {
   padding: 0.35rem 0.6rem;
   white-space: nowrap;
 }
-.simple-game {
-  grid-area: game;
-}
 @media (max-width: 860px) {
   .simple-grid {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: 'court' 'info' 'game';
+    grid-template-areas: 'court' 'info';
   }
 }
 
@@ -1316,25 +1311,6 @@ svg.spot-court .paths {
 }
 svg.spot-court .paths.stale {
   opacity: 0.3;
-}
-svg.spot-court .land path {
-  stroke: #fff;
-  stroke-width: 0.09;
-  stroke-linecap: round;
-}
-svg.spot-court .land text {
-  font-size: 0.6px;
-  font-weight: 800;
-  fill: #fff;
-  paint-order: stroke;
-  stroke: var(--ink);
-  stroke-width: 0.15;
-}
-svg.spot-court .land.in text {
-  fill: var(--ball);
-}
-svg.spot-court .land:not(.in) path {
-  stroke: #ff8a7a;
 }
 .spot-facts {
   margin: 0.5rem 0 0;
@@ -1572,137 +1548,4 @@ button.spin-row.on {
   font-size: 1.1rem;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
-}
-
-/* the practice game */
-.simple-game {
-  padding: 0.75rem 0.85rem;
-  border-radius: 16px;
-  background: #f4f1e8;
-}
-.game-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-.game-head h2 {
-  margin: 0;
-}
-.simple-game > .note {
-  margin: 0.3rem 0 0.6rem;
-  font-size: 0.85rem;
-}
-.score-row {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  flex-wrap: wrap;
-}
-table.scoreboard {
-  border-collapse: separate;
-  border-spacing: 0;
-  border-radius: 12px;
-  overflow: hidden;
-  background: var(--ink);
-  color: #fff;
-  font-variant-numeric: tabular-nums;
-}
-.scoreboard th,
-.scoreboard td {
-  padding: 0.25rem 0.7rem;
-  text-align: center;
-}
-.scoreboard thead th {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.65);
-}
-.scoreboard tbody th {
-  text-align: left;
-  font-weight: 700;
-}
-.scoreboard tbody td {
-  font-size: 1.2rem;
-  font-weight: 800;
-}
-.scoreboard td.pts {
-  min-width: 2.8rem;
-  color: var(--ball);
-}
-.scoreboard .serving {
-  margin-right: 0.3rem;
-  font-size: 0.6rem;
-  vertical-align: 0.15rem;
-  color: var(--ball);
-}
-.score-side {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.3rem;
-}
-.score-side .call,
-.score-side .next {
-  padding: 0.1rem 0.6rem;
-  border-radius: 999px;
-  font-size: 0.82rem;
-  font-weight: 700;
-}
-.score-side .call {
-  background: #fff4d6;
-}
-.score-side .next {
-  background: var(--card);
-  border: 2px solid var(--line);
-}
-button.serve-it {
-  display: block;
-  width: 100%;
-  margin-top: 0.7rem;
-  padding: 0.55rem 1rem;
-  background: var(--coral);
-  border-color: var(--coral);
-  color: #fff;
-  font-weight: 800;
-  font-size: 1.02rem;
-}
-button.serve-it:disabled {
-  opacity: 0.55;
-  cursor: default;
-  transform: none;
-}
-.played {
-  margin: 0.6rem 0 0;
-  padding: 0.5rem 0.8rem;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 0.92rem;
-  animation: pop 0.35s ease-out;
-}
-.played.ace {
-  background: #e3dcff;
-  color: #5b3fe0;
-}
-.played.winner {
-  background: #d8ebfb;
-  color: #2a74b8;
-}
-.played.tough {
-  background: #d6f5ea;
-  color: #23805f;
-}
-.played.easy {
-  background: #ffe6c8;
-  color: #c06a12;
-}
-.played.fault,
-.played.lost {
-  background: #fde1da;
-  color: var(--red);
-}
-.simple-game > .hint {
-  margin: 0.5rem 0 0;
-  color: var(--soft);
-  font-size: 0.78rem;
 }

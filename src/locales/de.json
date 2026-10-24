@@ -374,39 +374,7 @@
     "warnSecond": "dieser Aufschlag kommt hier bei keinem Tempo und Spin 9 von 10 Mal rein, für einen zweiten Aufschlag ist das riskant. versuch einen Punkt weiter weg von den Linien, oder einen anderen Aufschlag.",
     "watch": "In 3D ansehen",
     "working": "Aufschläge werden berechnet…",
-    "method": "das Tool probiert den gewählten Aufschlag mit weniger und mehr Spin bei mehreren Geschwindigkeiten bis zur schnellsten, die damit möglich ist, sucht für jeden den Schlägerwinkel und die Richtung, die den Ball auf deinen Punkt bringen, und fliegt jeden mit denselben kleinen Fehlern wie das volle Tool. die Punktzahl sind die Punkte, die du von 100 solchen Aufschlägen gewinnen würdest: Asse und Returnfehler gewinnen, und nach einem Return gewinnst du {{tough}} % der Ballwechsel nach einem schwierigen und {{easy}} % nach einem leichten. empfohlen wird der mit der besten Punktzahl unter denen, die oft genug reinkommen (beim ersten Aufschlag mindestens jedes zweite Mal, beim zweiten 9 von 10 Mal); schafft das keiner, der, der am häufigsten reinkommt. beim ersten Aufschlag führt ein Fehler zum zweiten Aufschlag (dein {{second}} auf denselben Punkt, der etwa {{secondWins}} % gewinnt), deshalb darf er mehr riskieren.",
-    "game": {
-      "title": "Spiel ein Spiel",
-      "note": "du schlägst jeden Punkt mit den gewählten Aufschlägen auf deinen Punkt auf, gegen den oben gewählten Returnspieler. ein Fehler gibt dir einen zweiten Aufschlag.",
-      "you": "Du",
-      "them": "Gegner",
-      "games": "Spiele",
-      "points": "Punkte",
-      "serving": "schlägt auf",
-      "deuce": "Einstand",
-      "advYou": "Vorteil du",
-      "advThem": "Vorteil Gegner",
-      "serve": "Aufschlagen: {{serve}}",
-      "newGame": "neues Spiel",
-      "stats": "Punkte gewonnen {{won}} von {{points}} · Asse {{aces}} · Doppelfehler {{doubles}} · erste Aufschläge drin {{first}} %"
-    },
-    "result": {
-      "fault": "Fehler: {{why}}. Zweiter Aufschlag.",
-      "double": "Doppelfehler: {{why}}. Punkt für den Gegner.",
-      "ace": "Ass! Punkt für dich.",
-      "winner": "Returnfehler: er bekommt den Schläger dran, aber den Ball nicht ins Feld. Punkt für dich.",
-      "toughWon": "Schwieriger Return, und du gewinnst den Ballwechsel.",
-      "toughLost": "Schwieriger Return, aber der Gegner gewinnt den Ballwechsel.",
-      "easyWon": "Leichter Return, aber du gewinnst trotzdem den Ballwechsel.",
-      "easyLost": "Leichter Return, und der Gegner gewinnt den Ballwechsel.",
-      "gameYou": "Spiel für dich!",
-      "gameThem": "Spiel für den Gegner."
-    },
-    "miss": {
-      "net": "ins Netz",
-      "long": "lang",
-      "wide": "aus"
-    }
+    "method": "das Tool probiert den gewählten Aufschlag mit weniger und mehr Spin bei mehreren Geschwindigkeiten bis zur schnellsten, die damit möglich ist, sucht für jeden den Schlägerwinkel und die Richtung, die den Ball auf deinen Punkt bringen, und fliegt jeden mit denselben kleinen Fehlern wie das volle Tool. die Punktzahl sind die Punkte, die du von 100 solchen Aufschlägen gewinnen würdest: Asse und Returnfehler gewinnen, und nach einem Return gewinnst du {{tough}} % der Ballwechsel nach einem schwierigen und {{easy}} % nach einem leichten. empfohlen wird der mit der besten Punktzahl unter denen, die oft genug reinkommen (beim ersten Aufschlag mindestens jedes zweite Mal, beim zweiten 9 von 10 Mal); schafft das keiner, der, der am häufigsten reinkommt. beim ersten Aufschlag führt ein Fehler zum zweiten Aufschlag (dein {{second}} auf denselben Punkt, der etwa {{secondWins}} % gewinnt), deshalb darf er mehr riskieren."
   },
   "nav": {
     "tool": "Aufschlag-Tool",
@@ -422,7 +390,7 @@
     "title": "Serve Visualization Tool: kostenloser 3D-Tennisaufschlag-Simulator",
     "description": "Ein kostenloser 3D-Simulator für den Tennisaufschlag. Stell Ballwurf, Stand, Sprung, Schlag, Spin und Tempo ein, sieh, ob der Ball über das Netz geht, und erfahre deine Fehlertoleranz und deine Chancen auf ein Ass gegen Rückschläger von NTRP 2.0 bis 5.0.",
     "simpleTitle": "Einfacher Modus: Punkt antippen, Aufschlag wählen, bestes Tempo und Spin finden | Serve Visualization Tool",
-    "simpleDescription": "Tippe an, wo dein Tennisaufschlag aufspringen soll, wähle flach, Slice, Topspin-Slice oder Kick und sieh, mit welchem Tempo und Spin er dort am besten hinkommt, mit seiner Fehlertoleranz, wie schwer er zu returnieren ist, und einer Punktzahl. Dann spiel ein Übungsspiel gegen einen Returnspieler von NTRP 2.0 bis 5.0.",
+    "simpleDescription": "Tippe an, wo dein Tennisaufschlag aufspringen soll, wähle flach, Slice, Topspin-Slice oder Kick und sieh, mit welchem Tempo und Spin er dort am besten hinkommt, mit seiner Fehlertoleranz, wie schwer er für einen Returnspieler von NTRP 2.0 bis 5.0 zu returnieren ist, und einer Punktzahl.",
     "aboutTitle": "So funktioniert das Serve Visualization Tool: die Mathematik des Tennisaufschlags einfach erklärt",
     "aboutDescription": "Wie das kostenlose Serve Visualization Tool einen Tennisaufschlag nachbildet: Ballflug, Spin, Absprung, Ballwurf, Fehlertoleranz und Rückschläger, einfach erklärt mit den Formeln dahinter.",
     "noscript": "Dieses interaktive 3D-Tool braucht aktiviertes JavaScript."

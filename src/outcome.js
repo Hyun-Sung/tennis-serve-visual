@@ -241,14 +241,6 @@ function nudge(flight, tilt, which, g, noise) {
   return f
 }
 
-/** The serve hit with all five kinds of mistake at once; g is each one's size in standard deviations. */
-export function misHit(flight, noise, g) {
-  const tilt = Math.atan2(flight.axis[1], -flight.axis[2])
-  let f = flight
-  for (let which = 0; which < 5; which++) f = nudge(f, tilt, which, g[which], noise)
-  return f
-}
-
 // What matters about a flight: net clearance, where it bounces, and the ball at each place the returner
 // could meet it (MEET_XS): when it gets there, how high, how far across and how fast.
 const CLEAR = 0

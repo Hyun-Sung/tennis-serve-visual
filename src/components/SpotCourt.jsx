@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { returnerAt, returnerReady } from '../outcome.js'
-import { ballAt, boxZ, COURT } from '../physics.js'
+import { returnerReady } from '../outcome.js'
+import { boxZ, COURT } from '../physics.js'
 
 // The far half of the court seen from above and behind the server: right on screen is the server's
 // right (z), up the screen is toward the returner (x). Screen point = (z, -x).
@@ -9,8 +9,6 @@ const VB = { x: -6.2, y: -25, w: 12.4, h: 14.8 }
 const snap = (v) => Math.round(v * 20) / 20
 // How far the arrow keys move the spot, in metres.
 const KEY_STEP = 0.1
-// The played ball flies at half speed so you can follow it.
-const RATE = 0.5
 // 9 in 10 of a two-dimensional normal scatter fall inside this many standard deviations.
 const CLOUD_K = Math.sqrt(-2 * Math.log(0.1))
 
@@ -39,17 +37,13 @@ function cloud(spread) {
   }
 }
 
-const reducedMotion = () => typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-
 /**
  * Pick where the serve should land. spot is { x, z } in metres; onPlace(spot, fresh) is called with
  * where the pointer is, fresh on the first touch of a drag (a fresh touch in the other box switches
  * sides). paths are the serves to draw ({ id, style, spread, points }); the one whose id is chosen is
- * drawn with its scatter. played is the last serve hit
- * in the practice game ({ id, sim, ret }); onLanded(id) fires once it has landed. stale dims the paths while
- * the ones for a new spot are worked out.
+ * drawn with its scatter. stale dims the paths while the ones for a new spot are worked out.
  */
-export default function SpotCourt({ side, spot, onPlace, paths, stale, chosen, played, onLanded, label, valueText }) {
+export default function SpotCourt({ side, spot, onPlace, paths, stale, chosen, label, valueText }) {
   const { t } = useTranslation()
   const ref = useRef(null)
   const dragging = useRef(false)
@@ -72,39 +66,6 @@ export default function SpotCourt({ side, spot, onPlace, paths, stale, chosen, p
     e.preventDefault()
     onPlace({ x: snap(spot.x + step[0]), z: snap(spot.z + step[1]) }, false)
   }
-
-  // Fly the played ball along its path, then report that it landed.
-  const [clock, setClock] = useState(null)
-  const landed = useRef(onLanded)
-  useEffect(() => {
-    landed.current = onLanded
-  })
-  const still = reducedMotion()
-  const end = played ? (played.sim.bounce ? played.sim.bounce.t : played.sim.duration) + 0.3 : 0
-  useEffect(() => {
-    if (!played) return
-    if (still) {
-      landed.current?.(played.id)
-      return
-    }
-    let raf
-    const start = performance.now()
-    const tick = (now) => {
-      const t = Math.min(((now - start) / 1000) * RATE, end)
-      setClock({ id: played.id, t })
-      if (t < end) raf = requestAnimationFrame(tick)
-      else landed.current?.(played.id)
-    }
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
-  }, [played, still, end])
-  // With reduced motion the ball isn't flown: it has simply landed.
-  const flyT = !played ? null : still ? end : clock?.id === played.id ? clock.t : null
-  const flying = played && flyT != null && flyT < end
-  const ball = flying ? ballAt(played.sim, flyT) : null
-  const mark = played && flyT != null && played.sim.bounce && flyT >= played.sim.bounce.t ? played.sim.bounce : null
-  // The returner sets off once they've read the played serve, sideways or diagonally forward to cut it off.
-  const returner = played?.ret && flyT != null ? returnerAt(played.ret, flyT) : ready
 
   const chosenPath = paths.find((p) => p.id === chosen)
   const c = chosenPath?.spread ? cloud(chosenPath.spread) : null
@@ -157,8 +118,8 @@ export default function SpotCourt({ side, spot, onPlace, paths, stale, chosen, p
       </text>
       <line x1={-hd - 0.4} y1={-net} x2={hd + 0.4} y2={-net} stroke="#2f3e66" strokeWidth="0.14" />
 
-      <circle cx={returner.z} cy={-returner.x} r="0.3" fill="#5aa9e6" stroke="#fff" strokeWidth="0.06" />
-      <text className="who-label" x={returner.z} y={-returner.x - 0.5}>
+      <circle cx={ready.z} cy={-ready.x} r="0.3" fill="#5aa9e6" stroke="#fff" strokeWidth="0.06" />
+      <text className="who-label" x={ready.z} y={-ready.x - 0.5}>
         {t('simple.returner')}
       </text>
 
@@ -183,20 +144,6 @@ export default function SpotCourt({ side, spot, onPlace, paths, stale, chosen, p
         <circle cx="0.05" cy="0.06" r="0.2" fill="rgba(0,0,0,0.25)" />
         <circle r="0.2" fill="#d8ef3a" stroke="#a9c21f" strokeWidth="0.05" />
       </g>
-
-      {mark && (
-        <g className={`land ${played.sim.result}`} transform={`translate(${mark.z} ${-mark.x})`}>
-          <path d="M-0.22,-0.22 L0.22,0.22 M-0.22,0.22 L0.22,-0.22" />
-          <text y="-0.5">{t(`map.${played.sim.result}`)}</text>
-        </g>
-      )}
-      {ball && (
-        <g>
-          <circle cx={ball.z + 0.06} cy={-ball.x + 0.08} r="0.16" fill="rgba(0,0,0,0.3)" />
-          <circle cx={ball.z} cy={-ball.x - Math.min(ball.y, 3) * 0.12} r={0.16 + Math.min(ball.y, 3) * 0.05} fill="#d8ef3a"
-            stroke="#a9c21f" strokeWidth="0.04" />
-        </g>
-      )}
     </svg>
   )
 }

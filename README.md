@@ -13,7 +13,6 @@ The simple mode (`/simple/` on the site) skips the controls. Tap where you want 
 - **return**: how hard it is to return (easy, medium, hard, very hard), with the bar of aces, return errors, tough and easy returns, and faults.
 - **score**: the points you'd win out of 100 serves like it. On a first serve a miss goes to your second serve (the recommended one for your second-serve pick, to the same spot), so it can take more risk.
 - **the best ways to hit it**: the top speeds and amounts of spin for the same serve, with their margin, return difficulty and score. Pick one to see its path, and "Watch it in 3D" loads it into the full tool.
-- **a practice game**: serve each point to your spot against the chosen returner, with a second serve after a fault, the ball flying onto the court, and real tennis scoring (15, 30, 40, deuce, advantage, game). Each serve is hit with a random set of the usual small mistakes, so the results follow the odds shown.
 
 Tapping the other box serves from the other side. The server's hand, height, stance and jump, their fastest serve and the returner level are shared with the full tool.
 

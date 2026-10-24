@@ -374,39 +374,7 @@
     "warnSecond": "this serve doesn't land here 9 times in 10 at any speed or spin, so it's risky for a second serve. try a spot further from the lines, or another serve.",
     "watch": "Watch it in 3D",
     "working": "working out the serves…",
-    "method": "the tool tries the serve you picked with a lighter and a heavier brush, at several speeds up to the fastest it can be hit, finds the racket angle and aim that land each one on your spot, and flies each with the same small mistakes as the full tool. the score is the points you'd win out of 100 serves like it: aces and return errors win, and after a return you win {{tough}}% of rallies after a tough one and {{easy}}% after an easy one. the recommended one scores best of those that land in often enough (at least half the time for a first serve, 9 times in 10 for a second); if none do, it's the one that lands in most. on a first serve a miss goes to your second serve (your {{second}} to the same spot, which wins about {{secondWins}}%), so it can take more risk.",
-    "game": {
-      "title": "Play a game",
-      "note": "you serve every point to your spot with the serves you picked, against the returner set above. a fault gives you a second serve.",
-      "you": "You",
-      "them": "Them",
-      "games": "Games",
-      "points": "Points",
-      "serving": "serving",
-      "deuce": "deuce",
-      "advYou": "advantage you",
-      "advThem": "advantage them",
-      "serve": "Serve it: {{serve}}",
-      "newGame": "new game",
-      "stats": "points won {{won}} of {{points}} · aces {{aces}} · double faults {{doubles}} · first serves in {{first}}%"
-    },
-    "result": {
-      "fault": "Fault: {{why}}. Second serve.",
-      "double": "Double fault: {{why}}. Point to them.",
-      "ace": "Ace! Point to you.",
-      "winner": "Return error: they got a racket on it but couldn't keep it in. Point to you.",
-      "toughWon": "Tough return, and you won the rally.",
-      "toughLost": "Tough return, but they won the rally.",
-      "easyWon": "Easy return, but you still won the rally.",
-      "easyLost": "Easy return, and they won the rally.",
-      "gameYou": "Game to you!",
-      "gameThem": "Game to them."
-    },
-    "miss": {
-      "net": "into the net",
-      "long": "long",
-      "wide": "wide"
-    }
+    "method": "the tool tries the serve you picked with a lighter and a heavier brush, at several speeds up to the fastest it can be hit, finds the racket angle and aim that land each one on your spot, and flies each with the same small mistakes as the full tool. the score is the points you'd win out of 100 serves like it: aces and return errors win, and after a return you win {{tough}}% of rallies after a tough one and {{easy}}% after an easy one. the recommended one scores best of those that land in often enough (at least half the time for a first serve, 9 times in 10 for a second); if none do, it's the one that lands in most. on a first serve a miss goes to your second serve (your {{second}} to the same spot, which wins about {{secondWins}}%), so it can take more risk."
   },
   "nav": {
     "tool": "Serve tool",
@@ -422,7 +390,7 @@
     "title": "Serve Visualization Tool: free 3D tennis serve simulator",
     "description": "A free 3D tennis serve simulator. Adjust your toss, stance, jump, swing, spin and speed, watch whether the ball clears the net, and see your error tolerance and your chances of an ace against returners from NTRP 2.0 to 5.0.",
     "simpleTitle": "Simple mode: tap a spot, pick a serve, get the best speed and spin | Serve Visualization Tool",
-    "simpleDescription": "Tap where you want your tennis serve to land, pick flat, slice, topspin-slice or kick, and see the speed and spin that get it there best, with its margin for error, how hard it is to return and a score. Then play a practice game against a returner from NTRP 2.0 to 5.0.",
+    "simpleDescription": "Tap where you want your tennis serve to land, pick flat, slice, topspin-slice or kick, and see the speed and spin that get it there best, with its margin for error, how hard it is for a returner from NTRP 2.0 to 5.0 to return, and a score.",
     "aboutTitle": "How the Serve Visualization Tool works: the tennis serve math, explained simply",
     "aboutDescription": "How the free Serve Visualization Tool models a tennis serve: ball flight, spin, the bounce, the toss, error tolerance and the returner, explained in plain words with the formulas behind them.",
     "noscript": "This interactive 3D tool needs JavaScript turned on."

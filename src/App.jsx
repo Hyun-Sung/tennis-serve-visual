@@ -12,7 +12,6 @@ import Target from './components/Target.jsx'
 import { Seg } from './components/Fields.jsx'
 import Timeline from './components/Timeline.jsx'
 import TopView from './components/TopView.jsx'
-import { NEW_GAME } from './game.js'
 import { assessServe, DEFAULT_LEVEL, evaluateReturn, RETURN_FLIGHT } from './outcome.js'
 import { simulateServe } from './physics.js'
 import { PHASES } from './pose.js'
@@ -73,11 +72,12 @@ export default function App() {
   const [kept, setKept] = useState([])
   const [level, setLevel] = useState(DEFAULT_LEVEL)
   const [maxKmh, setMaxKmh] = useState(DEFAULT_MAX_SPEED)
-  // The simple mode's landing spot and practice game, kept here so they survive a trip to the full tool.
+  // The simple mode's landing spot and choices, kept here so they survive a trip to the full tool.
   const [spot, setSpot] = useState(DEFAULT_SPOT)
   // The kind of serve chosen there for the first and second serve.
   const [spins, setSpins] = useState(DEFAULT_SPINS)
-  const [game, setGame] = useState(NEW_GAME)
+  // Whether it's showing the first or the second serve.
+  const [serveNo, setServeNo] = useState(1)
   const [system, setSystem] = useState(firstSystem)
   const units = useMemo(() => unitsFor(system), [system])
   const chooseSystem = (v) => {
@@ -313,8 +313,8 @@ export default function App() {
             onSpot={setSpot}
             spins={spins}
             onSpins={setSpins}
-            game={game}
-            onGame={setGame}
+            serveNo={serveNo}
+            onServeNo={setServeNo}
             onWatch={watchServe}
           />
         ) : (

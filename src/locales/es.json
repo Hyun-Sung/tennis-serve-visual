@@ -374,39 +374,7 @@
     "warnSecond": "este saque no entra aquí 9 de cada 10 veces con ninguna velocidad ni efecto, así que es arriesgado para un segundo saque. prueba un punto más lejos de las líneas, u otro saque.",
     "watch": "Verlo en 3D",
     "working": "calculando los saques…",
-    "method": "la herramienta prueba el saque que elegiste con menos y más efecto, a varias velocidades hasta la más rápida posible, busca el ángulo de raqueta y la dirección que llevan cada uno a tu punto y lanza cada uno con los mismos pequeños errores que la herramienta completa. la puntuación son los puntos que ganarías de 100 saques así: los aces y los errores de resto ganan, y tras un resto ganas el {{tough}}% de los peloteos si fue difícil y el {{easy}}% si fue fácil. se recomienda el que mejor puntúa de los que entran lo bastante (al menos la mitad de las veces en un primer saque, 9 de cada 10 en un segundo); si ninguno lo logra, el que más entra. en un primer saque, un fallo pasa a tu segundo saque (tu {{second}} al mismo punto, que gana alrededor del {{secondWins}}%), así que puede arriesgar más.",
-    "game": {
-      "title": "Juega un juego",
-      "note": "sacas todos los puntos a tu punto con los saques que elegiste, contra el restador elegido arriba. una falta te da un segundo saque.",
-      "you": "Tú",
-      "them": "Rival",
-      "games": "Juegos",
-      "points": "Puntos",
-      "serving": "saca",
-      "deuce": "iguales",
-      "advYou": "ventaja tuya",
-      "advThem": "ventaja del rival",
-      "serve": "Saca: {{serve}}",
-      "newGame": "juego nuevo",
-      "stats": "puntos ganados {{won}} de {{points}} · aces {{aces}} · dobles faltas {{doubles}} · primeros saques dentro {{first}}%"
-    },
-    "result": {
-      "fault": "Falta: {{why}}. Segundo saque.",
-      "double": "Doble falta: {{why}}. Punto para el rival.",
-      "ace": "¡Ace! Punto para ti.",
-      "winner": "Error de resto: la tocó pero no pudo meterla. Punto para ti.",
-      "toughWon": "Resto difícil, y ganaste el peloteo.",
-      "toughLost": "Resto difícil, pero el rival ganó el peloteo.",
-      "easyWon": "Resto fácil, pero aun así ganaste el peloteo.",
-      "easyLost": "Resto fácil, y el rival ganó el peloteo.",
-      "gameYou": "¡Juego para ti!",
-      "gameThem": "Juego para el rival."
-    },
-    "miss": {
-      "net": "a la red",
-      "long": "larga",
-      "wide": "fuera"
-    }
+    "method": "la herramienta prueba el saque que elegiste con menos y más efecto, a varias velocidades hasta la más rápida posible, busca el ángulo de raqueta y la dirección que llevan cada uno a tu punto y lanza cada uno con los mismos pequeños errores que la herramienta completa. la puntuación son los puntos que ganarías de 100 saques así: los aces y los errores de resto ganan, y tras un resto ganas el {{tough}}% de los peloteos si fue difícil y el {{easy}}% si fue fácil. se recomienda el que mejor puntúa de los que entran lo bastante (al menos la mitad de las veces en un primer saque, 9 de cada 10 en un segundo); si ninguno lo logra, el que más entra. en un primer saque, un fallo pasa a tu segundo saque (tu {{second}} al mismo punto, que gana alrededor del {{secondWins}}%), así que puede arriesgar más."
   },
   "nav": {
     "tool": "Herramienta de saque",
@@ -422,7 +390,7 @@
     "title": "Serve Visualization Tool: simulador gratuito de saque de tenis en 3D",
     "description": "Un simulador gratuito de saque de tenis en 3D. Ajusta el lanzamiento, la posición, el salto, el golpe, el efecto y la velocidad, mira si la bola pasa la red y descubre tu tolerancia al error y tus opciones de ace contra restadores de nivel NTRP 2.0 a 5.0.",
     "simpleTitle": "Modo sencillo: toca un punto, elige un saque y descubre la mejor velocidad y efecto | Serve Visualization Tool",
-    "simpleDescription": "Toca dónde quieres que bote tu saque de tenis, elige plano, cortado, liftado-cortado o kick, y descubre la velocidad y el efecto que mejor lo llevan ahí, con su margen de error, lo difícil que es restarlo y una puntuación. Luego juega un juego de práctica contra un restador de nivel NTRP 2.0 a 5.0.",
+    "simpleDescription": "Toca dónde quieres que bote tu saque de tenis, elige plano, cortado, liftado-cortado o kick, y descubre la velocidad y el efecto que mejor lo llevan ahí, con su margen de error, lo difícil que es restarlo para un restador de nivel NTRP 2.0 a 5.0 y una puntuación.",
     "aboutTitle": "Cómo funciona Serve Visualization Tool: las cuentas del saque de tenis, explicadas de forma sencilla",
     "aboutDescription": "Cómo modela un saque de tenis la herramienta gratuita Serve Visualization Tool: el vuelo de la bola, el efecto, el bote, el lanzamiento, la tolerancia al error y el restador, explicados con palabras sencillas y sus fórmulas.",
     "noscript": "Esta herramienta interactiva en 3D necesita JavaScript activado."

@@ -374,39 +374,7 @@
     "warnSecond": "ce service ne rentre ici 9 fois sur 10 à aucune vitesse ni aucun effet, c'est donc risqué pour une deuxième balle. essayez un point plus loin des lignes, ou un autre service.",
     "watch": "Voir en 3D",
     "working": "calcul des services…",
-    "method": "l'outil essaie le service choisi avec moins et plus d'effet, à plusieurs vitesses jusqu'à la plus rapide possible, cherche pour chacun l'angle de raquette et la direction qui envoient la balle sur votre point, et fait voler chacun avec les mêmes petites erreurs que l'outil complet. le score correspond aux points que vous gagneriez sur 100 services de ce type : les aces et les fautes en retour gagnent, et après un retour vous gagnez {{tough}} % des échanges s'il était difficile, {{easy}} % s'il était facile. le service recommandé est celui qui marque le plus parmi ceux qui rentrent assez souvent (au moins une fois sur deux en première balle, 9 fois sur 10 en deuxième) ; si aucun n'y arrive, celui qui rentre le plus. en première balle, une faute mène à votre deuxième balle (votre {{second}} vers le même point, qui gagne environ {{secondWins}} %), elle peut donc prendre plus de risques.",
-    "game": {
-      "title": "Jouez un jeu",
-      "note": "vous servez chaque point vers votre point avec les services choisis, contre le relanceur choisi plus haut. une faute vous donne une deuxième balle.",
-      "you": "Vous",
-      "them": "Adversaire",
-      "games": "Jeux",
-      "points": "Points",
-      "serving": "au service",
-      "deuce": "égalité",
-      "advYou": "avantage pour vous",
-      "advThem": "avantage adversaire",
-      "serve": "Servir : {{serve}}",
-      "newGame": "nouveau jeu",
-      "stats": "points gagnés {{won}} sur {{points}} · aces {{aces}} · doubles fautes {{doubles}} · premières balles {{first}} %"
-    },
-    "result": {
-      "fault": "Faute : {{why}}. Deuxième balle.",
-      "double": "Double faute : {{why}}. Point pour l'adversaire.",
-      "ace": "Ace ! Point pour vous.",
-      "winner": "Faute en retour : il la touche mais ne la remet pas dans le court. Point pour vous.",
-      "toughWon": "Retour difficile, et vous gagnez l'échange.",
-      "toughLost": "Retour difficile, mais l'adversaire gagne l'échange.",
-      "easyWon": "Retour facile, mais vous gagnez quand même l'échange.",
-      "easyLost": "Retour facile, et l'adversaire gagne l'échange.",
-      "gameYou": "Jeu pour vous !",
-      "gameThem": "Jeu pour l'adversaire."
-    },
-    "miss": {
-      "net": "dans le filet",
-      "long": "longue",
-      "wide": "dehors"
-    }
+    "method": "l'outil essaie le service choisi avec moins et plus d'effet, à plusieurs vitesses jusqu'à la plus rapide possible, cherche pour chacun l'angle de raquette et la direction qui envoient la balle sur votre point, et fait voler chacun avec les mêmes petites erreurs que l'outil complet. le score correspond aux points que vous gagneriez sur 100 services de ce type : les aces et les fautes en retour gagnent, et après un retour vous gagnez {{tough}} % des échanges s'il était difficile, {{easy}} % s'il était facile. le service recommandé est celui qui marque le plus parmi ceux qui rentrent assez souvent (au moins une fois sur deux en première balle, 9 fois sur 10 en deuxième) ; si aucun n'y arrive, celui qui rentre le plus. en première balle, une faute mène à votre deuxième balle (votre {{second}} vers le même point, qui gagne environ {{secondWins}} %), elle peut donc prendre plus de risques."
   },
   "nav": {
     "tool": "Outil de service",
@@ -422,7 +390,7 @@
     "title": "Serve Visualization Tool : simulateur gratuit de service au tennis en 3D",
     "description": "Un simulateur gratuit de service au tennis en 3D. Réglez le lancer, la position, le saut, la frappe, l'effet et la vitesse, regardez si la balle passe le filet, et voyez votre tolérance d'erreur et vos chances de faire un ace contre des relanceurs de niveau NTRP 2.0 à 5.0.",
     "simpleTitle": "Mode simple : touchez un point, choisissez un service, trouvez la meilleure vitesse et le meilleur effet | Serve Visualization Tool",
-    "simpleDescription": "Touchez l'endroit où vous voulez que votre service rebondisse, choisissez à plat, slice, lift-slice ou kick, et voyez la vitesse et l'effet qui l'y envoient le mieux, avec sa marge d'erreur, la difficulté du retour et un score. Puis jouez un jeu d'entraînement contre un relanceur de niveau NTRP 2.0 à 5.0.",
+    "simpleDescription": "Touchez l'endroit où vous voulez que votre service rebondisse, choisissez à plat, slice, lift-slice ou kick, et voyez la vitesse et l'effet qui l'y envoient le mieux, avec sa marge d'erreur, la difficulté du retour pour un relanceur de niveau NTRP 2.0 à 5.0 et un score.",
     "aboutTitle": "Comment fonctionne Serve Visualization Tool : les calculs du service au tennis, expliqués simplement",
     "aboutDescription": "Comment l'outil gratuit Serve Visualization Tool modélise un service au tennis : le vol de la balle, l'effet, le rebond, le lancer, la tolérance d'erreur et le relanceur, expliqués simplement avec les formules derrière.",
     "noscript": "Cet outil interactif en 3D a besoin que JavaScript soit activé."
