@@ -1,6 +1,6 @@
 {
   "app": {
-    "tagline": "ajuste o lançamento, os pés e o golpe, e veja se a bola passa a rede.",
+    "tagline": "ajuste o lançamento, o trabalho de pernas e o golpe, e veja se a bola passa a rede.",
     "units": "Unidades",
     "language": "Idioma"
   },
@@ -22,7 +22,7 @@
     "net": "rede",
     "side": "lateral",
     "coach": "treinador",
-    "orbit": "arraste para olhar ao redor",
+    "orbit": "arraste para girar a câmera",
     "loading": "carregando a quadra em 3D…"
   },
   "scene": {
@@ -88,8 +88,8 @@
     "stretch": "puxado para fora",
     "heat": "mais rápida do que ele está acostumado",
     "pace": "chega muito rápida",
-    "high": "quicou alto",
-    "low": "ficou baixa",
+    "high": "quica alto",
+    "low": "fica baixa",
     "jam": "no corpo"
   },
   "stats": {
@@ -100,21 +100,21 @@
     "speedAtBounce": "velocidade no quique",
     "bounceHeight": "altura do quique",
     "timeToReturner": "tempo até o recebedor",
-    "returnerMoves": "o recebedor precisa se mover"
+    "returnerMoves": "deslocamento do recebedor"
   },
   "tips": {
     "lowToss": "lance mais alto para bater com o braço estendido, ou salte mais.",
-    "net": "lance um pouco mais para trás, escove para cima para mais topspin ou bata mais embaixo na bola.",
-    "longAuto": "lance um pouco mais à frente ou escove para cima para mais topspin e trazê-la para baixo.",
-    "longManual": "incline a raquete um pouco para baixo ou escove para cima para mais topspin.",
+    "net": "lance um pouco mais para trás, escove mais para cima para dar mais topspin ou bata mais embaixo na bola.",
+    "longAuto": "lance um pouco mais à frente ou dê mais topspin para a bola cair antes.",
+    "longManual": "feche um pouco a face da raquete ou dê mais topspin.",
     "wide": "mire um pouco mais para dentro da área de saque."
   },
   "risk": {
     "label": "Tolerância a erro",
     "sub": "entram mesmo com pequenos erros",
     "window": "o ângulo da raquete pode variar <b>{{down}}°</b> antes de bater na rede, ou <b>+{{up}}°</b> antes de sair longa.",
-    "misses": "mesmo com o golpe perfeito, este saque erra. mude algo para fazê-lo entrar.",
-    "against": "contra um recebedor <b>{{level}}</b>: <b>{{won}}%</b> dos pontos ganhos direto, <b>{{fault}}%</b> de faltas.",
+    "misses": "mesmo batendo perfeito, este saque não entra. mude algum ajuste para colocá-lo dentro.",
+    "against": "contra um recebedor de nível <b>{{level}}</b>: <b>{{won}}%</b> dos pontos ganhos direto, <b>{{fault}}%</b> de faltas.",
     "method": "a partir de {{tries}} tentativas deste saque, cada uma um pouco diferente: cerca de ±{{angle}}° no ângulo da raquete, ±{{yaw}}° na direção, ±{{speed}}% na velocidade, ±{{rpm}}% no efeito e ±{{brush}}° na direção da escovada. esse último explica por que o slice é mais arriscado: com o efeito inclinado de lado, uma escovada um pouco diferente muda quanto a bola cai. um erro na devolução quer dizer que ele provavelmente acerta a bola, mas na rede ou fora. uma devolução fácil quer dizer que ele tem tempo de se posicionar e bater.",
     "parts": {
       "ace": "ace",
@@ -135,7 +135,7 @@
     "returner": "Recebedor",
     "level": "Nível (NTRP)",
     "beginner": "iniciante: reage devagar e não gosta de velocidade, então a maioria dos saques ganha o ponto.",
-    "club": "jogador de clube: lida com um saque regular, mas velocidade, ângulo ou um kick forte complicam.",
+    "club": "jogador de clube: devolve bem um saque sem perigo, mas velocidade, ângulo ou um kick forte complicam.",
     "strong": "jogador de clube forte: reage rápido, então o saque precisa de velocidade e colocação.",
     "advanced": "jogador avançado: mãos e pés rápidos. você precisa de um saque forte e bem colocado, ou de um kick ou slice que o tire da quadra.",
     "court": "Lado da quadra",
@@ -158,7 +158,7 @@
     "atReach": "no seu alcance",
     "wayAbove": "bem acima",
     "peaksBelow": "chega a {{apex}}, abaixo do seu alcance de {{reach}}, então você bate mais baixo.",
-    "peaks": "chega a {{apex}} do chão e sobe com sua altura e seu salto. no ar por {{t}} s.",
+    "peaks": "sobe até {{apex}} do chão, mais alto quanto mais alto você for e mais saltar. fica {{t}} s no ar.",
     "reset": "redefinir lançamento",
     "padLabel": "posição do lançamento: as setas o movem para frente, para trás e para os lados",
     "padValue": "{{forward}} à frente, {{side}} para o lado",
@@ -183,16 +183,16 @@
     "platform": "plataforma",
     "pinpoint": "pés juntos",
     "platformNote": "os pés ficam afastados o tempo todo e você bate na bola exatamente onde a lançou. estável e simples.",
-    "pinpointNote": "o pé de trás desliza para junto do pé da frente e os dois impulsionam para cima e para dentro da quadra: você bate na bola {{forward}} mais à frente e {{lift}} mais alto, e cai dentro da quadra.",
+    "pinpointNote": "o pé de trás se junta ao da frente e você se impulsiona com as duas pernas para cima e para dentro da quadra: bate na bola {{forward}} mais à frente e {{lift}} mais alto, e cai dentro da quadra.",
     "jump": "Altura do salto",
     "noJump": "sem salto",
     "bigJump": "salto alto",
     "offGround": "{{d}} acima do chão",
-    "jumpHint": "saltar mais alto faz você bater na bola mais alto, o que dá mais margem sobre a rede."
+    "jumpHint": "quanto mais alto você salta, mais alto bate na bola, o que dá mais margem sobre a rede."
   },
   "swing": {
     "title": "Golpe e efeito",
-    "lede": "A força do golpe, como a raquete escova a bola e onde na bola você faz o contato.",
+    "lede": "A força do golpe, como você escova a bola e em que ponto dela faz o contato.",
     "speed": "Velocidade do saque",
     "slower": "mais lento",
     "faster": "mais rápido",
@@ -212,8 +212,8 @@
     "acrossHintRighty": "escovar para a direita adiciona slice, que curva a bola para a esquerda.",
     "acrossHintLefty": "escovar para a esquerda adiciona slice, que curva a bola para a direita.",
     "contact": "Contato na bola",
-    "contactHintRighty": "embaixo na bola adiciona topspin e a eleva. o lado direito (3 horas) adiciona slice e a empurra para a esquerda. em cima na bola a achata e a faz descer.",
-    "contactHintLefty": "embaixo na bola adiciona topspin e a eleva. o lado esquerdo (9 horas) adiciona slice e a empurra para a direita. em cima na bola a achata e a faz descer.",
+    "contactHintRighty": "bater embaixo na bola dá topspin e a faz subir. no lado direito (3 horas) dá slice e a desvia para a esquerda. em cima, a bola fica mais chapada e desce.",
+    "contactHintLefty": "bater embaixo na bola dá topspin e a faz subir. no lado esquerdo (9 horas) dá slice e a desvia para a direita. em cima, a bola fica mais chapada e desce.",
     "result": "Efeito resultante",
     "topspin": "Topspin",
     "dipKick": "cai, depois quica alto",
@@ -246,7 +246,7 @@
     "title": "Ângulo da raquete",
     "auto": "auto: o sacador inclina a raquete para a bola entrar na área de saque, como se o lançamento fosse perfeito",
     "angle": "Ângulo da raquete",
-    "hint": "negativo fecha a face e manda a bola para baixo. um lançamento à frente a inclina para baixo, atrás para cima. na animação, a raquete se inclina igual no contato."
+    "hint": "um valor negativo fecha a face e manda a bola para baixo. com o lançamento à frente a face fecha, e com ele atrás ela abre. na animação, a raquete fica com o mesmo ângulo no contato."
   },
   "ball": {
     "centre": "o centro da bola",
@@ -267,10 +267,10 @@
     "wide": "fora"
   },
   "compare": {
-    "newLine": "Linha do novo saque",
-    "colors": "cor da linha do novo saque",
+    "newLine": "Trajetória do novo saque",
+    "colors": "cor da trajetória do novo saque",
     "custom": "escolher qualquer cor",
-    "customLabel": "cor de linha personalizada",
+    "customLabel": "cor personalizada da trajetória",
     "keep": "guardar este saque para comparar",
     "serveN": "saque {{n}}",
     "remove": "remover saque {{n}}",
@@ -289,7 +289,7 @@
   },
   "recommend": {
     "title": "Saques recomendados",
-    "for": "para um jogador {{hand}} de {{height}} no lado de {{side}}, contra um recebedor {{level}}. mude qualquer um desses dados e a recomendação acompanha.",
+    "for": "para um sacador {{hand}} de {{height}} no lado de {{side}}, contra um recebedor de nível {{level}}. se você mudar algum desses dados, a recomendação se atualiza.",
     "maxSpeed": "Seu saque mais rápido",
     "maxSpeedHint": "seu saque chapado mais rápido. o efeito tira parte dessa velocidade: um kick sai cerca de um quarto mais lento.",
     "first": "Primeiro saque",
@@ -365,8 +365,8 @@
     "angleUp": "ângulo da raquete {{deg}}° para cima",
     "angleDown": "ângulo da raquete {{deg}}° para baixo",
     "angleLevel": "ângulo da raquete na horizontal",
-    "aimRight": "mire cerca de {{d}} à direita do ponto: o efeito traz a bola de volta",
-    "aimLeft": "mire cerca de {{d}} à esquerda do ponto: o efeito traz a bola de volta",
+    "aimRight": "mire cerca de {{d}} à direita do ponto: o efeito faz a bola curvar até ele",
+    "aimLeft": "mire cerca de {{d}} à esquerda do ponto: o efeito faz a bola curvar até ele",
     "options": "As melhores formas de bater este saque ({{spin}})",
     "setting": "Velocidade e efeito",
     "cantSpin": "este saque ({{spin}}) não consegue quicar lá. tente outro ponto ou outro saque.",
@@ -374,7 +374,7 @@
     "warnSecond": "este saque não entra aqui 9 em cada 10 vezes com nenhuma velocidade ou efeito, então é arriscado para um segundo saque. tente um ponto mais longe das linhas, ou outro saque.",
     "watch": "Ver em 3D",
     "working": "calculando os saques…",
-    "method": "a ferramenta testa o saque que você escolheu com menos e mais efeito, em várias velocidades até a mais rápida possível, encontra o ângulo da raquete e a direção que levam cada um até o seu ponto e lança cada um com os mesmos pequenos erros da ferramenta completa. a pontuação são os pontos que você ganharia em 100 saques assim: aces e erros na devolução ganham, e depois de uma devolução você ganha {{tough}}% dos ralis se ela foi difícil e {{easy}}% se foi fácil. o recomendado é o que pontua melhor entre os que entram o bastante (pelo menos metade das vezes no primeiro saque, 9 em cada 10 no segundo); se nenhum consegue, o que mais entra. no primeiro saque, um erro leva ao seu segundo saque (o seu {{second}} no mesmo ponto, que ganha cerca de {{secondWins}}%), então ele pode arriscar mais."
+    "method": "a ferramenta testa o saque que você escolheu com menos e mais efeito, em várias velocidades até a mais rápida possível, encontra o ângulo da raquete e a direção que levam cada um até o seu ponto e simula cada um com os mesmos pequenos erros da ferramenta de saque. a pontuação são os pontos que você ganharia em 100 saques assim: aces e erros na devolução ganham, e depois de uma devolução você ganha {{tough}}% dos ralis se ela foi difícil e {{easy}}% se foi fácil. o recomendado é o que pontua melhor entre os que entram o bastante (pelo menos metade das vezes no primeiro saque, 9 em cada 10 no segundo); se nenhum consegue, o que mais entra. no primeiro saque, um erro leva ao seu segundo saque (o seu {{second}} no mesmo ponto, que ganha cerca de {{secondWins}}%), então ele pode arriscar mais."
   },
   "nav": {
     "tool": "Ferramenta de saque",
@@ -401,7 +401,7 @@
     "back": "← voltar para a ferramenta de saque",
     "flight": {
       "title": "1. Como a bola voa",
-      "body": "A bola avança em passos minúsculos, <b>1.000 vezes por segundo</b>. A cada passo, três coisas agem sobre ela: a gravidade a puxa para baixo, a resistência do ar a freia e o efeito a empurra para baixo ou para o lado. Soma-se tudo, atualiza-se a velocidade, atualiza-se a posição e repete-se.",
+      "body": "O voo da bola é calculado em passos minúsculos, <b>1.000 vezes por segundo</b>. A cada passo, três forças agem sobre ela: a gravidade a puxa para baixo, a resistência do ar a freia e o efeito a empurra para baixo ou para o lado. Somam-se as três, atualizam-se a velocidade e a posição, e repete-se.",
       "formula": "aceleração = gravidade + resistência + empurrão do efeito",
       "note": "a gravidade é 9,81 m/s² para baixo. a resistência cresce com o quadrado da velocidade, então um saque a 200 km/h sofre quatro vezes a resistência de um a 100 km/h."
     },
@@ -413,13 +413,13 @@
     },
     "bounce": {
       "title": "3. O quique",
-      "body": "Ao tocar o chão, a bola mantém cerca de <b>75%</b> da velocidade para baixo, agora para cima. O atrito com a quadra a freia e faz o giro tender a rolar. Já uma bola que chega baixa e rápida desliza, por isso um saque chapado mantém mais velocidade. Muito topspin agarra a quadra e faz a bola subir mais: esse é o saque kick.",
+      "body": "Ao tocar o chão, a bola mantém cerca de <b>75%</b> da velocidade para baixo, agora para cima. O atrito com a quadra a freia e aproxima o giro ao de uma bola rolando. Já uma bola que chega baixa e rápida desliza, por isso um saque chapado mantém mais velocidade. Muito topspin agarra a quadra e faz a bola subir mais: esse é o saque kick.",
       "formula": "velocidade para cima depois = 0,75 × velocidade para baixo antes + kick",
       "note": "o kick é um pequeno empurrão extra que cresce com o topspin."
     },
     "toss": {
       "title": "4. O lançamento e onde você bate na bola",
-      "body": "Seu <b>alcance</b> é a altura em que a raquete consegue encontrar a bola: sua altura, seu braço e a raquete, mais o seu salto. A altura do lançamento é medida acima desse alcance, então jogadores mais altos e saltos maiores lançam mais alto. Um lançamento que não chega ao seu alcance obriga um contato mais baixo. Um lançamento à frente inclina a raquete para baixo; um atrás, para cima.",
+      "body": "Seu <b>alcance</b> é a altura em que a raquete consegue encontrar a bola: sua altura, seu braço e a raquete, mais o seu salto. A altura do lançamento é medida acima desse alcance, então jogadores mais altos e saltos maiores lançam mais alto. Um lançamento que não chega ao seu alcance obriga um contato mais baixo. Com o lançamento à frente a face da raquete fecha; com ele atrás, abre.",
       "formula": "tempo no ar = √(2 × subida ÷ g) + √(2 × descida ÷ g)",
       "note": "a subida é quanto a bola sobe depois de sair da sua mão, a descida é quanto ela cai até onde você bate, e g é a gravidade."
     },
@@ -431,7 +431,7 @@
     },
     "tolerance": {
       "title": "6. Tolerância a erro",
-      "body": "Ninguém saca igual duas vezes. A ferramenta refaz o seu saque com cada tipo de pequeno erro separadamente (ângulo da raquete, direção, velocidade, efeito e direção da escovada), mede quanto cada um desloca a bola e soma esses efeitos em <b>1.024</b> tentativas distribuídas por igual. A parte que ainda cai dentro da área de saque é a sua tolerância a erro.",
+      "body": "Ninguém saca igual duas vezes. A ferramenta simula de novo o seu saque com cada tipo de pequeno erro separadamente (ângulo da raquete, direção, velocidade, efeito e direção da escovada), mede quanto cada um desloca a bola e soma esses efeitos em <b>1.024</b> tentativas distribuídas por igual. A parte que ainda cai dentro da área de saque é a sua tolerância a erro.",
       "formula": "tolerância a erro = tentativas que entram ÷ todas as tentativas",
       "note": "o slice é mais arriscado porque uma escovada um pouco diferente muda quanto topspin sobra para trazer a bola para baixo."
     },

@@ -10,7 +10,7 @@
   },
   "transport": {
     "pause": "pause",
-    "serveAgain": "servir encore",
+    "serveAgain": "servir à nouveau",
     "serve": "servez !",
     "replay": "rejouer",
     "speed": "vitesse de lecture"
@@ -22,7 +22,7 @@
     "net": "filet",
     "side": "côté",
     "coach": "entraîneur",
-    "orbit": "faites glisser pour regarder autour",
+    "orbit": "faites glisser pour tourner la caméra",
     "loading": "chargement du court en 3D…"
   },
   "scene": {
@@ -86,10 +86,10 @@
   "reason": {
     "rush": "peu de temps pour frapper",
     "stretch": "sorti du court",
-    "heat": "plus rapide que d'habitude pour lui",
+    "heat": "plus rapide que ce dont il a l'habitude",
     "pace": "arrive très vite",
     "high": "rebond très haut",
-    "low": "restée basse",
+    "low": "reste basse",
     "jam": "dans le corps"
   },
   "stats": {
@@ -100,21 +100,21 @@
     "speedAtBounce": "vitesse au rebond",
     "bounceHeight": "hauteur du rebond",
     "timeToReturner": "temps jusqu'au relanceur",
-    "returnerMoves": "le relanceur doit se déplacer"
+    "returnerMoves": "déplacement du relanceur"
   },
   "tips": {
     "lowToss": "lancez plus haut pour frapper bras tendu, ou sautez plus haut.",
-    "net": "lancez un peu plus en arrière, brossez vers le haut pour plus de lift, ou frappez plus bas sur la balle.",
-    "longAuto": "lancez un peu plus devant, ou brossez vers le haut pour plus de lift et la faire redescendre.",
-    "longManual": "inclinez un peu la raquette vers le bas, ou brossez vers le haut pour plus de lift.",
+    "net": "lancez un peu plus en arrière, brossez davantage vers le haut pour plus de lift, ou frappez la balle plus bas.",
+    "longAuto": "lancez un peu plus devant, ou mettez plus de lift pour qu'elle redescende plus tôt.",
+    "longManual": "fermez un peu le tamis, ou mettez plus de lift.",
     "wide": "visez un peu plus à l'intérieur du carré."
   },
   "risk": {
     "label": "Tolérance d'erreur",
-    "sub": "rentrent même frappées avec de petites erreurs",
-    "window": "l'angle de raquette peut varier de <b>{{down}}°</b> avant de toucher le filet, ou de <b>+{{up}}°</b> avant de sortir long.",
-    "misses": "même frappé parfaitement, ce service est faute. changez quelque chose pour le faire rentrer.",
-    "against": "contre un relanceur <b>{{level}}</b> : <b>{{won}} %</b> de points gagnés directement, <b>{{fault}} %</b> de fautes.",
+    "sub": "rentrent malgré de petites erreurs de frappe",
+    "window": "l'angle de raquette peut varier de <b>{{down}}°</b> avant que la balle touche le filet, ou de <b>+{{up}}°</b> avant qu'elle sorte long.",
+    "misses": "même parfaitement frappé, ce service est faute. modifiez un réglage pour le faire rentrer.",
+    "against": "contre un relanceur de niveau <b>{{level}}</b> : <b>{{won}} %</b> de points gagnés directement, <b>{{fault}} %</b> de fautes.",
     "method": "sur {{tries}} essais de ce service, chacun un peu différent : environ ±{{angle}}° d'angle de raquette, ±{{yaw}}° de direction, ±{{speed}} % de vitesse, ±{{rpm}} % d'effet et ±{{brush}}° dans la direction du brossage. ce dernier point explique pourquoi le slice est plus risqué : avec l'effet incliné sur le côté, un brossage un peu différent change la façon dont la balle plonge. une faute en retour veut dire qu'il la touche sans doute, mais dans le filet ou dehors. un retour facile veut dire qu'il a le temps de se placer et de frapper.",
     "parts": {
       "ace": "ace",
@@ -135,7 +135,7 @@
     "returner": "Relanceur",
     "level": "Niveau (NTRP)",
     "beginner": "débutant : réagit lentement et n'aime pas la vitesse, donc la plupart des services gagnent le point.",
-    "club": "joueur de club : gère un service régulier, mais la vitesse, les angles ou un gros kick le gênent.",
+    "club": "joueur de club : renvoie bien un service sans danger, mais la vitesse, les angles ou un gros kick le gênent.",
     "strong": "bon joueur de club : réagit vite, donc le service doit avoir de la vitesse et du placement.",
     "advanced": "joueur confirmé : mains et jambes rapides. il faut un gros service bien placé, ou un kick ou un slice qui le sort du court.",
     "court": "Côté du court",
@@ -155,10 +155,10 @@
     "height": "Hauteur du lancer",
     "aboveReach": "{{d}} au-dessus de votre allonge",
     "belowReach": "{{d}} sous votre allonge",
-    "atReach": "à votre allonge",
+    "atReach": "à hauteur d'allonge",
     "wayAbove": "bien au-dessus",
     "peaksBelow": "culmine à {{apex}}, sous votre allonge de {{reach}}, donc vous frappez plus bas.",
-    "peaks": "culmine à {{apex}} du sol et monte avec votre taille et votre saut. en l'air pendant {{t}} s.",
+    "peaks": "culmine à {{apex}} du sol, d'autant plus haut que vous êtes grand et sautez haut. reste {{t}} s en l'air.",
     "reset": "réinitialiser le lancer",
     "padLabel": "placement du lancer : les flèches le déplacent en avant, en arrière et sur les côtés",
     "padValue": "{{forward}} en avant, {{side}} sur le côté",
@@ -183,12 +183,12 @@
     "platform": "plateforme",
     "pinpoint": "pieds joints",
     "platformNote": "les pieds restent écartés tout du long et vous frappez la balle là où vous l'avez lancée. stable et simple.",
-    "pinpointNote": "le pied arrière glisse à côté du pied avant, puis les deux poussent vers le haut et vers le court : vous touchez la balle {{forward}} plus loin et {{lift}} plus haut, et retombez dans le court.",
+    "pinpointNote": "le pied arrière vient rejoindre le pied avant, puis vous poussez sur les deux jambes vers le haut et vers le court : vous touchez la balle {{forward}} plus loin et {{lift}} plus haut, et retombez dans le court.",
     "jump": "Hauteur du saut",
     "noJump": "sans saut",
     "bigJump": "grand saut",
     "offGround": "{{d}} au-dessus du sol",
-    "jumpHint": "sauter plus haut fait frapper la balle plus haut, ce qui laisse plus de marge au-dessus du filet."
+    "jumpHint": "plus vous sautez haut, plus vous frappez haut, ce qui laisse plus de marge au-dessus du filet."
   },
   "swing": {
     "title": "Frappe et effet",
@@ -212,8 +212,8 @@
     "acrossHintRighty": "brosser vers la droite ajoute du slice, qui courbe la balle vers la gauche.",
     "acrossHintLefty": "brosser vers la gauche ajoute du slice, qui courbe la balle vers la droite.",
     "contact": "Contact sur la balle",
-    "contactHintRighty": "bas sur la balle ajoute du lift et la fait monter. le côté droit (3 h) ajoute du slice et la pousse vers la gauche. haut sur la balle l'aplatit et la fait descendre.",
-    "contactHintLefty": "bas sur la balle ajoute du lift et la fait monter. le côté gauche (9 h) ajoute du slice et la pousse vers la droite. haut sur la balle l'aplatit et la fait descendre.",
+    "contactHintRighty": "frapper la balle par en dessous donne du lift et la fait monter. sur le côté droit (3 h), on donne du slice et elle part vers la gauche. par le haut, on l'aplatit et elle plonge.",
+    "contactHintLefty": "frapper la balle par en dessous donne du lift et la fait monter. sur le côté gauche (9 h), on donne du slice et elle part vers la droite. par le haut, on l'aplatit et elle plonge.",
     "result": "Effet obtenu",
     "topspin": "Lift",
     "dipKick": "plonge, puis rebondit haut",
@@ -246,7 +246,7 @@
     "title": "Angle de raquette",
     "auto": "auto : le serveur incline la raquette pour viser le carré, comme si le lancer était parfait",
     "angle": "Angle de raquette",
-    "hint": "négatif ferme le tamis et envoie la balle vers le bas. un lancer devant l'incline vers le bas, derrière vers le haut. dans l'animation, la raquette s'incline de même à l'impact."
+    "hint": "une valeur négative ferme le tamis et envoie la balle vers le bas. un lancer devant ferme le tamis, un lancer derrière l'ouvre. dans l'animation, la raquette prend le même angle à l'impact."
   },
   "ball": {
     "centre": "le centre de la balle",
@@ -267,10 +267,10 @@
     "wide": "dehors"
   },
   "compare": {
-    "newLine": "Ligne du nouveau service",
-    "colors": "couleur de ligne du nouveau service",
+    "newLine": "Trajectoire du nouveau service",
+    "colors": "couleur de la trajectoire du nouveau service",
     "custom": "choisir une couleur",
-    "customLabel": "couleur de ligne personnalisée",
+    "customLabel": "couleur de trajectoire personnalisée",
     "keep": "garder ce service pour comparer",
     "serveN": "service {{n}}",
     "remove": "retirer le service {{n}}",
@@ -289,7 +289,7 @@
   },
   "recommend": {
     "title": "Services conseillés",
-    "for": "pour un serveur {{hand}} de {{height}} côté {{side}}, contre un relanceur {{level}}. changez l'un de ces réglages et les conseils suivent.",
+    "for": "pour un serveur {{hand}} de {{height}} côté {{side}}, face à un relanceur de niveau {{level}}. si vous changez l'un de ces réglages, les conseils s'adaptent.",
     "maxSpeed": "Votre service le plus rapide",
     "maxSpeedHint": "votre service à plat le plus rapide. l'effet en prend une partie : un kick sort environ un quart moins vite.",
     "first": "Premier service",
@@ -311,7 +311,7 @@
     "try": "Essayer",
     "total": "au total, vous gagneriez environ <b>{{won}} %</b> de vos points de service, avec <b>{{df}} %</b> de doubles fautes.",
     "keepBoth": "garder les deux pour comparer",
-    "method": "trouvé en essayant {{n}} services (quatre effets, six directions, cinq vitesses) avec votre taille, votre main, votre appui et votre saut, avec la même physique et la même tolérance d'erreur que plus haut. après un retour difficile, le serveur est censé gagner {{tough}} % des échanges, après un retour facile {{easy}} %. un repère, pas une règle.",
+    "method": "trouvé en essayant {{n}} services (quatre effets, six directions, cinq vitesses) avec votre taille, votre main, votre appui et votre saut, selon la même physique et la même tolérance d'erreur que plus haut. après un retour difficile, le serveur est censé gagner {{tough}} % des échanges, après un retour facile {{easy}} %. un repère, pas une règle.",
     "working": "calcul de vos services…"
   },
   "simple": {
@@ -365,8 +365,8 @@
     "angleUp": "angle de raquette {{deg}}° vers le haut",
     "angleDown": "angle de raquette {{deg}}° vers le bas",
     "angleLevel": "angle de raquette horizontal",
-    "aimRight": "visez environ {{d}} à droite du point : l'effet la ramène",
-    "aimLeft": "visez environ {{d}} à gauche du point : l'effet la ramène",
+    "aimRight": "visez environ {{d}} à droite du point : l'effet la ramène dessus",
+    "aimLeft": "visez environ {{d}} à gauche du point : l'effet la ramène dessus",
     "options": "Les meilleures façons de jouer ce service ({{spin}})",
     "setting": "Vitesse et effet",
     "cantSpin": "ce service ({{spin}}) ne peut pas rebondir là. essayez un autre point ou un autre service.",
@@ -374,7 +374,7 @@
     "warnSecond": "ce service ne rentre ici 9 fois sur 10 à aucune vitesse ni aucun effet, c'est donc risqué pour une deuxième balle. essayez un point plus loin des lignes, ou un autre service.",
     "watch": "Voir en 3D",
     "working": "calcul des services…",
-    "method": "l'outil essaie le service choisi avec moins et plus d'effet, à plusieurs vitesses jusqu'à la plus rapide possible, cherche pour chacun l'angle de raquette et la direction qui envoient la balle sur votre point, et fait voler chacun avec les mêmes petites erreurs que l'outil complet. le score correspond aux points que vous gagneriez sur 100 services de ce type : les aces et les fautes en retour gagnent, et après un retour vous gagnez {{tough}} % des échanges s'il était difficile, {{easy}} % s'il était facile. le service recommandé est celui qui marque le plus parmi ceux qui rentrent assez souvent (au moins une fois sur deux en première balle, 9 fois sur 10 en deuxième) ; si aucun n'y arrive, celui qui rentre le plus. en première balle, une faute mène à votre deuxième balle (votre {{second}} vers le même point, qui gagne environ {{secondWins}} %), elle peut donc prendre plus de risques."
+    "method": "l'outil essaie le service choisi avec moins et plus d'effet, à plusieurs vitesses jusqu'à la plus rapide possible, cherche pour chacun l'angle de raquette et la direction qui envoient la balle sur votre point, et simule chacun avec les mêmes petites erreurs que l'outil de service. le score correspond aux points que vous gagneriez sur 100 services de ce type : les aces et les fautes en retour gagnent, et après un retour vous gagnez {{tough}} % des échanges s'il était difficile, {{easy}} % s'il était facile. le service recommandé est celui qui marque le plus parmi ceux qui rentrent assez souvent (au moins une fois sur deux en première balle, 9 fois sur 10 en deuxième) ; si aucun n'y arrive, celui qui rentre le plus. en première balle, une faute mène à votre deuxième balle (votre {{second}} vers le même point, qui gagne environ {{secondWins}} %), elle peut donc prendre plus de risques."
   },
   "nav": {
     "tool": "Outil de service",
@@ -401,7 +401,7 @@
     "back": "← retour à l'outil de service",
     "flight": {
       "title": "1. Comment la balle vole",
-      "body": "La balle avance par tout petits pas, <b>1 000 fois par seconde</b>. À chaque pas, trois choses agissent sur elle : la gravité la tire vers le bas, la résistance de l'air la freine et l'effet la pousse vers le bas ou sur le côté. On additionne, on met à jour la vitesse, puis la position, et on recommence.",
+      "body": "Le vol de la balle est calculé par tout petits pas, <b>1 000 fois par seconde</b>. À chaque pas, trois forces agissent sur elle : la gravité la tire vers le bas, la résistance de l'air la freine et l'effet la pousse vers le bas ou sur le côté. On les additionne, on met à jour la vitesse puis la position, et on recommence.",
       "formula": "accélération = gravité + traînée + poussée de l'effet",
       "note": "la gravité vaut 9,81 m/s² vers le bas. la traînée croît avec le carré de la vitesse : un service à 200 km/h subit quatre fois la traînée d'un service à 100 km/h."
     },
@@ -413,13 +413,13 @@
     },
     "bounce": {
       "title": "3. Le rebond",
-      "body": "Quand la balle touche le sol, elle garde environ <b>75 %</b> de sa vitesse vers le bas, maintenant vers le haut. Le frottement avec le court la ralentit et pousse sa rotation vers un roulement. Une balle qui arrive basse et vite glisse au contraire, si bien qu'un service à plat garde plus de vitesse. Beaucoup de lift accroche le court et fait rebondir la balle plus haut : c'est le service kické.",
+      "body": "Quand la balle touche le sol, elle garde environ <b>75 %</b> de sa vitesse vers le bas, maintenant vers le haut. Le frottement avec le court la ralentit et rapproche sa rotation de celle d'une balle qui roule. Une balle qui arrive basse et vite glisse au contraire, si bien qu'un service à plat garde plus de vitesse. Beaucoup de lift accroche le court et fait rebondir la balle plus haut : c'est le service kické.",
       "formula": "vitesse vers le haut après = 0,75 × vitesse vers le bas avant + kick",
       "note": "le kick est une petite poussée en plus qui grandit avec le lift."
     },
     "toss": {
       "title": "4. Le lancer et l'endroit où vous frappez",
-      "body": "Votre <b>allonge</b> est la hauteur à laquelle la raquette peut toucher la balle : votre taille, votre bras et la raquette, plus votre saut. La hauteur du lancer se mesure au-dessus de cette allonge, donc les joueurs plus grands et les sauts plus hauts lancent plus haut. Un lancer qui culmine sous votre allonge oblige à frapper plus bas. Un lancer devant incline la raquette vers le bas ; un lancer derrière l'incline vers le haut.",
+      "body": "Votre <b>allonge</b> est la hauteur à laquelle la raquette peut toucher la balle : votre taille, votre bras et la raquette, plus votre saut. La hauteur du lancer se mesure au-dessus de cette allonge, donc les joueurs plus grands et les sauts plus hauts lancent plus haut. Un lancer qui culmine sous votre allonge oblige à frapper plus bas. Un lancer devant ferme le tamis ; un lancer derrière l'ouvre.",
       "formula": "temps en l'air = √(2 × montée ÷ g) + √(2 × descente ÷ g)",
       "note": "la montée est la hauteur gagnée après avoir quitté la main, la descente ce qu'elle redescend jusqu'au point d'impact, et g est la gravité."
     },
